@@ -1,0 +1,423 @@
+---
+import Container from "./Container.astro";
+---
+
+<div class="countdown-section py-8 sm:py-12 md:py-16 relative z-20">
+  <Container>
+    <div class="countdown-wrap">
+      <div class="countdown">
+        <div class="bloc-time days" data-init-value="0">
+          <span class="count-title">Days</span>
+          <div class="figure days days-1">
+            <span class="top">0</span>
+            <span class="top-back"><span>0</span></span>
+            <span class="bottom">0</span>
+            <span class="bottom-back"><span>0</span></span>
+          </div>
+          <div class="figure days days-2">
+            <span class="top">0</span>
+            <span class="top-back"><span>0</span></span>
+            <span class="bottom">0</span>
+            <span class="bottom-back"><span>0</span></span>
+          </div>
+          <div class="figure days days-3">
+            <span class="top">0</span>
+            <span class="top-back"><span>0</span></span>
+            <span class="bottom">0</span>
+            <span class="bottom-back"><span>0</span></span>
+          </div>
+        </div>
+
+        <div class="bloc-time hours" data-init-value="0">
+          <span class="count-title">Hours</span>
+          <div class="figure hours hours-1">
+            <span class="top">0</span>
+            <span class="top-back"><span>0</span></span>
+            <span class="bottom">0</span>
+            <span class="bottom-back"><span>0</span></span>
+          </div>
+          <div class="figure hours hours-2">
+            <span class="top">0</span>
+            <span class="top-back"><span>0</span></span>
+            <span class="bottom">0</span>
+            <span class="bottom-back"><span>0</span></span>
+          </div>
+        </div>
+
+        <div class="bloc-time min" data-init-value="0">
+          <span class="count-title">Minutes</span>
+          <div class="figure min min-1">
+            <span class="top">0</span>
+            <span class="top-back"><span>0</span></span>
+            <span class="bottom">0</span>
+            <span class="bottom-back"><span>0</span></span>
+          </div>
+          <div class="figure min min-2">
+            <span class="top">0</span>
+            <span class="top-back"><span>0</span></span>
+            <span class="bottom">0</span>
+            <span class="bottom-back"><span>0</span></span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </Container>
+</div>
+
+<style>
+
+  .countdown-wrap {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .countdown {
+    display: flex;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  @media (max-width: 640px) {
+    .countdown {
+      gap: 1rem;
+    }
+  }
+
+  .bloc-time {
+    text-align: center;
+  }
+
+  .count-title {
+    display: block;
+    margin-bottom: 0.75rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: #f4f7ff;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  @media (min-width: 640px) {
+    .count-title {
+      font-size: 0.875rem;
+      margin-bottom: 1rem;
+    }
+  }
+
+  .figure {
+    position: relative;
+    float: left;
+    height: 60px;
+    width: 50px;
+    margin-right: 0.375rem;
+    background-color: #212322;
+    border-radius: 0.5rem;
+    box-shadow: 0 3px 4px 0 rgba(0, 0, 0, 0.2), inset 2px 4px 0 0 rgba(255, 255, 255, 0.08);
+  }
+
+  @media (min-width: 640px) {
+    .figure {
+      height: 80px;
+      width: 65px;
+      margin-right: 0.5rem;
+    }
+  }
+
+  @media (min-width: 768px) {
+    .figure {
+      height: 110px;
+      width: 85px;
+      margin-right: 0.625rem;
+    }
+  }
+  .figure {
+  transform-style: preserve-3d;
+  perspective: 1000px;
+}
+
+
+  .figure:last-child {
+    margin-right: 0;
+  }
+  .card-face {
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+/* Make the flip halves center their digit */
+/* Flip layers must be absolute and pinned */
+.figure .top,
+.figure .bottom,
+.figure .top-back,
+.figure .bottom-back {
+  position: absolute;
+  left: 0;
+  right: 0;
+  width: 100%;
+  height: 50%;
+  overflow: hidden;
+}
+
+/* Pin top half and bottom half */
+.figure .top,
+.figure .top-back { top: 0; }
+
+.figure .bottom,
+.figure .bottom-back { bottom: 0; }
+
+/* Top half: push digit down so only top portion appears in clipped area */
+.figure .top,
+.figure .top-back span {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  height: 100%;
+  transform: translateY(50%);
+}
+
+/* Bottom half: pull digit up so only bottom portion appears in clipped area */
+.figure .bottom,
+.figure .bottom-back span {
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  height: 100%;
+  transform: translateY(-50%);
+}
+.figure::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 50%;
+  height: 1px;
+  background: rgba(244, 247, 255, 0.3);
+  z-index: 10;
+}
+
+
+/* Apply gradient to the digit text (front + back) */
+.figure .top,
+.figure .bottom,
+.figure .top-back span,
+.figure .bottom-back span {
+  font-weight: 700;
+
+  background: linear-gradient(to top, #f1d44b, #ea7600);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  transform: translateZ(0);
+}
+
+
+  @media (min-width: 640px) {
+    .figure > span {
+      font-size: 3.5rem;
+      line-height: 80px;
+    }
+  }
+
+  @media (min-width: 768px) {
+    .figure > span {
+      font-size: 5rem;
+      line-height: 110px;
+    }
+  }
+
+  .top:after,
+  .bottom-back:after {
+    content: "";
+    position: absolute;
+    z-index: -1;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    height: 100%;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .top {
+    z-index: 3;
+    background-color: #212322;
+    transform-origin: 50% 100%;
+    border-top-left-radius: 0.625rem;
+    border-top-right-radius: 0.625rem;
+    transform: perspective(200px) rotateX(0deg);
+    will-change: transform;
+  }
+
+  .top.flipping {
+    animation: flipTop 0.6s cubic-bezier(0.4, 0.0, 0.2, 1);
+  }
+
+  @keyframes flipTop {
+    0% {
+      transform: perspective(200px) rotateX(0deg);
+    }
+    100% {
+      transform: perspective(200px) rotateX(-180deg);
+    }
+  }
+
+  .bottom {
+    z-index: 1;
+  }
+
+  .bottom:before {
+    content: "";
+    position: absolute;
+    display: block;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 50%;
+    background-color: rgba(0, 0, 0, 0.3);
+  }
+
+  .bottom-back {
+    z-index: 2;
+    top: 0;
+    height: 50%;
+    overflow: hidden;
+    background-color: #212322;
+    border-top-left-radius: 0.625rem;
+    border-top-right-radius: 0.625rem;
+  }
+
+  .bottom-back span {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    margin: auto;
+  }
+
+  .top,
+  .top-back {
+    height: 50%;
+    overflow: hidden;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+  }
+
+  .top-back {
+    z-index: 4;
+    bottom: 0;
+    background-color: #212322;
+    transform-origin: 50% 0;
+    transform: perspective(200px) rotateX(180deg);
+    border-bottom-left-radius: 0.625rem;
+    border-bottom-right-radius: 0.625rem;
+    will-change: transform;
+  }
+
+  .top-back.flipping {
+    animation: flipTopBack 0.6s cubic-bezier(0.4, 0.0, 0.2, 1);
+  }
+
+  @keyframes flipTopBack {
+    0% {
+      transform: perspective(200px) rotateX(180deg);
+    }
+    100% {
+      transform: perspective(200px) rotateX(0deg);
+    }
+  }
+
+  .top-back span {
+    position: absolute;
+    top: -100%;
+    left: 0;
+    right: 0;
+    margin: auto;
+  }
+  
+</style>
+
+<script>
+  function initCountdown() {
+    const targetDate = new Date('June 25, 2026 00:00:00').getTime();
+
+    const $days = document.querySelectorAll('.figure.days');
+    const $hours = document.querySelectorAll('.figure.hours');
+    const $minutes = document.querySelectorAll('.figure.min');
+
+    function animateFigure($el: Element, value: string) {
+      const $top = $el.querySelector('.top') as HTMLElement;
+      const $bottom = $el.querySelector('.bottom') as HTMLElement;
+      const $backTop = $el.querySelector('.top-back') as HTMLElement;
+      const $backBottom = $el.querySelector('.bottom-back') as HTMLElement;
+
+      if (!$top || !$bottom || !$backTop || !$backBottom) return;
+
+      // Don't animate if already animating
+      if ($top.classList.contains('flipping')) return;
+
+      const $backTopSpan = $backTop.querySelector('span') as HTMLElement;
+      const $backBottomSpan = $backBottom.querySelector('span') as HTMLElement;
+
+      // Update the back values before animation
+      if ($backTopSpan) $backTopSpan.textContent = value;
+      if ($backBottomSpan) $backBottomSpan.textContent = value;
+
+      // Use requestAnimationFrame to ensure smooth animation
+      requestAnimationFrame(() => {
+        // Add flipping animation class
+        $top.classList.add('flipping');
+        $backTop.classList.add('flipping');
+
+        // Remove animation class and update front values after animation completes
+        setTimeout(() => {
+          $top.textContent = value;
+          $bottom.textContent = value;
+          $top.classList.remove('flipping');
+          $backTop.classList.remove('flipping');
+        }, 600);
+      });
+    }
+
+    function updateFigure(value: number, $figures: NodeListOf<Element>, padLength: number = 2) {
+      const valueStr = value.toString().padStart(padLength, '0');
+
+      Array.from($figures).forEach(($fig, index) => {
+        const digit = valueStr[index] || '0';
+        const $top = $fig.querySelector('.top') as HTMLElement;
+
+        if ($top && $top.textContent !== digit) {
+          animateFigure($fig, digit);
+        }
+      });
+    }
+
+    function updateCountdown() {
+      const now = new Date().getTime();
+      const distance = targetDate - now;
+
+      if (distance < 0) {
+        return;
+      }
+
+      const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+
+      updateFigure(days, $days, 3);
+      updateFigure(hours, $hours, 2);
+      updateFigure(minutes, $minutes, 2);
+    }
+
+    updateCountdown();
+    setInterval(updateCountdown, 1000);
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initCountdown);
+  } else {
+    initCountdown();
+  }
+</script>

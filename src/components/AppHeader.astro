@@ -1,97 +1,561 @@
 ---
-import Container from "./Container.astro";
-const links = [
-    {
-        to: "/#features",
-        label: "Features",
-    },
-    {
-        to: "/#solution",
-        label: "Solution",
-    },
-    {
-        to: "/#reviews",
-        label: "Reviews",
-    },
-    {
-        to: "https://github.com/luasenvy/nextjs-astro-theme",
-        label: "NextJS Version",
-    },
-];
+const links = [];
 ---
 
 <header>
-    <nav id="nav" class="absolute group z-10 w-full border-b border-black/5 dark:border-white/5 lg:border-transparent">
-        <Container>
-            <div class="relative flex flex-wrap items-center justify-between gap-6 py-3 md:gap-0 md:py-4">
-                <div class="relative z-20 flex w-full justify-between md:px-0 lg:w-fit">
-                    <a href="/#home" aria-label="logo" class="flex items-center space-x-2">
-                        <div aria-hidden="true" class="flex space-x-1">
-                            <div class="size-4 rounded-full bg-gray-900 dark:bg-white"></div>
-                            <div class="h-6 w-2 bg-primary"></div>
-                        </div>
-                        <span class="text-2xl font-bold text-gray-900 dark:text-white">Astrolus</span>
-                    </a>
+    <nav id="navbar" class="navbar">
+        <div class="nav-container">
+            <!-- Donate Button (left of logo) -->
+            <a class="nav-action-btn donate-btn" href="#" id="donate-btn">
+                <span class="btn-inner">Donate</span>
+            </a>
 
-                    <div class="relative flex max-h-10 items-center lg:hidden">
-                        <button aria-label="humburger" id="hamburger" class="relative -mr-6 p-6 active:scale-95 duration-300">
-                            <div aria-hidden="true" id="line" class="m-auto h-0.5 w-5 rounded bg-gray-950 transition duration-300 dark:bg-white origin-top group-data-[state=active]:rotate-45 group-data-[state=active]:translate-y-1.5"></div>
-                            <div aria-hidden="true" id="line2" class="m-auto mt-2 h-0.5 w-5 rounded bg-gray-950 transition duration-300 dark:bg-white origin-bottom group-data-[state=active]:-rotate-45 group-data-[state=active]:-translate-y-1"></div>
-                        </button>
-                    </div>
-                </div>
-                <div id="navLayer" aria-hidden="true" class="fixed inset-0 z-10 h-screen w-screen origin-bottom scale-y-0 bg-white/70 backdrop-blur-2xl transition duration-500 group-data-[state=active]:origin-top group-data-[state=active]:scale-y-100 dark:bg-gray-950/70 lg:hidden"></div>
-                <div id="navlinks" class="invisible absolute top-full left-0 z-20 w-full origin-top-right translate-y-1 scale-90 flex-col flex-wrap justify-end gap-6 rounded-3xl border border-gray-100 bg-white p-8 opacity-0 shadow-2xl shadow-gray-600/10 transition-all duration-300 dark:border-gray-700 dark:bg-gray-800 dark:shadow-none lg:visible lg:relative lg:flex lg:w-fit lg:translate-y-0 lg:scale-100 lg:flex-row lg:items-center lg:gap-0 lg:border-none lg:bg-transparent lg:p-0 lg:opacity-100 lg:shadow-none lg:dark:bg-transparent group-data-[state=active]:visible group-data-[state=active]:scale-100 group-data-[state=active]:opacity-100 lg:group-data-[state=active]:translate-y-0">
-                    <div class="w-full text-gray-600 dark:text-gray-200 lg:w-auto lg:pr-4 lg:pt-0">
-                        <div id="links-group" class="flex flex-col gap-6 tracking-wide lg:flex-row lg:gap-0 lg:text-sm">
-                            {
-                                links.map((link) => (
-                                    <a href={link.to} class="hover:text-primary block transition dark:hover:text-white md:px-4">
-                                        <span>{link.label}</span>
-                                    </a>
-                                ))
-                            }
-                            <a href="https://tailtips.dev" target="_blank" class="flex gap-2 font-semibold text-gray-700 transition hover:text-primary dark:text-white dark:hover:text-white md:px-4">
-                                <span>TailwindCSS Tips</span>
-                                <span class="flex rounded-full border bg-primary/20 px-2 py-0.5 text-xs tracking-wider text-purple-700 dark:bg-white/10 dark:text-orange-300">New</span>
-                            </a>
-                        </div>
-                    </div>
+            <!-- Hanging Conclave Logo (appears on scroll) -->
+            <img
+                src="/phi%20mu%20delta%20conclave%202026.png"
+                alt="Phi Mu Delta Conclave 2026"
+                class="navbar-conclave-logo"
+                id="navbar-conclave-logo"
+            />
 
-                    <div class="mt-12 lg:mt-0">
-                        <a href="/register" class="relative flex h-9 w-full items-center justify-center px-4 before:absolute before:inset-0 before:rounded-full before:bg-primary before:transition before:duration-300 hover:before:scale-105 active:duration-75 active:before:scale-95 sm:w-max">
-                            <span class="relative text-sm font-semibold text-white"> Get Started</span>
-                        </a>
-                    </div>
-                </div>
+            <!-- Register Button (right of logo) -->
+            <a class="nav-action-btn register-btn" href="#" id="register-btn">
+                <span class="btn-inner">Register</span>
+            </a>
+
+            <!-- Mobile Toggle -->
+            <button type="button" class="navbar-toggle" id="navbar-toggle" aria-label="Toggle navigation" aria-expanded="false">
+                <span class="toggle-icon"></span>
+            </button>
+
+            <!-- Navigation Links -->
+            <div class="navbar-collapse" id="navbar-collapse">
+                <ul class="navbar-nav" id="navbar-nav">
+                    {links.map((link) => (
+                        <li class="glass-item">
+                            <span class="shine"></span>
+                            <span class="glow"></span>
+                            <a href={link.to}>{link.label}</a>
+                        </li>
+                    ))}
+                </ul>
             </div>
-        </Container>
+        </div>
     </nav>
+
+    <!-- Scroll to Top Button -->
+    <a href="/#home" class="scroll-top" id="scroll-top" aria-label="Scroll to top">
+        <svg viewBox="0 0 24 24" fill="currentColor">
+            <path d="M7.41 15.41L12 10.83l4.59 4.58L18 14l-6-6-6 6z"/>
+        </svg>
+    </a>
 </header>
 
-<script>
-    let isToggled = false;
-    const navbar = document.querySelector("#nav") as HTMLElement;
-    const menuBtn = document.querySelector("#hamburger") as HTMLButtonElement;
-    const links = [...navbar.querySelector("#links-group").children] as HTMLAnchorElement[];
+<style>
+    /* Variables */
+    :root {
+        --nav-height: 70px;
+        --nav-bg: transparent;
+        --nav-text: #9ca3af;
+        --nav-text-active: #ea7600;
+        --nav-font-size: 14px;
 
-    function toggleNavlinks() {
-        if (isToggled) {
-            navbar.dataset.state = "active";
-        } else {
-            navbar.dataset.state = "";
+        /* Glass effect vars */
+        --glass-border: 1px;
+        --glass-border-color: rgba(234, 118, 0, 0.25);
+        --glass-radius: 12px;
+        --glass-ease: cubic-bezier(0.5, 1, 0.89, 1);
+
+        /* Button colors */
+        --color-orange: #ea7600;
+        --color-gold: #f1d44b;
+        --color-black: #000;
+    }
+
+    /* Animation properties */
+    @property --angle {
+        syntax: "<angle>";
+        initial-value: 0deg;
+        inherits: false;
+    }
+
+    @property --glowColor {
+        syntax: "<color>";
+        initial-value: #ea7600;
+    }
+
+    @keyframes rotate {
+        0% { --angle: 0deg; }
+        100% { --angle: 360deg; }
+    }
+
+    /* Navbar Base */
+    .navbar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: var(--nav-height);
+        background: var(--nav-bg);
+        border: none;
+        z-index: 1000;
+        transition: background-color 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .nav-container {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+        height: 100%;
+        width: 100%;
+        padding: 0 1rem;
+    }
+
+    @media (min-width: 640px) {
+        .nav-container {
+            padding: 0 1.5rem;
         }
     }
 
-    menuBtn.addEventListener("click", () => {
-        isToggled = !isToggled;
-        toggleNavlinks();
+    @media (min-width: 1024px) {
+        .nav-container {
+            padding: 0 2rem;
+        }
+    }
+
+    /* Hanging Conclave Logo */
+    .navbar-conclave-logo {
+        position: absolute;
+        left: 50%;
+        top: 100%;
+        transform: translateX(-50%) translateY(-30%);
+        height: auto;
+        width: clamp(100px, 25vw, 220px);
+        opacity: 0;
+        visibility: hidden;
+        transition: opacity 0.3s ease, transform 0.3s ease, visibility 0.3s ease;
+        z-index: 100;
+        pointer-events: none;
+    }
+
+    .navbar-conclave-logo.show {
+        opacity: 1;
+        visibility: visible;
+        pointer-events: auto;
+    }
+
+    /* Action Buttons */
+    .nav-action-btn {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 100px;
+        border: none;
+        background: none;
+        position: absolute;
+        top: 100%;
+        transform: translateY(-30%);
+        padding: 1px;
+        text-decoration: none;
+        transition: all 0.18s ease-in-out;
+        opacity: 0;
+        visibility: hidden;
+        z-index: 100;
+        pointer-events: none;
+    }
+
+    .nav-action-btn.show {
+        opacity: 1;
+        visibility: visible;
+        pointer-events: auto;
+    }
+
+    .donate-btn {
+        right: calc(50% + clamp(50px, 12.5vw, 110px) + 1.5rem);
+    }
+
+    .register-btn {
+        left: calc(50% + clamp(50px, 12.5vw, 110px) + 1.5rem);
+    }
+
+    .nav-action-btn:after, 
+    .nav-action-btn:before {
+        content: "";
+        display: block;
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        border-radius: calc(100px + 1.5px);
+        background-size: 100% 100%;
+        background-position: 0px 0px;
+        background-image: conic-gradient(
+            from var(--angle) at 50% 50%, 
+            rgba(0,0,0,0) 0%,
+            rgba(0,0,0,0) 33%,
+            var(--glowColor) 50%,
+            rgba(0,0,0,0) 66%,
+            rgba(0,0,0,0) 100%
+        );
+        animation: rotate 2s infinite linear;
+    }
+
+    .nav-action-btn:before {
+        filter: blur(20px);
+    }
+
+    .register-btn {
+        --glowColor: var(--color-orange);
+    }
+
+    .donate-btn {
+        --glowColor: var(--color-gold);
+    }
+
+    .btn-inner {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        padding: 0.65rem 1.75rem;
+        border-radius: 100px;
+        font-weight: 600;
+        font-size: 0.9375rem;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        z-index: 1;
+        transition: all 0.18s ease;
+        background: rgba(255, 255, 255, 0.25);
+        backdrop-filter: blur(40px);
+        backface-visibility: hidden;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15), 0 4px 16px rgba(0, 0, 0, 0.1);
+        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    }
+
+    .register-btn .btn-inner {
+        color: #212322;
+    }
+
+    .donate-btn .btn-inner {
+        color: #212322;
+    }
+
+    .nav-action-btn:hover .btn-inner {
+        background: rgba(0, 0, 0, 0.5);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25), 0 8px 24px rgba(0, 0, 0, 0.15);
+        transform: translateY(-1px);
+    }
+
+    .register-btn:hover .btn-inner {
+        color: #ff8c1a;
+    }
+
+    .donate-btn:hover .btn-inner {
+        color: #f5de6f;
+    }
+
+    .nav-action-btn:active {
+        transform: translateY(-30%) scale(0.95);
+    }
+
+    /* Mobile button positioning */
+    @media (max-width: 768px) {
+        .donate-btn {
+            right: calc(50% + clamp(50px, 12.5vw, 110px) + 1rem);
+        }
+
+        .register-btn {
+            left: calc(50% + clamp(50px, 12.5vw, 110px) + 1rem);
+        }
+
+        .btn-inner {
+            padding: 0.5rem 1.25rem;
+            font-size: 0.8125rem;
+            letter-spacing: 0.5px;
+        }
+    }
+
+    /* Mobile Toggle */
+    .navbar-toggle {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 44px;
+        height: 44px;
+        padding: 0;
+        background: none;
+        border: none;
+        cursor: pointer;
+        position: absolute;
+        right: 1rem;
+    }
+
+    @media (min-width: 768px) {
+        .navbar-toggle {
+            display: none;
+        }
+    }
+
+    .toggle-icon {
+        position: relative;
+        width: 24px;
+        height: 2px;
+        background: #374151;
+        transition: background 0.2s ease;
+    }
+
+    .toggle-icon::before,
+    .toggle-icon::after {
+        content: '';
+        position: absolute;
+        left: 0;
+        width: 100%;
+        height: 2px;
+        background: #374151;
+        transition: transform 0.3s ease;
+    }
+
+    .toggle-icon::before {
+        top: -8px;
+    }
+
+    .toggle-icon::after {
+        bottom: -8px;
+    }
+
+    .navbar-toggle[aria-expanded="true"] .toggle-icon {
+        background: transparent;
+    }
+
+    .navbar-toggle[aria-expanded="true"] .toggle-icon::before {
+        transform: translateY(8px) rotate(45deg);
+    }
+
+    .navbar-toggle[aria-expanded="true"] .toggle-icon::after {
+        transform: translateY(-8px) rotate(-45deg);
+    }
+
+    /* Navbar Collapse */
+    .navbar-collapse {
+        display: none;
+        position: absolute;
+        top: var(--nav-height);
+        left: 0;
+        right: 0;
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(12px);
+        padding: 1rem;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    .navbar-collapse.show {
+        display: block;
+    }
+
+    @media (min-width: 768px) {
+        .navbar-collapse {
+            display: flex;
+            position: absolute;
+            right: 2rem;
+            top: 50%;
+            transform: translateY(-50%);
+            align-items: center;
+            gap: 0.5rem;
+            background: transparent;
+            backdrop-filter: none;
+            padding: 0;
+            box-shadow: none;
+        }
+    }
+
+    /* Navigation Links */
+    .navbar-nav {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        width: 100%;
+    }
+
+    @media (min-width: 768px) {
+        .navbar-nav {
+            flex-direction: row;
+            align-items: center;
+            width: auto;
+        }
+    }
+
+    /* Scroll to Top Button */
+    .scroll-top {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: fixed;
+        right: 20px;
+        bottom: 20px;
+        width: 44px;
+        height: 44px;
+        color: white;
+        background: var(--nav-text-active);
+        border-radius: 50%;
+        box-shadow: 2px 2px 12px rgba(0, 0, 0, 0.2);
+        transform: translateY(80px);
+        transition: transform 0.2s ease-in, opacity 0.2s ease;
+        opacity: 0.7;
+        z-index: 999;
+    }
+
+    .scroll-top:hover {
+        opacity: 1;
+    }
+
+    .scroll-top.show-button {
+        transform: translateY(0);
+    }
+
+    .scroll-top svg {
+        width: 24px;
+        height: 24px;
+        fill: currentColor;
+    }
+
+    /* Focus section animation */
+    :global(section.focus .section-header) {
+        color: var(--nav-text-active);
+    }
+</style>
+
+<script>
+    // Elements
+    const navbar = document.getElementById('navbar') as HTMLElement;
+    const navbarToggle = document.getElementById('navbar-toggle') as HTMLButtonElement;
+    const navbarCollapse = document.getElementById('navbar-collapse') as HTMLElement;
+    const navbarNav = document.getElementById('navbar-nav') as HTMLElement;
+    const scrollTopBtn = document.getElementById('scroll-top') as HTMLElement;
+    const navLinks = navbarNav.querySelectorAll('a');
+    const heroConclaveLogo = document.getElementById('hero-conclave-logo') as HTMLElement;
+    const navbarConclaveLogo = document.getElementById('navbar-conclave-logo') as HTMLElement;
+    const registerBtn = document.getElementById('register-btn') as HTMLElement;
+    const donateBtn = document.getElementById('donate-btn') as HTMLElement;
+
+    // Mobile menu toggle
+    navbarToggle.addEventListener('click', () => {
+        const expanded = navbarToggle.getAttribute('aria-expanded') === 'true';
+        navbarToggle.setAttribute('aria-expanded', String(!expanded));
+        navbarCollapse.classList.toggle('show');
     });
 
-    links.forEach((link) => {
-        link.addEventListener("click", () => {
-            isToggled = !isToggled;
-            toggleNavlinks();
+    // Smooth scroll and active state
+    navLinks.forEach((link) => {
+        link.addEventListener('click', (e) => {
+            const href = link.getAttribute('href');
+
+            if (href && href.startsWith('/#')) {
+                e.preventDefault();
+                const targetId = href.substring(2);
+                const targetElement = document.getElementById(targetId);
+
+                // Remove active from all, add to current
+                navbarNav.querySelectorAll('.glass-item').forEach(item => item.classList.remove('active'));
+                link.closest('.glass-item')?.classList.add('active');
+
+                // Add focus effect to target section
+                document.querySelectorAll('section').forEach(s => s.classList.remove('focus'));
+                targetElement?.classList.add('focus');
+
+                // Remove focus class after animation
+                setTimeout(() => {
+                    targetElement?.classList.remove('focus');
+                }, 2000);
+
+                if (targetElement) {
+                    const navHeight = navbar.offsetHeight;
+                    const targetPosition = targetElement.offsetTop - navHeight;
+
+                    window.scrollTo({
+                        top: targetPosition,
+                        behavior: 'smooth'
+                    });
+                }
+
+                // Close mobile menu
+                navbarToggle.setAttribute('aria-expanded', 'false');
+                navbarCollapse.classList.remove('show');
+            }
         });
     });
+
+    // Home link smooth scroll
+    const homeLinks = document.querySelectorAll('a[href="/#home"]');
+    homeLinks.forEach((link) => {
+        link.addEventListener('click', (e) => {
+            e.preventDefault();
+
+            // Remove all active states
+            navbarNav.querySelectorAll('.glass-item').forEach(item => item.classList.remove('active'));
+
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+
+            // Close mobile menu
+            navbarToggle.setAttribute('aria-expanded', 'false');
+            navbarCollapse.classList.remove('show');
+        });
+    });
+
+    // Scroll event handler
+    function handleScroll() {
+        const scrollPos = window.scrollY;
+
+        // Show/hide scroll-top button
+        if (scrollPos > 50) {
+            scrollTopBtn.classList.add('show-button');
+        } else {
+            scrollTopBtn.classList.remove('show-button');
+        }
+
+        // Update active nav item based on scroll position
+        const sections = document.querySelectorAll('section[id]');
+        const navHeight = navbar.offsetHeight;
+
+        sections.forEach((section) => {
+            const sectionTop = (section as HTMLElement).offsetTop - navHeight - 100;
+            const sectionBottom = sectionTop + (section as HTMLElement).offsetHeight;
+            const sectionId = section.getAttribute('id');
+
+            if (scrollPos >= sectionTop && scrollPos < sectionBottom) {
+                navbarNav.querySelectorAll('.glass-item').forEach(item => item.classList.remove('active'));
+                const activeLink = navbarNav.querySelector(`a[href="/#${sectionId}"]`);
+                activeLink?.closest('.glass-item')?.classList.add('active');
+            }
+        });
+
+        // Show/hide hanging logo and buttons
+        if (heroConclaveLogo && navbarConclaveLogo && registerBtn && donateBtn) {
+            const heroLogoRect = heroConclaveLogo.getBoundingClientRect();
+            const navHeight = navbar.offsetHeight;
+
+            if (heroLogoRect.top < navHeight) {
+                navbarConclaveLogo.classList.add('show');
+                registerBtn.classList.add('show');
+                donateBtn.classList.add('show');
+                heroConclaveLogo.classList.add('faded');
+            } else {
+                navbarConclaveLogo.classList.remove('show');
+                registerBtn.classList.remove('show');
+                donateBtn.classList.remove('show');
+                heroConclaveLogo.classList.remove('faded');
+            }
+        }
+    }
+
+    // Initial check and scroll listener
+    handleScroll();
+    window.addEventListener('scroll', handleScroll);
 </script>

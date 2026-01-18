@@ -1,0 +1,854 @@
+---
+import Container from "./Container.astro"
+import ConclaveCoach from "./ConclaveCoach.astro"
+
+interface Props {
+  class?: string;
+}
+const { class: className = '' } = Astro.props;
+---
+
+<section class:list={["travel-calculator", className]} id="travel">
+  <Container>
+    <span style="
+      font-family: 'Have Heart One', cursive;
+      font-size: clamp(2.5rem, 8vw + 1rem, 10rem);
+      display: block;
+      text-align: center;
+      white-space: nowrap;
+      background: linear-gradient(90deg, #ea7600 0%, #f1d44b 50%, #ea7600 100%);
+      background-size: 200% auto;
+      background-clip: text;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation: shimmer 6s ease-in-out infinite;
+    ">All Roads Lead to Ada</span>
+    
+    <h3 style="font-family: 'Inter', sans-serif; font-weight: 100; font-size: clamp(1rem, 2vw + 0.5rem, 1.5rem); text-align: center; margin-bottom: 2rem;">
+      Did Someone Say Roadtrip? Let's Plan Your Trip to Ada, Ohio.
+    </h3>
+
+    <ConclaveCoach />
+
+    <div class="map-section">
+      <!-- Search Controls -->
+      <div class="search-controls">
+        <!-- Airport Selector -->
+        <div class="selector-wrapper">
+          <button class="selector-btn" id="airport-selector" data-type="airport">
+            <span class="selector-icon">✈️</span>
+            <span class="selector-text">Airports</span>
+            <span class="selector-arrow">▼</span>
+          </button>
+          
+          <!-- Airport Dropdown -->
+          <div class="dropdown-overlay" id="airport-dropdown">
+            <div class="dropdown-content">
+              <button class="dropdown-item" data-airport="DAY" data-name="James M. Cox Dayton International Airport">
+                <span class="airport-code">DAY</span>
+                <span class="airport-full-name">James M. Cox Dayton International Airport</span>
+              </button>
+              <button class="dropdown-item" data-airport="CMH" data-name="John Glenn Columbus International Airport">
+                <span class="airport-code">CMH</span>
+                <span class="airport-full-name">John Glenn Columbus International Airport</span>
+              </button>
+              <button class="dropdown-item" data-airport="LCK" data-name="Rickenbacker International Airport">
+                <span class="airport-code">LCK</span>
+                <span class="airport-full-name">Rickenbacker International Airport</span>
+              </button>
+              <button class="dropdown-item" data-airport="FWA" data-name="Fort Wayne International Airport">
+                <span class="airport-code">FWA</span>
+                <span class="airport-full-name">Fort Wayne International Airport</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Address Input -->
+        <div class="selector-wrapper">
+          <div class="address-input-wrapper">
+            <span class="selector-icon">🔍</span>
+            <input
+              type="text"
+              id="departure-address"
+              class="address-input"
+              placeholder="Enter your departure address"
+              aria-label="Departure address"
+            />
+          </div>
+        </div>
+      </div>
+
+      <!-- Route Display (shows after selection) -->
+      <div id="route-display" class="route-display hidden">
+        <div class="route-pills">
+          <div class="route-pill origin" id="origin-pill">
+            <span class="pill-text">Select origin</span>
+          </div>
+          <span class="route-arrow">→</span>
+          <div class="route-pill destination">
+            <span class="pill-icon">📍</span>
+            <span class="pill-text">Ohio Northern University</span>
+          </div>
+        </div>
+        
+        <div class="route-stats">
+          <div class="stat-item">
+            <span class="stat-icon">⏱️</span>
+            <span class="stat-value" id="duration-value">--</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-icon">📏</span>
+            <span class="stat-value" id="distance-value">--</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Map Container -->
+      <div id="map-container" class="map-container">
+        <div id="route-map"></div>
+        
+        <!-- Loading Overlay -->
+        <div id="loading-overlay" class="loading-overlay hidden">
+          <div class="spinner"></div>
+          <p>Calculating route...</p>
+        </div>
+      </div>
+
+      <!-- Error Display -->
+      <div id="error" class="error-display hidden">
+        <p id="error-message"></p>
+      </div>
+    </div>
+  </Container>
+</section>
+
+<!-- Mapbox GL JS -->
+<script src='https://api.mapbox.com/mapbox-gl-js/v3.0.1/mapbox-gl.js' is:inline></script>
+<link href='https://api.mapbox.com/mapbox-gl-js/v3.0.1/mapbox-gl.css' rel='stylesheet' />
+
+<!-- Inject Mapbox Token -->
+<script is:inline define:vars={{ mapboxToken: import.meta.env.PUBLIC_MAPBOX_TOKEN }}>
+  window.MAPBOX_TOKEN = mapboxToken;
+</script>
+
+<style>
+  .travel-calculator {
+    padding: 4rem 1rem;
+    background: #f4f7ff;
+    position: relative;
+  }
+
+  @keyframes shimmer {
+    0% {
+      background-position: 200% center;
+    }
+    100% {
+      background-position: -200% center;
+    }
+  }
+
+  .map-section {
+    position: relative;
+  }
+
+  /* Search Controls */
+  .search-controls {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1rem;
+    position: relative;
+    z-index: 100;
+  }
+
+  .selector-wrapper {
+    flex: 1;
+    position: relative;
+  }
+
+  /* Selector Button */
+  .selector-btn {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 1rem 1.25rem;
+    background: linear-gradient(90deg, #ea7600, #f1d44b);
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    color: white;
+  }
+
+  .selector-btn:hover {
+    box-shadow: 0 4px 12px rgba(234, 118, 0, 0.2);
+  }
+
+  .selector-btn.selected {
+    background: white;
+    border: 2px solid transparent;
+    background-image: linear-gradient(white, white), linear-gradient(90deg, #ea7600, #f1d44b);
+    background-origin: border-box;
+    background-clip: padding-box, border-box;
+    color: #1a1a1a;
+  }
+
+  .selector-icon {
+    font-size: 1.25rem;
+  }
+
+  .selector-text {
+    flex: 1;
+    text-align: left;
+    font-weight: 600;
+  }
+
+  .selector-btn:not(.selected) .selector-text {
+    color: white;
+  }
+
+  .selector-btn.selected .selector-text {
+    color: #1a1a1a;
+  }
+
+  .selector-arrow {
+    font-size: 0.75rem;
+    transition: transform 0.3s ease;
+    color: #666;
+  }
+
+  .selector-btn.active .selector-arrow {
+    transform: rotate(180deg);
+  }
+
+  /* Address Input */
+  .address-input-wrapper {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 1rem 1.25rem;
+    background: linear-gradient(90deg, #5170ff, #ff66c4);
+    border: none;
+    border-radius: 50px;
+    transition: all 0.3s ease;
+    color: white;
+  }
+
+  .address-input-wrapper.selected {
+    background: white;
+    border: 2px solid transparent;
+    background-image: linear-gradient(white, white), linear-gradient(90deg, #5170ff, #ff66c4);
+    background-origin: border-box;
+    background-clip: padding-box, border-box;
+  }
+
+  .address-input-wrapper:focus-within {
+    box-shadow: 0 4px 12px rgba(81, 112, 255, 0.2);
+    outline: 2px solid #5170ff;
+    outline-offset: 2px;
+  }
+
+  .address-input {
+    flex: 1;
+    border: none;
+    outline: none;
+    font-size: 1rem;
+    background: transparent;
+    color: inherit;
+  }
+
+  .address-input-wrapper.selected .address-input {
+    color: #1a1a1a;
+  }
+
+  .address-input::placeholder {
+    color: rgba(255, 255, 255, 0.7);
+  }
+
+  .address-input-wrapper.selected .address-input::placeholder {
+    color: #999;
+    font-style: italic;
+  }
+
+  /* Dropdown Overlay */
+  .dropdown-overlay {
+    position: absolute;
+    top: calc(100% + 0.5rem);
+    left: 0;
+    right: 0;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(12px);
+    border-radius: 16px;
+    padding: 0.5rem;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-10px);
+    transition: all 0.3s ease;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+    z-index: 200;
+    overflow: hidden;
+  }
+
+  .dropdown-overlay.show {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+  }
+
+  /* Dropdown gradient border effect */
+  .dropdown-overlay::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 16px;
+    padding: 2px;
+    background: linear-gradient(90deg, #ea7600, #f1d44b);
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+
+  .dropdown-overlay.show::before {
+    opacity: 1;
+  }
+
+  .dropdown-content {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .dropdown-item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem 1.25rem;
+    background: white;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-align: left;
+  }
+
+  .dropdown-item:hover {
+    background: linear-gradient(135deg, rgba(234, 118, 0, 0.1), rgba(241, 212, 75, 0.1));
+    transform: translateX(4px);
+  }
+
+  .dropdown-item.selected {
+    background: linear-gradient(135deg, #ea7600, #f1d44b);
+    color: white;
+  }
+
+  .airport-code {
+    font-size: 1.125rem;
+    font-weight: 700;
+    min-width: 3rem;
+  }
+
+  .airport-full-name {
+    font-size: 0.875rem;
+    flex: 1;
+  }
+
+  /* Route Display */
+  .route-display {
+    position: absolute;
+    top: 6.5rem;
+    left: 1.5rem;
+    right: 1rem;
+    z-index: 50;
+    opacity: 0;
+    transform: translateY(-10px);
+    transition: all 0.3s ease;
+    pointer-events: none;
+  }
+
+  .route-display:not(.hidden) {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+  }
+
+  .route-display.hidden {
+    display: none;
+  }
+
+  .route-pills {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 0.75rem;
+    flex-wrap: wrap;
+  }
+
+  .route-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1.25rem;
+    background: white;
+    border-radius: 50px;
+    font-size: 0.875rem;
+    font-weight: 600;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    white-space: nowrap;
+    width: auto;
+    flex-shrink: 0;
+  }
+
+  .route-pill.origin {
+    background: linear-gradient(90deg, #ea7600, #f1d44b);
+    color: white;
+  }
+
+  .route-pill.destination {
+    background: linear-gradient(90deg, #ea7600, #212322);
+    color: white;
+  }
+
+  .route-arrow {
+    font-size: 1.25rem;
+    color: #666;
+    flex-shrink: 0;
+  }
+
+  .pill-icon {
+    font-size: 1rem;
+  }
+
+  .pill-text {
+    font-size: 0.875rem;
+  }
+
+  /* Route Stats */
+  .route-stats {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+
+  .stat-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.625rem 1rem;
+    background: white;
+    border-radius: 50px;
+    font-size: 0.875rem;
+    font-weight: 600;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  }
+
+  .stat-icon {
+    font-size: 1.125rem;
+  }
+
+  .stat-value {
+    color: #1a1a1a;
+  }
+
+  /* Map Container */
+  .map-container {
+    width: 100%;
+    height: 500px;
+    border-radius: 16px;
+    overflow: hidden;
+    border: 2px solid #e5e7eb;
+    position: relative;
+    margin-top: 1rem;
+  }
+
+  #route-map {
+    width: 100%;
+    height: 100%;
+  }
+
+  /* Loading Overlay */
+  .loading-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(8px);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    z-index: 10;
+  }
+
+  .loading-overlay.hidden {
+    display: none;
+  }
+
+  .spinner {
+    width: 48px;
+    height: 48px;
+    border: 4px solid #f3f4f6;
+    border-top-color: #ea7600;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+    margin-bottom: 1rem;
+  }
+
+  @keyframes spin {
+    to { transform: rotate(360deg); }
+  }
+
+  .loading-overlay p {
+    font-weight: 600;
+    color: #666;
+  }
+
+  /* Error Display */
+  .error-display {
+    margin-top: 1rem;
+    padding: 1rem 1.5rem;
+    background: #fee;
+    border: 2px solid #fcc;
+    border-radius: 12px;
+    color: #c00;
+    font-weight: 600;
+  }
+
+  .error-display.hidden {
+    display: none;
+  }
+
+  /* Mobile Responsive */
+  @media (max-width: 768px) {
+    .travel-calculator {
+      padding: 3rem 0.5rem;
+    }
+
+    .search-controls {
+      flex-direction: column;
+    }
+
+    .route-display {
+      top: 11rem;
+      left: 1rem;
+    }
+
+    .map-container {
+      height: 600px;
+    }
+
+    .route-pills {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+
+    .route-pill {
+      justify-content: center;
+      width: auto;
+    }
+
+    .route-arrow {
+      display: none;
+    }
+
+    .route-stats {
+      justify-content: flex-start;
+      margin-left: auto;
+      align-self: flex-end;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .travel-calculator {
+      padding: 2rem 0.25rem;
+    }
+
+    .selector-btn,
+    .address-input-wrapper {
+      padding: 0.875rem 1rem;
+    }
+
+    .dropdown-item {
+      padding: 0.875rem 1rem;
+    }
+
+    .airport-full-name {
+      font-size: 0.75rem;
+    }
+  }
+</style>
+
+<script>
+  // Constants
+  const DESTINATION = {
+    address: '401 W College Ave, Ada, OH 45810',
+    name: 'Ohio Northern University',
+    coords: [-83.8241, 40.7698] // Ada, Ohio coordinates
+  };
+
+  // Elements
+  const airportSelector = document.getElementById('airport-selector') as HTMLButtonElement;
+  const airportDropdown = document.getElementById('airport-dropdown') as HTMLElement;
+  const departureInput = document.getElementById('departure-address') as HTMLInputElement;
+  const routeDisplay = document.getElementById('route-display') as HTMLElement;
+  const originPill = document.getElementById('origin-pill') as HTMLElement;
+  const durationValue = document.getElementById('duration-value') as HTMLElement;
+  const distanceValue = document.getElementById('distance-value') as HTMLElement;
+  const mapContainer = document.getElementById('route-map') as HTMLElement;
+  const loadingOverlay = document.getElementById('loading-overlay') as HTMLElement;
+  const errorDisplay = document.getElementById('error') as HTMLElement;
+  const errorMessage = document.getElementById('error-message') as HTMLElement;
+  const dropdownItems = document.querySelectorAll('.dropdown-item');
+
+  let map: any;
+  let selectedOrigin: { type: 'airport' | 'address', value: string, name: string, coords?: [number, number] } | null = null;
+  let originMarker: any = null;
+
+  // Initialize Mapbox
+  function initMap() {
+    if (!(window as any).mapboxgl || !window.MAPBOX_TOKEN) {
+      console.error('Mapbox not loaded');
+      return;
+    }
+
+    (window as any).mapboxgl.accessToken = window.MAPBOX_TOKEN;
+    
+    map = new (window as any).mapboxgl.Map({
+      container: 'route-map',
+      style: 'mapbox://styles/mapbox/streets-v12',
+      center: DESTINATION.coords,
+      zoom: 12
+    });
+
+    // Add destination marker
+    new (window as any).mapboxgl.Marker({ color: '#5170ff' })
+      .setLngLat(DESTINATION.coords)
+      .setPopup(new (window as any).mapboxgl.Popup().setHTML(`<strong>${DESTINATION.name}</strong>`))
+      .addTo(map);
+  }
+
+  // Toggle airport dropdown
+  airportSelector.addEventListener('click', (e) => {
+    e.stopPropagation();
+    const isActive = airportDropdown.classList.contains('show');
+    
+    if (isActive) {
+      closeDropdown();
+    } else {
+      openDropdown();
+    }
+  });
+
+  function openDropdown() {
+    airportDropdown.classList.add('show');
+    airportSelector.classList.add('active');
+  }
+
+  function closeDropdown() {
+    airportDropdown.classList.remove('show');
+    airportSelector.classList.remove('active');
+  }
+
+  // Close dropdown when clicking outside
+  document.addEventListener('click', (e) => {
+    if (!airportDropdown.contains(e.target as Node) && e.target !== airportSelector) {
+      closeDropdown();
+    }
+  });
+
+  // Handle airport selection
+  dropdownItems.forEach(item => {
+    item.addEventListener('click', async (e) => {
+      e.stopPropagation();
+      const button = item as HTMLButtonElement;
+      const code = button.dataset.airport!;
+      const name = button.dataset.name!;
+
+      // Update UI
+      dropdownItems.forEach(i => i.classList.remove('selected'));
+      button.classList.add('selected');
+      
+      // Clear address input and its selected state
+      departureInput.value = '';
+      document.querySelector('.address-input-wrapper')?.classList.remove('selected');
+      
+      // Mark airport selector as selected
+      airportSelector.classList.add('selected');
+
+      // Set selected origin
+      selectedOrigin = { type: 'airport', value: code, name };
+      
+      closeDropdown();
+      await calculateRoute(code, 'airport');
+    });
+  });
+
+  // Handle address input
+  let addressTimeout: number;
+  departureInput.addEventListener('input', () => {
+    clearTimeout(addressTimeout);
+    addressTimeout = window.setTimeout(async () => {
+      const address = departureInput.value.trim();
+      if (address.length > 5) {
+        // Clear airport selection
+        dropdownItems.forEach(i => i.classList.remove('selected'));
+        airportSelector.classList.remove('selected');
+        
+        // Mark address input as selected
+        document.querySelector('.address-input-wrapper')?.classList.add('selected');
+        
+        selectedOrigin = { type: 'address', value: address, name: address };
+        await calculateRoute(address, 'address');
+      }
+    }, 800);
+  });
+
+  // Calculate route
+  async function calculateRoute(origin: string, type: 'airport' | 'address') {
+    try {
+      loadingOverlay.classList.remove('hidden');
+      errorDisplay.classList.add('hidden');
+
+      // Geocode origin
+      let originCoords: [number, number];
+      
+      if (type === 'airport') {
+        // For simplicity, hardcode airport coordinates
+        const airportCoords: Record<string, [number, number]> = {
+          'DAY': [-84.2194, 39.9024],
+          'CMH': [-82.8919, 40.0798],
+          'LCK': [-82.9278, 39.8138],
+          'FWA': [-85.1951, 40.9785]
+        };
+        originCoords = airportCoords[origin];
+      } else {
+        // Geocode address
+        const geoResponse = await fetch(
+          `https://api.mapbox.com/geocoding/v5/mapbox.places/${encodeURIComponent(origin)}.json?access_token=${window.MAPBOX_TOKEN}`
+        );
+        const geoData = await geoResponse.json();
+        
+        if (!geoData.features || geoData.features.length === 0) {
+          throw new Error('Address not found');
+        }
+        
+        originCoords = geoData.features[0].center;
+      }
+
+      // Get directions
+      const directionsResponse = await fetch(
+        `https://api.mapbox.com/directions/v5/mapbox/driving/${originCoords[0]},${originCoords[1]};${DESTINATION.coords[0]},${DESTINATION.coords[1]}?geometries=geojson&access_token=${window.MAPBOX_TOKEN}`
+      );
+      const directionsData = await directionsResponse.json();
+
+      if (!directionsData.routes || directionsData.routes.length === 0) {
+        throw new Error('No route found');
+      }
+
+      const route = directionsData.routes[0];
+      
+      // Update UI
+      updateRouteDisplay(route);
+      drawRoute(route.geometry, originCoords);
+      
+      loadingOverlay.classList.add('hidden');
+    } catch (error) {
+      loadingOverlay.classList.add('hidden');
+      errorDisplay.classList.remove('hidden');
+      errorMessage.textContent = error instanceof Error ? error.message : 'Failed to calculate route';
+    }
+  }
+
+  // Update route display
+  function updateRouteDisplay(route: any) {
+    const durationMinutes = Math.round(route.duration / 60);
+    const hours = Math.floor(durationMinutes / 60);
+    const minutes = durationMinutes % 60;
+    const durationText = hours > 0 ? `${hours}h ${minutes}m` : `${minutes}m`;
+    const distanceMiles = (route.distance * 0.000621371).toFixed(1);
+
+    // Update origin pill with appropriate gradient and icon
+    if (selectedOrigin) {
+      const gradientClass = selectedOrigin.type === 'airport' ? 
+        'background: linear-gradient(90deg, #ea7600, #f1d44b);' : 
+        'background: linear-gradient(90deg, #5170ff, #ff66c4);';
+      
+      const icon = selectedOrigin.type === 'airport' ? '✈️' : '🚗';
+      
+      originPill.innerHTML = `
+        <span class="pill-icon">${icon}</span>
+        <span class="pill-text">${selectedOrigin.type === 'airport' ? selectedOrigin.value + ' - ' : ''}${selectedOrigin.name}</span>
+      `;
+      originPill.style.cssText = gradientClass + ' color: white;';
+    }
+
+    durationValue.textContent = durationText;
+    distanceValue.textContent = `${distanceMiles} mi`;
+
+    routeDisplay.classList.remove('hidden');
+  }
+
+  // Draw route on map
+  function drawRoute(geometry: any, originCoords: [number, number]) {
+    // Remove existing route layer
+    if (map.getLayer('route')) {
+      map.removeLayer('route');
+      map.removeSource('route');
+    }
+
+    // Remove existing origin marker
+    if (originMarker) {
+      originMarker.remove();
+      originMarker = null;
+    }
+
+    // Add route
+    map.addSource('route', {
+      type: 'geojson',
+      data: {
+        type: 'Feature',
+        properties: {},
+        geometry: geometry
+      }
+    });
+
+    map.addLayer({
+      id: 'route',
+      type: 'line',
+      source: 'route',
+      layout: {
+        'line-join': 'round',
+        'line-cap': 'round'
+      },
+      paint: {
+        'line-color': '#ea7600',
+        'line-width': 4
+      }
+    });
+
+    // Add origin marker
+    originMarker = new (window as any).mapboxgl.Marker({ color: '#ea7600' })
+      .setLngLat(originCoords)
+      .addTo(map);
+
+    // Fit map to route
+    const bounds = new (window as any).mapboxgl.LngLatBounds();
+    bounds.extend(originCoords);
+    bounds.extend(DESTINATION.coords);
+    
+    map.fitBounds(bounds, {
+      padding: 80,
+      duration: 1000
+    });
+  }
+
+  // Initialize on load
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initMap);
+  } else {
+    initMap();
+  }
+</script>
