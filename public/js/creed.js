@@ -1,7 +1,8 @@
 (() => {
+  const section = document.querySelector(".creed-wrap");
   const wordEl = document.querySelector(".creed-word");
   const ellipsisEl = document.querySelector(".creed-ellipsis");
-  if (!wordEl || !ellipsisEl) return;
+  if (!section || !wordEl || !ellipsisEl) return;
 
   const words = ["Brotherhood", "Service", "Democracy"];
   const ELLIPSIS = "...";
@@ -18,18 +19,32 @@
   let typedWord = "";
   let typedEllipsis = "";
   let cycleStart = 0;
+  let isVisible = false;
+  let currentTimeout = null;
 
   function setHighlight(on) {
     wordEl.classList.toggle("is-highlight", on);
   }
 
+  function scheduleNext(fn, delay) {
+    // Clear any existing timeout
+    if (currentTimeout) {
+      clearTimeout(currentTimeout);
+    }
+    // Only schedule if visible
+    if (isVisible) {
+      currentTimeout = setTimeout(fn, delay);
+    }
+  }
+
   function typeWord(word, i = 0) {
+    if (!isVisible) return;
     setHighlight(true);
 
     if (i < word.length) {
       typedWord += word.charAt(i);
       wordEl.textContent = typedWord;
-      setTimeout(() => typeWord(word, i + 1), TYPE_SPEED);
+      scheduleNext(() => typeWord(word, i + 1), TYPE_SPEED);
     } else {
       // word complete -> type ellipsis
       typeEllipsis(0);
@@ -37,40 +52,44 @@
   }
 
   function typeEllipsis(i = 0) {
+    if (!isVisible) return;
     if (i < ELLIPSIS.length) {
       typedEllipsis += ELLIPSIS.charAt(i);
       ellipsisEl.textContent = typedEllipsis;
-      setTimeout(() => typeEllipsis(i + 1), TYPE_SPEED);
+      scheduleNext(() => typeEllipsis(i + 1), TYPE_SPEED);
     } else {
       // hold with highlight on word
-      setTimeout(deleteEllipsis, PAUSE_AFTER_TYPED);
+      scheduleNext(deleteEllipsis, PAUSE_AFTER_TYPED);
     }
   }
 
   function deleteEllipsis() {
+    if (!isVisible) return;
     // ellipsis is not highlighted, so no class changes here
     if (typedEllipsis.length > 0) {
       typedEllipsis = typedEllipsis.slice(0, -1);
       ellipsisEl.textContent = typedEllipsis;
-      setTimeout(deleteEllipsis, DELETE_SPEED);
+      scheduleNext(deleteEllipsis, DELETE_SPEED);
     } else {
-      setTimeout(deleteWord, PAUSE_AFTER_DELETED);
+      scheduleNext(deleteWord, PAUSE_AFTER_DELETED);
     }
   }
 
   function deleteWord() {
+    if (!isVisible) return;
     setHighlight(false);
 
     if (typedWord.length > 0) {
       typedWord = typedWord.slice(0, -1);
       wordEl.textContent = typedWord;
-      setTimeout(deleteWord, DELETE_SPEED);
+      scheduleNext(deleteWord, DELETE_SPEED);
     } else {
-      setTimeout(nextWordOrHoldTo30s, PAUSE_AFTER_DELETED);
+      scheduleNext(nextWordOrHoldTo30s, PAUSE_AFTER_DELETED);
     }
   }
 
   function nextWordOrHoldTo30s() {
+    if (!isVisible) return;
     wordIndex++;
 
     if (wordIndex < words.length) {
@@ -86,10 +105,11 @@
     const elapsed = Date.now() - cycleStart;
     const remaining = Math.max(0, CYCLE_TOTAL - elapsed);
 
-    setTimeout(startCycle, remaining);
+    scheduleNext(startCycle, remaining);
   }
 
   function startCycle() {
+    if (!isVisible) return;
     cycleStart = Date.now();
     wordIndex = 0;
 
@@ -102,5 +122,30 @@
     typeWord(words[wordIndex], 0);
   }
 
-  startCycle();
+  // Intersection Observer for lazy loading
+  const observer = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          section.classList.remove('paused');
+          isVisible = true;
+          // Resume or start the cycle
+          if (!currentTimeout) {
+            startCycle();
+          }
+        } else {
+          section.classList.add('paused');
+          isVisible = false;
+          // Clear any pending timeouts to stop the animation
+          if (currentTimeout) {
+            clearTimeout(currentTimeout);
+            currentTimeout = null;
+          }
+        }
+      });
+    },
+    { rootMargin: '100px', threshold: 0 }
+  );
+
+  observer.observe(section);
 })();

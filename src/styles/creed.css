@@ -8,6 +8,11 @@
   --pill-pad-x: 0.25em;
 }
 
+/* Pause animations when not in view */
+.creed-wrap.paused .creed-ellipsis::after {
+  animation-play-state: paused;
+}
+
 .creed-wrap {
   display: grid;
   place-items: center;

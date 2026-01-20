@@ -23,11 +23,6 @@ const links = [];
                 <span class="btn-inner">Register</span>
             </a>
 
-            <!-- Mobile Toggle -->
-            <button type="button" class="navbar-toggle" id="navbar-toggle" aria-label="Toggle navigation" aria-expanded="false">
-                <span class="toggle-icon"></span>
-            </button>
-
             <!-- Navigation Links -->
             <div class="navbar-collapse" id="navbar-collapse">
                 <ul class="navbar-nav" id="navbar-nav">
@@ -277,66 +272,6 @@ const links = [];
         }
     }
 
-    /* Mobile Toggle */
-    .navbar-toggle {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        width: 44px;
-        height: 44px;
-        padding: 0;
-        background: none;
-        border: none;
-        cursor: pointer;
-        position: absolute;
-        right: 1rem;
-    }
-
-    @media (min-width: 768px) {
-        .navbar-toggle {
-            display: none;
-        }
-    }
-
-    .toggle-icon {
-        position: relative;
-        width: 24px;
-        height: 2px;
-        background: #374151;
-        transition: background 0.2s ease;
-    }
-
-    .toggle-icon::before,
-    .toggle-icon::after {
-        content: '';
-        position: absolute;
-        left: 0;
-        width: 100%;
-        height: 2px;
-        background: #374151;
-        transition: transform 0.3s ease;
-    }
-
-    .toggle-icon::before {
-        top: -8px;
-    }
-
-    .toggle-icon::after {
-        bottom: -8px;
-    }
-
-    .navbar-toggle[aria-expanded="true"] .toggle-icon {
-        background: transparent;
-    }
-
-    .navbar-toggle[aria-expanded="true"] .toggle-icon::before {
-        transform: translateY(8px) rotate(45deg);
-    }
-
-    .navbar-toggle[aria-expanded="true"] .toggle-icon::after {
-        transform: translateY(-8px) rotate(-45deg);
-    }
-
     /* Navbar Collapse */
     .navbar-collapse {
         display: none;
@@ -432,8 +367,6 @@ const links = [];
 <script>
     // Elements
     const navbar = document.getElementById('navbar') as HTMLElement;
-    const navbarToggle = document.getElementById('navbar-toggle') as HTMLButtonElement;
-    const navbarCollapse = document.getElementById('navbar-collapse') as HTMLElement;
     const navbarNav = document.getElementById('navbar-nav') as HTMLElement;
     const scrollTopBtn = document.getElementById('scroll-top') as HTMLElement;
     const navLinks = navbarNav.querySelectorAll('a');
@@ -441,13 +374,6 @@ const links = [];
     const navbarConclaveLogo = document.getElementById('navbar-conclave-logo') as HTMLElement;
     const registerBtn = document.getElementById('register-btn') as HTMLElement;
     const donateBtn = document.getElementById('donate-btn') as HTMLElement;
-
-    // Mobile menu toggle
-    navbarToggle.addEventListener('click', () => {
-        const expanded = navbarToggle.getAttribute('aria-expanded') === 'true';
-        navbarToggle.setAttribute('aria-expanded', String(!expanded));
-        navbarCollapse.classList.toggle('show');
-    });
 
     // Smooth scroll and active state
     navLinks.forEach((link) => {
@@ -481,10 +407,6 @@ const links = [];
                         behavior: 'smooth'
                     });
                 }
-
-                // Close mobile menu
-                navbarToggle.setAttribute('aria-expanded', 'false');
-                navbarCollapse.classList.remove('show');
             }
         });
     });
@@ -502,10 +424,6 @@ const links = [];
                 top: 0,
                 behavior: 'smooth'
             });
-
-            // Close mobile menu
-            navbarToggle.setAttribute('aria-expanded', 'false');
-            navbarCollapse.classList.remove('show');
         });
     });
 

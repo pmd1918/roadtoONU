@@ -3,7 +3,7 @@ import Container from "./Container.astro"
 
 ---
 
-<div id="features">
+<div id="features" class="paused">
   <Container>
     <div class="md:w-2/3 lg:w-1/2">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6 text-secondary">
@@ -135,7 +135,30 @@ import Container from "./Container.astro"
     </div>
   </Container>
 </div>
+
+<script>
+  const featuresSection = document.getElementById('features');
+  if (featuresSection) {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            featuresSection.classList.remove('paused');
+          } else {
+            featuresSection.classList.add('paused');
+          }
+        });
+      },
+      { rootMargin: '100px', threshold: 0 }
+    );
+    observer.observe(featuresSection);
+  }
+</script>
+
 <style>
+  #features.paused .shimmer-word {
+    animation-play-state: paused;
+  }
   .shimmer-word {
   position: relative;
   display: inline-block;

@@ -1,6 +1,5 @@
 ---
 import Container from "./Container.astro"
-import ConclaveCoach from "./ConclaveCoach.astro"
 
 interface Props {
   class?: string;
@@ -10,26 +9,6 @@ const { class: className = '' } = Astro.props;
 
 <section class:list={["travel-calculator", className]} id="travel">
   <Container>
-    <span style="
-      font-family: 'Have Heart One', cursive;
-      font-size: clamp(2.5rem, 8vw + 1rem, 10rem);
-      display: block;
-      text-align: center;
-      white-space: nowrap;
-      background: linear-gradient(90deg, #ea7600 0%, #f1d44b 50%, #ea7600 100%);
-      background-size: 200% auto;
-      background-clip: text;
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      animation: shimmer 6s ease-in-out infinite;
-    ">All Roads Lead to Ada</span>
-    
-    <h3 style="font-family: 'Inter', sans-serif; font-weight: 100; font-size: clamp(1rem, 2vw + 0.5rem, 1.5rem); text-align: center; margin-bottom: 2rem;">
-      Did Someone Say Roadtrip? Let's Plan Your Trip to Ada, Ohio.
-    </h3>
-
-    <ConclaveCoach />
-
     <div class="map-section">
       <!-- Search Controls -->
       <div class="search-controls">
@@ -137,15 +116,6 @@ const { class: className = '' } = Astro.props;
     padding: 4rem 1rem;
     background: #f4f7ff;
     position: relative;
-  }
-
-  @keyframes shimmer {
-    0% {
-      background-position: 200% center;
-    }
-    100% {
-      background-position: -200% center;
-    }
   }
 
   .map-section {

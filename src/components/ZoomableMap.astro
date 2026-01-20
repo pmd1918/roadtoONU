@@ -1,0 +1,293 @@
+---
+// ZoomableMap.astro
+---
+
+<div id="container">
+    <svg id="map">
+        <defs>
+            <linearGradient id="hoverGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                <stop offset="0%" style="stop-color:#ea7600;stop-opacity:1" />
+                <stop offset="100%" style="stop-color:#f1d44b;stop-opacity:1" />
+            </linearGradient>
+            <linearGradient id="activeGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                <stop offset="0%" style="stop-color:#ea7600;stop-opacity:1" />
+                <stop offset="100%" style="stop-color:#f1d44b;stop-opacity:1" />
+            </linearGradient>
+        </defs>
+    </svg>
+    <div class="button-wrap">
+    <button class="reset-button" id="resetBtn">Reset View</button>
+    </div>
+</div>
+
+<style>
+    #container {
+        max-width: 1200px;
+        margin: 0 auto;
+        background:#f4f7ff;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow:none;
+        overflow: visible;
+    }
+    
+    h1 {
+        margin: 0 0 20px 0;
+        font-size: 24px;
+        color: #333;
+    }
+    
+    #map {
+        display: block;
+        margin: 0 auto;
+        border: 1px solid #f4f7ff;
+        border-radius: 4px;
+        background: #f4f7ff;
+        width: 100%;
+        min-height: 600px;
+        overflow: visible;
+    }
+    
+    :global(.state) {
+        stroke: transparent;
+        stroke-width: 1.5;
+        cursor: pointer;
+        transition: opacity 0.2s;
+    }
+    
+    :global(.state:hover) {
+        opacity: 0.8;
+    }
+    
+    .button-wrap {
+        display: flex;
+        justify-content: center;
+    }
+
+    .reset-button {
+        margin-top: 20px;
+        padding: 10px 20px;
+        background: #4a90e2;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        font-size: 14px;
+        cursor: pointer;
+        transition: background 0.2s;
+    }
+    
+    .reset-button:hover {
+        background: #357abd;
+    }
+    
+    .info {
+        margin-top: 20px;
+        padding: 15px;
+        background: #f4f7ff;
+        border-radius: 4px;
+        color: #666;
+        font-size: 14px;
+    }
+    
+</style>
+
+<script is:inline src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
+<script is:inline src="https://cdnjs.cloudflare.com/ajax/libs/topojson/3.0.2/topojson.min.js"></script>
+
+<script is:inline>
+    console.log('Script loading...');
+    
+    function initMap() {
+        console.log('Initializing map...');
+        
+        // Chapter data - properly structured
+        const chapters = [
+            { state: 'Connecticut', university: 'University of Connecticut', date: 'March 1, 1918', status: 'Dormant' },
+            { state: 'New Hampshire', university: 'University of New Hampshire', date: 'March 1, 1918', status: 'Dormant' },
+            { state: 'Vermont', university: 'University of Vermont', date: 'March 1, 1918', status: 'Active' },
+            { state: 'Illinois', university: 'Northwestern University', date: 'April 28, 1921', status: 'Dormant' },
+            { state: 'Massachusetts', university: 'MIT', date: 'January 22, 1922', status: 'Dormant' },
+            { state: 'Michigan', university: 'University of Michigan', date: 'May 1, 1922', status: 'Dormant' },
+            { state: 'Illinois', university: 'University of Illinois', date: 'February 24, 1923', status: 'Dormant' },
+            { state: 'Maine', university: 'University of Maine', date: 'March 3, 1923', status: 'Dormant' },
+            { state: 'Wisconsin', university: 'University of Wisconsin', date: 'March 16, 1923', status: 'Dormant' },
+            { state: 'Pennsylvania', university: 'Susquehanna University', date: 'December 20, 1924', status: 'Active' },
+            { state: 'California', university: 'UC Berkeley', date: 'April 18, 1925', status: 'Dormant' },
+            { state: 'Ohio', university: 'Ohio Northern University', date: 'April 10, 1926', status: 'Active' },
+            { state: 'Ohio', university: 'Ohio State University', date: 'May 22, 1926', status: 'Dormant' },
+            { state: 'Massachusetts', university: 'Boston University', date: 'April 30, 1927', status: 'Dormant' },
+            { state: 'Rhode Island', university: 'University of Rhode Island', date: 'February 23, 1929', status: 'Dormant' },
+            { state: 'New York', university: 'RPI', date: 'May 4, 1929', status: 'Active' },
+            { state: 'Ohio', university: 'Wittenberg University', date: 'March 1, 1930', status: 'Dormant' },
+            { state: 'Oregon', university: 'Oregon State University', date: 'November 28, 1931', status: 'Dormant' },
+            { state: 'Massachusetts', university: 'Tufts University', date: 'October 21, 1934', status: 'Dormant' },
+            { state: 'New York', university: 'New York University', date: 'December 7, 1935', status: 'Dormant' },
+            { state: 'Massachusetts', university: 'UMass Amherst', date: 'October 17, 1953', status: 'Dormant' },
+            { state: 'Minnesota', university: 'University of Minnesota–Morris', date: 'December 18, 1964', status: 'Dormant' },
+            { state: 'Connecticut', university: 'Trinity College', date: 'April 30, 1966', status: 'Dormant' },
+            { state: 'Maine', university: 'University of Southern Maine', date: 'December 8, 1967', status: 'Dormant' },
+            { state: 'Pennsylvania', university: 'Lock Haven University', date: 'April 12, 1969', status: 'Active' },
+            { state: 'Pennsylvania', university: 'Kutztown University', date: 'April 25, 1970', status: 'Dormant' },
+            { state: 'New Hampshire', university: 'Keene State College', date: 'September 26, 1970', status: 'Dormant' },
+            { state: 'Missouri', university: 'Tarkio College', date: 'April 17, 1971', status: 'Dormant' },
+            { state: 'Pennsylvania', university: 'Slippery Rock University', date: 'May 27, 1972', status: 'Dormant' },
+            { state: 'Ohio', university: 'University of Toledo', date: 'May 19, 1973', status: 'Dormant' },
+            { state: 'Pennsylvania', university: 'California University of Pennsylvania', date: 'May 5, 1985', status: 'Dormant' },
+            { state: 'Pennsylvania', university: 'Mansfield University', date: 'August 8, 1998', status: 'Dormant' },
+            { state: 'Pennsylvania', university: 'Indiana University of Pennsylvania', date: 'August 8, 1998', status: 'Dormant' },
+            { state: 'Pennsylvania', university: 'Lycoming College', date: 'April 15, 1999', status: 'Dormant' },
+            { state: 'Pennsylvania', university: 'Pennsylvania College of Technology', date: 'April 25, 2003', status: 'Active' },
+            { state: 'New York', university: 'Plattsburgh University', date: 'April 28, 2007', status: 'Active' },
+            { state: 'Maryland', university: 'Frostburg State University', date: 'April 15, 2009', status: 'Active' },
+            { state: 'New Hampshire', university: 'New England College', date: 'October 29, 2011', status: 'Dormant' },
+            { state: 'Virginia', university: 'Longwood University', date: 'April 25, 2013', status: 'Active' },
+            { state: 'Ohio', university: 'Shawnee State University', date: 'March 13, 2016', status: 'Dormant' },
+            { state: 'New Jersey', university: 'Rutgers University–New Brunswick', date: 'October 22, 2016', status: 'Active' },
+            { state: 'New Jersey', university: 'Rutgers University–Camden', date: 'October 22, 2016', status: 'Dormant' },
+            { state: 'Pennsylvania', university: 'Robert Morris University', date: 'March 1, 2018', status: 'Active' },
+            { state: 'Pennsylvania', university: 'Penn State University', date: 'October 11, 2023', status: 'Dormant' },
+            { state: 'Rhode Island', university: 'Rhode Island College', date: 'Did Not Charter', status: 'Active' },
+            { state: 'Pennsylvania', university: 'Marywood University', date: 'Did Not Charter', status: 'Dormant' },
+            { state: 'Pennsylvania', university: 'Temple University', date: 'Did Not Charter', status: 'Dormant' },
+            { state: 'Maryland', university: 'Stevenson University', date: 'Provisional Charter', status: 'Active' },
+            { state: 'New Jersey', university: 'Stockton College', date: 'Provisional Charter', status: 'Active' }
+        ];
+
+        // Function to get state color based on whether it has any active chapters
+        function getStateColor(stateName) {
+            const stateChapters = chapters.filter(ch => ch.state === stateName);
+            
+            if (stateChapters.length === 0) {
+                return '#f4f7ff';
+            }
+
+
+            
+            const hasActiveChapter = stateChapters.some(ch => ch.status === 'Active');
+            
+            if (hasActiveChapter) {
+                return 'url(#activeGradient)';
+            } else {
+                return '#212322';
+            }
+        }
+
+        const width = 960;
+        const height = 600;
+
+        const svg = d3.select("#map")
+            .attr("viewBox", [0, 0, width, height]);
+
+        const g = svg.append("g");
+
+        const zoom = d3.zoom()
+            .scaleExtent([1, 8])
+            .on("zoom", (event) => {
+                g.attr("transform", event.transform);
+            });
+
+        svg.call(zoom);
+
+        // Disable scroll/wheel zoom - only allow click zoom
+        svg.on("wheel.zoom", null);
+
+        // Load US map data
+        fetch("/json/states-albers-10m.json")
+            .then(response => response.json())
+            .then(us => {
+                console.log('Map data loaded', us);
+                const states = topojson.feature(us, us.objects.states);
+                
+                const path = d3.geoPath();
+
+                // Draw states
+                // Draw states
+g.selectAll("path")
+  .data(states.features)
+  .join("path")
+  .attr("class", d => {
+    const stateName = d.properties.name;
+    const hasChapters = chapters.some(ch => ch.state === stateName);
+    return hasChapters ? "state" : "state none";
+  })
+  .attr("d", path)
+  .attr("fill", d => getStateColor(d.properties.name))
+  .style("pointer-events", d => {
+    const stateName = d.properties.name;
+    const hasChapters = chapters.some(ch => ch.state === stateName);
+    return hasChapters ? "all" : "none";
+  })
+
+  .on("click", (event, d) => {
+  event.stopPropagation();   // ✅ THIS IS THE FIX
+
+  const stateName = d.properties.name;
+  const hasChapters = chapters.some(ch => ch.state === stateName);
+  if (!hasChapters) return;
+
+  clicked(event, d);
+});
+
+
+                // Add background click to reset
+                svg.on("click", function(event) {
+                    if (event.target === this) {
+                        reset();
+                    }
+                });
+            })
+            .catch(err => console.error('Error loading map:', err));
+
+            function clicked(event, d) {
+  event.stopPropagation();
+
+  d3.selectAll(".state").classed("active", false);
+  d3.select(event.currentTarget).classed("active", true);
+
+  const [[x0, y0], [x1, y1]] = d3.geoPath().bounds(d);
+
+  svg.transition()
+    .duration(750)
+    .call(
+      zoom.transform,
+      d3.zoomIdentity
+        .translate(width / 2, height / 2)
+        .scale(Math.min(8, 0.9 / Math.max((x1 - x0) / width, (y1 - y0) / height)))
+        .translate(-(x0 + x1) / 2, -(y0 + y1) / 2),
+      d3.pointer(event, svg.node())
+    );
+}
+
+
+        function reset() {
+            d3.selectAll(".state").classed("active", false);
+            
+            svg.transition()
+                .duration(750)
+                .call(
+                    zoom.transform,
+                    d3.zoomIdentity,
+                    d3.zoomTransform(svg.node()).invert([width / 2, height / 2])
+                );
+        }
+
+        document.getElementById('resetBtn')?.addEventListener('click', reset);
+
+        // Click anywhere to dismiss/reset
+        document.getElementById('container')?.addEventListener('click', function(event) {
+            // Don't reset if clicking on a state or the reset button
+            if (event.target.classList.contains('state') ||
+                event.target.id === 'resetBtn' ||
+                event.target.closest('.state')) {
+                return;
+            }
+            reset();
+        });
+    }
+
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initMap);
+    } else {
+        initMap();
+    }
+</script>
