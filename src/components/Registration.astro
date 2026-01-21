@@ -1,0 +1,19 @@
+---
+import Lanyard from "./Lanyard";
+---
+
+<div class="lanyard-wrapper">
+  <Lanyard client:only="react" />
+</div>
+
+<style>
+  .lanyard-wrapper {
+    position: relative;
+    z-index: 0;
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+</style>

@@ -8,16 +8,20 @@ import Creed from "../components/Creed.astro";
 import TravelCalculator from '../components/TravelCalculator.astro';
 import ConclaveCoach from '../components/ConclaveCoach.astro';
 import Chapters from '../components/Chapters.astro';
+import Registration from '../components/Registration.Astro';
 ---
 
 <Layout title="Welcome to Astrolus.">
-	<main class="space-y-40 mb-40">
+	<main class="space-y-40 mb-60">
 		<HeroSection/>
 		<Features/>
-		<Chapters/>
+		<Registration/>
 		<Creed/>
+		<Chapters/>
+		<div class="-mt-45">
 		<GlowingCard/>
-		<div class="-mt-20">
+	</div>
+		<div class="-mt-40">
 			<ConclaveCoach />
 			</div>
 		<TravelCalculator/>

@@ -5,11 +5,7 @@ const links = [];
 <header>
     <nav id="navbar" class="navbar">
         <div class="nav-container">
-            <!-- Donate Button (left of logo) -->
-            <a class="nav-action-btn donate-btn" href="#" id="donate-btn">
-                <span class="btn-inner">Donate</span>
-            </a>
-
+           
             <!-- Hanging Conclave Logo (appears on scroll) -->
             <img
                 src="/phi%20mu%20delta%20conclave%202026.png"
@@ -21,6 +17,10 @@ const links = [];
             <!-- Register Button (right of logo) -->
             <a class="nav-action-btn register-btn" href="#" id="register-btn">
                 <span class="btn-inner">Register</span>
+            </a>
+             <!-- Donate Button (left of logo) -->
+             <a class="nav-action-btn sponsor-btn" href="#" id="sponsor-btn">
+                <span class="btn-inner">Sponsor</span>
             </a>
 
             <!-- Navigation Links -->
@@ -166,12 +166,11 @@ const links = [];
         pointer-events: auto;
     }
 
-    .donate-btn {
-        right: calc(50% + clamp(50px, 12.5vw, 110px) + 1.5rem);
-    }
-
     .register-btn {
         left: calc(50% + clamp(50px, 12.5vw, 110px) + 1.5rem);
+    }
+    .sponsor-btn {
+        left: calc(58% + clamp(50px, 12.5vw, 110px) + 1.5rem);
     }
 
     .nav-action-btn:after, 
@@ -196,7 +195,7 @@ const links = [];
         );
         animation: rotate 2s infinite linear;
     }
-
+ 
     .nav-action-btn:before {
         filter: blur(20px);
     }
@@ -205,7 +204,7 @@ const links = [];
         --glowColor: var(--color-orange);
     }
 
-    .donate-btn {
+    .sponsor-btn {
         --glowColor: var(--color-gold);
     }
 
@@ -214,12 +213,13 @@ const links = [];
         display: flex;
         flex-direction: column;
         width: 100%;
-        padding: 0.65rem 1.75rem;
+        padding: 0.6rem 2rem;
         border-radius: 100px;
-        font-weight: 600;
+        font-family: 'Inter', sans-serif;
+        font-weight: 800;
         font-size: 0.9375rem;
         text-transform: uppercase;
-        letter-spacing: 1px;
+        letter-spacing: 2px;
         z-index: 1;
         transition: all 0.18s ease;
         background: rgba(255, 255, 255, 0.25);
@@ -233,7 +233,7 @@ const links = [];
         color: #212322;
     }
 
-    .donate-btn .btn-inner {
+    .sponsor-btn .btn-inner {
         color: #212322;
     }
 
@@ -247,7 +247,7 @@ const links = [];
         color: #ff8c1a;
     }
 
-    .donate-btn:hover .btn-inner {
+    .sponsor-btn:hover .btn-inner {
         color: #f5de6f;
     }
 
@@ -257,7 +257,7 @@ const links = [];
 
     /* Mobile button positioning */
     @media (max-width: 768px) {
-        .donate-btn {
+        .sponsor-btn {
             right: calc(50% + clamp(50px, 12.5vw, 110px) + 1rem);
         }
 
@@ -373,7 +373,7 @@ const links = [];
     const heroConclaveLogo = document.getElementById('hero-conclave-logo') as HTMLElement;
     const navbarConclaveLogo = document.getElementById('navbar-conclave-logo') as HTMLElement;
     const registerBtn = document.getElementById('register-btn') as HTMLElement;
-    const donateBtn = document.getElementById('donate-btn') as HTMLElement;
+    const sponsorBtn = document.getElementById('sponsor-btn') as HTMLElement;
 
     // Smooth scroll and active state
     navLinks.forEach((link) => {
@@ -455,19 +455,19 @@ const links = [];
         });
 
         // Show/hide hanging logo and buttons
-        if (heroConclaveLogo && navbarConclaveLogo && registerBtn && donateBtn) {
+        if (heroConclaveLogo && navbarConclaveLogo && registerBtn && sponsorBtn) {
             const heroLogoRect = heroConclaveLogo.getBoundingClientRect();
             const navHeight = navbar.offsetHeight;
 
             if (heroLogoRect.top < navHeight) {
                 navbarConclaveLogo.classList.add('show');
                 registerBtn.classList.add('show');
-                donateBtn.classList.add('show');
+                sponsorBtn.classList.add('show');
                 heroConclaveLogo.classList.add('faded');
             } else {
                 navbarConclaveLogo.classList.remove('show');
                 registerBtn.classList.remove('show');
-                donateBtn.classList.remove('show');
+                sponsorBtn.classList.remove('show');
                 heroConclaveLogo.classList.remove('faded');
             }
         }

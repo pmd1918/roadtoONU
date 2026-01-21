@@ -1,86 +1,79 @@
 ---
-import Container from "./Container.astro"
+import ChromaGrid from "./ChromaGrid";
+
+const testimonials = [
+  {
+    image: "/images/avatars/avatar-2.webp",
+    name: "Yanick Doe",
+    title: "Developer",
+    blurb: "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Architecto laboriosam deleniti aperiam ab veniam sint non cumque quis tempore cupiditate. Sint libero voluptas veniam at reprehenderit, veritatis harum et rerum.",
+    borderColor: "#F59E0B",
+    gradient: "linear-gradient(145deg, #F59E0B, #000)"
+  },
+  {
+    image: "/images/avatars/IMG_1112.JPG",
+    name: "Alex Fries",
+    title: "National Council member, former chapter president Nu Beta",
+    blurb: "Joining Phi Mu Delta is about more than joining a chapter. It is about joining a brotherhood of future friends, colleagues and partners in your pursuit of the common good, no matter the arena you choose to enter. Conclave is where that ideal becomes real.",
+    borderColor: "#D97706",
+    gradient: "linear-gradient(165deg, #D97706, #000)"
+  },
+  {
+    image: "/images/avatars/1714137500084.jpeg",
+    name: "Michael Doran",
+    title: "National Council member, former chapter president Mu Alpha",
+    blurb: "We spend most of our lives inside our bubbles, in our own built communities. Conclaves are the chance to pop those bubbles and share ideas, successes, failures and support across the national fraternity in distance and generation. Living our creed reaching beyond the limits of distance and time to be together as brothers.",
+    borderColor: "#B45309",
+    gradient: "linear-gradient(180deg, #B45309, #000)"
+  },
+  {
+    image: "/images/avatars/avatar-3.webp",
+    name: "Jane Doe",
+    title: "Mobile dev",
+    blurb: "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Architecto laboriosam deleniti aperiam ab veniam sint non cumque quis tempore cupiditate. Sint libero voluptas veniam at reprehenderit, veritatis harum et rerum.",
+    borderColor: "#F59E0B",
+    gradient: "linear-gradient(195deg, #F59E0B, #000)"
+  },
+  {
+    image: "/images/avatars/avatar-4.webp",
+    name: "Andy Doe",
+    title: "Manager",
+    blurb: "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Architecto laboriosam deleniti aperiam ab veniam sint non cumque quis tempore cupiditate. Sint libero voluptas veniam at reprehenderit, veritatis harum et rerum.",
+    borderColor: "#D97706",
+    gradient: "linear-gradient(210deg, #D97706, #000)"
+  },
+  {
+    image: "/images/avatars/1693961796462_orig.jpeg",
+    name: "Thomas Stephen",
+    title: "National Treasurer, former chapter president Nu Beta",
+    blurb: "Conclave is the expression of our Phi Mu Delta values! Spending time with brothers, old and new, it reminds me of all the good we can create in the world.",
+    borderColor: "#B45309",
+    gradient: "linear-gradient(135deg, #B45309, #000)"
+  }
+];
 ---
 
 <div class="text-gray-600" id="reviews">
-  <Container>
-    <div class="mb-20 space-y-4 px-6 md:px-0">
+  <div class="testimonials">
+    <div class="mb-12 px-6 md:px-0">
       <h2 class="text-center text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold text-gray-800">
         Why Attend Conclave.
       </h2>
     </div>
-    <div class="md:columns-2 lg:columns-3 gap-8 space-y-8">
-      <div class="aspect-auto p-6 sm:p-8 border border-gray-100 rounded-3xl bg-white shadow-2xl shadow-gray-600/10">
-        <div class="flex gap-4">
-          <img class="w-12 h-12 rounded-full" src="./images/avatars/avatar-2.webp" alt="user avatar" width="200" height="200" loading="lazy">
-          <div>
-            <h6 class="text-base sm:text-lg font-medium text-gray-700">Yanick Doe</h6>
-            <p class="text-xs sm:text-sm text-gray-500">Developer</p>
-          </div>
-        </div>
-        <p class="mt-6 sm:mt-8 text-sm sm:text-base">Lorem ipsum dolor sit amet consectetur, adipisicing elit. Architecto laboriosam deleniti aperiam ab veniam sint non cumque quis tempore cupiditate. Sint libero voluptas veniam at reprehenderit, veritatis harum et rerum.</p>
-      </div>
-      <div class="aspect-auto p-6 sm:p-8 border border-gray-100 rounded-3xl bg-white shadow-2xl shadow-gray-600/10">
-        <div class="flex gap-4">
-          <img
-  class="w-12 h-12 rounded-full object-cover"
-  src="./images/avatars/IMG_1112.JPG"
-  srcset="./images/avatars/IMG_1112.JPG 48w, ./images/avatars/IMG_1112.JPG 96w"
-  sizes="48px"
-  alt="User avatar"
-  width="48"
-  height="48"
-  loading="lazy"
-  decoding="async"
-/>
 
-          <div>
-            <h6 class="text-base sm:text-lg font-medium text-gray-700">Alex Fries</h6>
-            <p class="text-xs sm:text-sm text-gray-500">National Council member, former chapter president Nu Beta </p>
-          </div>
-        </div>
-        <p class="mt-6 sm:mt-8 text-sm sm:text-base">Joining Phi Mu Delta is about more than joining a chapter. It is about joining a brotherhood of future friends, colleagues and partners in your pursuit of the common good, no matter the arena you choose to enter.</p> <p class="mt-6 sm:mt-8 text-sm sm:text-base"> Conclave is where that ideal becomes real.</p>
-      </div>
-      <div class="aspect-auto p-6 sm:p-8 border border-gray-100 rounded-3xl bg-white shadow-2xl shadow-gray-600/10">
-        <div class="flex gap-4">
-          <img class="w-12 h-12 rounded-full" src="./images/avatars/1714137500084.jpeg" alt="user avatar" width="200" height="200" loading="lazy">
-          <div>
-            <h6 class="text-base sm:text-lg font-medium text-gray-700">Michael Doran </h6>
-            <p class="text-xs sm:text-sm text-gray-500">National Council member, former chapter president Mu Alpha </p>
-          </div>
-        </div>
-        <p class="mt-6 sm:mt-8 text-sm sm:text-base"> We spend most of our lives inside our bubbles, in our own built communities. Conclaves are the chance to pop those bubbles and share ideas, successes, failures, and support across the national fraternity in distance and generation. Living our creed reaching beyond the limits of distance and time to be together as brothers. </p>
-      </div>
-      <div class="aspect-auto p-6 sm:p-8 border border-gray-100 rounded-3xl bg-white shadow-2xl shadow-gray-600/10">
-        <div class="flex gap-4">
-          <img class="w-12 h-12 rounded-full" src="./images/avatars/avatar-3.webp" alt="user avatar" width="200" height="200" loading="lazy">
-          <div>
-            <h6 class="text-base sm:text-lg font-medium text-gray-700">Jane Doe</h6>
-            <p class="text-xs sm:text-sm text-gray-500">Mobile dev</p>
-          </div>
-        </div>
-        <p class="mt-6 sm:mt-8 text-sm sm:text-base">Lorem ipsum dolor sit amet consectetur, adipisicing elit. Architecto laboriosam deleniti aperiam ab veniam sint non cumque quis tempore cupiditate. Sint libero voluptas veniam at reprehenderit, veritatis harum et rerum.</p>
-      </div>
-      <div class="aspect-auto p-6 sm:p-8 border border-gray-100 rounded-3xl bg-white shadow-2xl shadow-gray-600/10">
-        <div class="flex gap-4">
-          <img class="w-12 h-12 rounded-full" src="./images/avatars/avatar-4.webp" alt="user avatar" width="200" height="200" loading="lazy">
-          <div>
-            <h6 class="text-base sm:text-lg font-medium text-gray-700">Andy Doe</h6>
-            <p class="text-xs sm:text-sm text-gray-500">Manager</p>
-          </div>
-        </div>
-        <p class="mt-6 sm:mt-8 text-sm sm:text-base"> Lorem ipsum dolor sit amet consectetur, adipisicing elit. Architecto laboriosam deleniti aperiam ab veniam sint non cumque quis tempore cupiditate. Sint libero voluptas veniam at reprehenderit, veritatis harum et rerum.</p>
-      </div>
-      <div class="aspect-auto p-6 sm:p-8 border border-gray-100 rounded-3xl bg-white shadow-2xl shadow-gray-600/10">
-        <div class="flex gap-4">
-          <img class="w-12 h-12 rounded-full" src="./images/avatars/1693961796462_orig.jpeg" alt="user avatar" width="400" height="400" loading="lazy">
-          <div>
-            <h6 class="text-base sm:text-lg font-medium text-gray-700">Thomas Stephen</h6>
-            <p class="text-xs sm:text-sm text-gray-500">National Treasurer, former chapter president Nu Beta </p>
-          </div>
-        </div>
-        <p class="mt-6 sm:mt-8 text-sm sm:text-base">Conclave is the expression of our Phi Mu Delta values! Spending time with brothers, old and new, it reminds me of all the good we can create in the world.</p>
-      </div>
-    </div>
-  </Container>
+    <ChromaGrid
+      client:only="react"
+      items={testimonials}
+      radius={350}
+      damping={0.45}
+      fadeOut={0.6}
+      ease="power3.out"
+    />
+  </div>
 </div>
+
+<style>
+  .testimonials {
+    padding: 2rem 1rem;
+  }
+</style>

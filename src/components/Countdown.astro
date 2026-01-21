@@ -8,55 +8,61 @@ import Container from "./Container.astro";
       <div class="countdown">
         <div class="bloc-time days" data-init-value="0">
           <span class="count-title">Days</span>
-          <div class="figure days days-1">
-            <span class="top">0</span>
-            <span class="top-back"><span>0</span></span>
-            <span class="bottom">0</span>
-            <span class="bottom-back"><span>0</span></span>
-          </div>
-          <div class="figure days days-2">
-            <span class="top">0</span>
-            <span class="top-back"><span>0</span></span>
-            <span class="bottom">0</span>
-            <span class="bottom-back"><span>0</span></span>
-          </div>
-          <div class="figure days days-3">
-            <span class="top">0</span>
-            <span class="top-back"><span>0</span></span>
-            <span class="bottom">0</span>
-            <span class="bottom-back"><span>0</span></span>
+          <div class="figures-wrap">
+            <div class="figure days days-1">
+              <span class="top">0</span>
+              <span class="top-back"><span>0</span></span>
+              <span class="bottom">0</span>
+              <span class="bottom-back"><span>0</span></span>
+            </div>
+            <div class="figure days days-2">
+              <span class="top">0</span>
+              <span class="top-back"><span>0</span></span>
+              <span class="bottom">0</span>
+              <span class="bottom-back"><span>0</span></span>
+            </div>
+            <div class="figure days days-3">
+              <span class="top">0</span>
+              <span class="top-back"><span>0</span></span>
+              <span class="bottom">0</span>
+              <span class="bottom-back"><span>0</span></span>
+            </div>
           </div>
         </div>
 
         <div class="bloc-time hours" data-init-value="0">
           <span class="count-title">Hours</span>
-          <div class="figure hours hours-1">
-            <span class="top">0</span>
-            <span class="top-back"><span>0</span></span>
-            <span class="bottom">0</span>
-            <span class="bottom-back"><span>0</span></span>
-          </div>
-          <div class="figure hours hours-2">
-            <span class="top">0</span>
-            <span class="top-back"><span>0</span></span>
-            <span class="bottom">0</span>
-            <span class="bottom-back"><span>0</span></span>
+          <div class="figures-wrap">
+            <div class="figure hours hours-1">
+              <span class="top">0</span>
+              <span class="top-back"><span>0</span></span>
+              <span class="bottom">0</span>
+              <span class="bottom-back"><span>0</span></span>
+            </div>
+            <div class="figure hours hours-2">
+              <span class="top">0</span>
+              <span class="top-back"><span>0</span></span>
+              <span class="bottom">0</span>
+              <span class="bottom-back"><span>0</span></span>
+            </div>
           </div>
         </div>
 
         <div class="bloc-time min" data-init-value="0">
           <span class="count-title">Minutes</span>
-          <div class="figure min min-1">
-            <span class="top">0</span>
-            <span class="top-back"><span>0</span></span>
-            <span class="bottom">0</span>
-            <span class="bottom-back"><span>0</span></span>
-          </div>
-          <div class="figure min min-2">
-            <span class="top">0</span>
-            <span class="top-back"><span>0</span></span>
-            <span class="bottom">0</span>
-            <span class="bottom-back"><span>0</span></span>
+          <div class="figures-wrap">
+            <div class="figure min min-1">
+              <span class="top">0</span>
+              <span class="top-back"><span>0</span></span>
+              <span class="bottom">0</span>
+              <span class="bottom-back"><span>0</span></span>
+            </div>
+            <div class="figure min min-2">
+              <span class="top">0</span>
+              <span class="top-back"><span>0</span></span>
+              <span class="bottom">0</span>
+              <span class="bottom-back"><span>0</span></span>
+            </div>
           </div>
         </div>
       </div>
@@ -75,28 +81,51 @@ import Container from "./Container.astro";
   .countdown {
     display: flex;
     gap: 1.5rem;
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
     justify-content: center;
   }
 
   @media (max-width: 640px) {
     .countdown {
-      gap: 1rem;
+      gap: 0.5rem;
+    }
+  }
+
+  @media (max-width: 400px) {
+    .countdown {
+      gap: 0.25rem;
     }
   }
 
   .bloc-time {
     text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex-shrink: 0;
+  }
+
+  .bloc-time .figures-wrap {
+    display: flex;
+    flex-wrap: nowrap;
   }
 
   .count-title {
     display: block;
-    margin-bottom: 0.75rem;
-    font-size: 0.75rem;
+    margin-bottom: 0.5rem;
+    font-size: 0.625rem;
     font-weight: 600;
     color: #f4f7ff;
     text-transform: uppercase;
-    letter-spacing: 0.05em;
+    letter-spacing: 0.02em;
+  }
+
+  @media (min-width: 400px) {
+    .count-title {
+      font-size: 0.75rem;
+      margin-bottom: 0.75rem;
+      letter-spacing: 0.05em;
+    }
   }
 
   @media (min-width: 640px) {
@@ -108,13 +137,21 @@ import Container from "./Container.astro";
 
   .figure {
     position: relative;
-    float: left;
-    height: 60px;
-    width: 50px;
-    margin-right: 0.375rem;
+    flex-shrink: 0;
+    height: 50px;
+    width: 38px;
+    margin-right: 0.25rem;
     background-color: #212322;
-    border-radius: 0.5rem;
+    border-radius: 0.375rem;
     box-shadow: 0 3px 4px 0 rgba(0, 0, 0, 0.2), inset 2px 4px 0 0 rgba(255, 255, 255, 0.08);
+  }
+
+  @media (min-width: 400px) {
+    .figure {
+      height: 55px;
+      width: 42px;
+      margin-right: 0.25rem;
+    }
   }
 
   @media (min-width: 640px) {
@@ -215,6 +252,18 @@ import Container from "./Container.astro";
 }
 
 
+  .figure > span {
+    font-size: 2rem;
+    line-height: 50px;
+  }
+
+  @media (min-width: 400px) {
+    .figure > span {
+      font-size: 2.25rem;
+      line-height: 55px;
+    }
+  }
+
   @media (min-width: 640px) {
     .figure > span {
       font-size: 3.5rem;
@@ -245,10 +294,17 @@ import Container from "./Container.astro";
     z-index: 3;
     background-color: #212322;
     transform-origin: 50% 100%;
-    border-top-left-radius: 0.625rem;
-    border-top-right-radius: 0.625rem;
+    border-top-left-radius: 0.375rem;
+    border-top-right-radius: 0.375rem;
     transform: perspective(200px) rotateX(0deg);
     will-change: transform;
+  }
+
+  @media (min-width: 640px) {
+    .top {
+      border-top-left-radius: 0.625rem;
+      border-top-right-radius: 0.625rem;
+    }
   }
 
   .top.flipping {
@@ -285,8 +341,15 @@ import Container from "./Container.astro";
     height: 50%;
     overflow: hidden;
     background-color: #212322;
-    border-top-left-radius: 0.625rem;
-    border-top-right-radius: 0.625rem;
+    border-top-left-radius: 0.375rem;
+    border-top-right-radius: 0.375rem;
+  }
+
+  @media (min-width: 640px) {
+    .bottom-back {
+      border-top-left-radius: 0.625rem;
+      border-top-right-radius: 0.625rem;
+    }
   }
 
   .bottom-back span {
@@ -311,9 +374,16 @@ import Container from "./Container.astro";
     background-color: #212322;
     transform-origin: 50% 0;
     transform: perspective(200px) rotateX(180deg);
-    border-bottom-left-radius: 0.625rem;
-    border-bottom-right-radius: 0.625rem;
+    border-bottom-left-radius: 0.375rem;
+    border-bottom-right-radius: 0.375rem;
     will-change: transform;
+  }
+
+  @media (min-width: 640px) {
+    .top-back {
+      border-bottom-left-radius: 0.625rem;
+      border-bottom-right-radius: 0.625rem;
+    }
   }
 
   .top-back.flipping {
