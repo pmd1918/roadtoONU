@@ -1,0 +1,244 @@
+---
+import Layout from "../../layouts/Layout.astro"
+import Container from "../../components/Container.astro"
+
+const campusOptions = [
+  {
+    name: "University Inn",
+    type: "Suite Style",
+    price: "$75",
+    priceUnit: "per night",
+    capacity: "2-4 guests per suite",
+    description: "Our premium on-campus option features modern suite-style accommodations with private bathrooms. Each suite includes comfortable beds, air conditioning, and a small refrigerator. Perfect for families or small groups wanting privacy and comfort.",
+    features: [
+      { name: "Private Bathroom", icon: "bathroom" },
+      { name: "Air Conditioning", icon: "ac_unit" },
+      { name: "Mini Refrigerator", icon: "kitchen" },
+      { name: "Free WiFi", icon: "wifi" },
+      { name: "Daily Housekeeping", icon: "cleaning_services" },
+      { name: "On-Campus Location", icon: "location_on" }
+    ],
+    checkIn: "3:00 PM",
+    checkOut: "11:00 AM",
+    included: ["Linens & Towels", "Basic Toiletries", "Parking Pass"]
+  },
+  {
+    name: "Residence Hall",
+    type: "Traditional Dorm",
+    price: "$45",
+    priceUnit: "per night",
+    capacity: "1-2 guests per room",
+    description: "Experience authentic campus life with our traditional residence hall rooms. Shared bathroom facilities and common lounges provide opportunities to connect with fellow brothers. A budget-friendly option that puts you in the heart of the action.",
+    features: [
+      { name: "Shared Bathroom", icon: "shower" },
+      { name: "Common Lounge", icon: "weekend" },
+      { name: "Laundry Access", icon: "local_laundry_service" },
+      { name: "Free WiFi", icon: "wifi" },
+      { name: "Study Areas", icon: "menu_book" },
+      { name: "Walking Distance", icon: "directions_walk" }
+    ],
+    checkIn: "2:00 PM",
+    checkOut: "10:00 AM",
+    included: ["Linens", "Pillow", "Parking Pass"]
+  }
+]
+---
+
+<Layout>
+  <main class="pt-24 pb-20">
+    <!-- Hero Section -->
+    <section class="bg-gradient-to-br from-[#212322] to-[#2a2b2a] py-16 sm:py-20">
+      <Container>
+        <div class="max-w-3xl">
+          <a href="/#campus-accommodations" class="inline-flex items-center gap-2 text-gray-400 hover:text-[#f1d44b] transition-colors mb-6">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+            </svg>
+            Back to Home
+          </a>
+          <h1 class="text-4xl sm:text-5xl md:text-6xl font-bold text-white mb-6">
+            On-Campus <span class="text-[#f1d44b]">Housing</span>
+          </h1>
+          <p class="text-xl text-gray-400 leading-relaxed">
+            Stay where the action is. On-campus housing puts you steps away from all Conclave events and activities at Ohio Northern University.
+          </p>
+        </div>
+      </Container>
+    </section>
+
+    <!-- Benefits Banner -->
+    <section class="bg-gradient-to-r from-[#ea7600] to-[#f1d44b] py-6">
+      <Container>
+        <div class="flex flex-wrap justify-center gap-8 text-[#212322]">
+          <div class="flex items-center gap-2">
+            <span class="material-symbols-outlined">check_circle</span>
+            <span class="font-semibold">Walk to All Events</span>
+          </div>
+          <div class="flex items-center gap-2">
+            <span class="material-symbols-outlined">check_circle</span>
+            <span class="font-semibold">Brotherhood Experience</span>
+          </div>
+          <div class="flex items-center gap-2">
+            <span class="material-symbols-outlined">check_circle</span>
+            <span class="font-semibold">Budget Friendly</span>
+          </div>
+          <div class="flex items-center gap-2">
+            <span class="material-symbols-outlined">check_circle</span>
+            <span class="font-semibold">Free Parking</span>
+          </div>
+        </div>
+      </Container>
+    </section>
+
+    <!-- Campus Options -->
+    <section class="py-16 sm:py-20">
+      <Container>
+        <div class="space-y-16">
+          {campusOptions.map((option, index) => (
+            <div class="campus-detail-card">
+              <div class={`relative rounded-3xl overflow-hidden ${index === 0 ? 'bg-gradient-to-br from-[#f8f9fa] to-white' : 'bg-[#212322]'}`}>
+                <!-- Header -->
+                <div class={`p-8 lg:p-12 border-b ${index === 0 ? 'border-gray-200' : 'border-gray-700'}`}>
+                  <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
+                    <div>
+                      <span class={`inline-block px-4 py-1 rounded-full text-sm font-semibold mb-4 ${index === 0 ? 'bg-[#ea7600]/10 text-[#ea7600]' : 'bg-[#f1d44b]/20 text-[#f1d44b]'}`}>
+                        {option.type}
+                      </span>
+                      <h2 class={`text-3xl sm:text-4xl font-bold mb-2 ${index === 0 ? 'text-gray-800' : 'text-white'}`}>
+                        {option.name}
+                      </h2>
+                      <p class={index === 0 ? 'text-gray-500' : 'text-gray-400'}>
+                        {option.capacity}
+                      </p>
+                    </div>
+                    <div class="text-left lg:text-right">
+                      <p class={`text-5xl font-bold ${index === 0 ? 'text-[#ea7600]' : 'text-[#f1d44b]'}`}>
+                        {option.price}
+                      </p>
+                      <p class={index === 0 ? 'text-gray-500' : 'text-gray-400'}>
+                        {option.priceUnit}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Content -->
+                <div class="p-8 lg:p-12">
+                  <div class="grid lg:grid-cols-2 gap-12">
+                    <div>
+                      <h3 class={`text-xl font-bold mb-4 ${index === 0 ? 'text-gray-800' : 'text-white'}`}>
+                        About This Option
+                      </h3>
+                      <p class={`leading-relaxed mb-8 ${index === 0 ? 'text-gray-600' : 'text-gray-400'}`}>
+                        {option.description}
+                      </p>
+
+                      <h3 class={`text-xl font-bold mb-4 ${index === 0 ? 'text-gray-800' : 'text-white'}`}>
+                        What's Included
+                      </h3>
+                      <div class="flex flex-wrap gap-2">
+                        {option.included.map((item) => (
+                          <span class={`inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm ${index === 0 ? 'bg-gray-100 text-gray-700' : 'bg-gray-800 text-gray-300'}`}>
+                            <svg class={`w-4 h-4 ${index === 0 ? 'text-[#ea7600]' : 'text-[#f1d44b]'}`} fill="currentColor" viewBox="0 0 20 20">
+                              <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                            </svg>
+                            {item}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+
+                    <div>
+                      <h3 class={`text-xl font-bold mb-4 ${index === 0 ? 'text-gray-800' : 'text-white'}`}>
+                        Features & Amenities
+                      </h3>
+                      <div class="grid grid-cols-2 gap-4 mb-8">
+                        {option.features.map((feature) => (
+                          <div class={`flex items-center gap-3 p-3 rounded-xl ${index === 0 ? 'bg-gray-50' : 'bg-gray-800/50'}`}>
+                            <span class={`material-symbols-outlined ${index === 0 ? 'text-[#ea7600]' : 'text-[#f1d44b]'}`}>
+                              {feature.icon}
+                            </span>
+                            <span class={index === 0 ? 'text-gray-700' : 'text-gray-300'}>
+                              {feature.name}
+                            </span>
+                          </div>
+                        ))}
+                      </div>
+
+                      <div class={`p-4 rounded-xl ${index === 0 ? 'bg-gray-100' : 'bg-gray-800'}`}>
+                        <div class="flex justify-between items-center">
+                          <div>
+                            <p class={`text-sm ${index === 0 ? 'text-gray-500' : 'text-gray-500'}`}>Check-in</p>
+                            <p class={`font-semibold ${index === 0 ? 'text-gray-800' : 'text-white'}`}>{option.checkIn}</p>
+                          </div>
+                          <div class={`w-px h-10 ${index === 0 ? 'bg-gray-300' : 'bg-gray-700'}`}></div>
+                          <div>
+                            <p class={`text-sm ${index === 0 ? 'text-gray-500' : 'text-gray-500'}`}>Check-out</p>
+                            <p class={`font-semibold ${index === 0 ? 'text-gray-800' : 'text-white'}`}>{option.checkOut}</p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="mt-10 pt-8 border-t border-gray-200 dark:border-gray-700">
+                    <a href="#" class={`inline-flex items-center justify-center gap-3 w-full sm:w-auto px-8 py-4 font-bold rounded-xl transition-all duration-300 hover:-translate-y-1 ${index === 0 ? 'bg-[#ea7600] text-white hover:shadow-lg hover:shadow-[#ea7600]/25' : 'bg-gradient-to-r from-[#ea7600] to-[#f1d44b] text-[#212322] hover:shadow-lg hover:shadow-[#f1d44b]/25'}`}>
+                      Reserve {option.name}
+                      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
+                      </svg>
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </Container>
+    </section>
+
+    <!-- FAQ Section -->
+    <section class="py-16 bg-gray-50">
+      <Container>
+        <div class="max-w-3xl mx-auto">
+          <h3 class="text-2xl font-bold text-gray-800 mb-8 text-center">Frequently Asked Questions</h3>
+          <div class="space-y-4">
+            <div class="bg-white rounded-xl p-6 shadow-sm">
+              <h4 class="font-semibold text-gray-800 mb-2">When should I book on-campus housing?</h4>
+              <p class="text-gray-600">On-campus housing is limited. We recommend booking as early as possible after registration opens to secure your preferred option.</p>
+            </div>
+            <div class="bg-white rounded-xl p-6 shadow-sm">
+              <h4 class="font-semibold text-gray-800 mb-2">Can I request a specific roommate?</h4>
+              <p class="text-gray-600">Yes! During the booking process, you can specify a roommate preference. Both parties must list each other for the request to be honored.</p>
+            </div>
+            <div class="bg-white rounded-xl p-6 shadow-sm">
+              <h4 class="font-semibold text-gray-800 mb-2">Is parking included?</h4>
+              <p class="text-gray-600">Yes, all on-campus housing includes a complimentary parking pass for the duration of your stay.</p>
+            </div>
+          </div>
+        </div>
+      </Container>
+    </section>
+  </main>
+</Layout>
+
+<style>
+  .campus-detail-card {
+    animation: fadeSlideUp 0.6s ease-out both;
+  }
+
+  .campus-detail-card:nth-child(2) {
+    animation-delay: 0.2s;
+  }
+
+  @keyframes fadeSlideUp {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+</style>

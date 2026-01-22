@@ -445,8 +445,8 @@ g.selectAll("path")
 
         document.getElementById('resetBtn')?.addEventListener('click', reset);
 
-        // Listen for swatch clicks to zoom to state
-        window.addEventListener('chapter-swatch-clicked', (event) => {
+        // Listen for card clicks to zoom to state
+        window.addEventListener('chapter-cards-clicked', (event) => {
             const { state, fromSwatch } = event.detail;
             if (!statesData) return;
 
@@ -458,11 +458,13 @@ g.selectAll("path")
         });
 
         // Click anywhere to dismiss/reset
-        document.getElementById('container')?.addEventListener('click', function(event) {
-            // Don't reset if clicking on a state or the reset button
+        document.addEventListener('click', function(event) {
+            // Don't reset if clicking on interactive elements
             if (event.target.classList.contains('state') ||
+                event.target.classList.contains('chapter-cards') ||
                 event.target.id === 'resetBtn' ||
-                event.target.closest('.state')) {
+                event.target.closest('.state') ||
+                event.target.closest('.chapter-cards')) {
                 return;
             }
             reset();

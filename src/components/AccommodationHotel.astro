@@ -1,0 +1,259 @@
+---
+import Container from "./Container.astro"
+
+const alumniHotel = {
+  name: "The Inn at ONU",
+  tagline: "Official Conclave Room Block",
+  address: "401 West College Avenue, Ada, OH 45810",
+  amenities: ["On-Campus Location", "On-Site Dining & Pub", "Meeting Spaces", "Signature Amenities"],
+  bookingUrl: "https://www.innatonu.com/",
+  description: "The only on-campus hotel at Ohio Northern University. Enjoy warm Midwestern hospitality, deluxe rooms, and convenient access to all Conclave events."
+}
+
+const alumniImages = [
+  "https://www.innatonu.com/wp-content/gallery/king-rooms/82-ONU-The-Inn792021e_One-King-scaled.jpg",
+  "https://www.innatonu.com/wp-content/gallery/suites/71-ONU-The-Inn682021_Living-Room.jpg",
+  "https://www.innatonu.com/wp-content/gallery/queen-rooms/64-ONU-The-Inn612021_Queen-Queen-scaled.jpg",
+  "https://www.innatonu.com/wp-content/gallery/suites/51-ONU-The-Inn482021_Kitchen-and-Living-Room.jpg",
+]
+
+const undergradHousing = {
+  name: "On-Campus Residence Halls",
+  tagline: "Undergraduate Housing",
+  description: "Stay in ONU's residence halls during Conclave weekend. Experience campus life firsthand with comfortable accommodations and easy access to all events.",
+  amenities: ["Campus Location", "Dining Hall Access", "Community Spaces", "Included in Your Conclave Registration"],
+  bookingUrl: "https://www.onu.edu/student-life/housing"
+}
+
+const undergradImages = [
+  "https://www.onu.edu/sites/default/files/styles/3_up_image_700x500/public/2025-10/20210702_campusexteriors_0051_0.jpg",
+  "https://www.onu.edu/sites/default/files/styles/3_up_image_700x500/public/2025-10/20210702_campusexteriors_0056_0.jpg",
+]
+---
+
+<section id="hotel-accommodations" class="accommodation-hotel-section paused py-16 sm:py-20 md:py-24 bg-[#f4f7ff]">
+  <Container>
+    <div class="mb-6">
+      <h2 class="text-3xl sm:text-4xl md:text-5xl font-bold text-gray-800">
+        Where to Stay
+      </h2>
+    </div>
+    <p class="text-gray-600 text-lg text-center mb-12 sm:mb-16">
+      We've secured accommodations on the ONU campus for Conclave attendees.
+    </p>
+
+    <div class="grid lg:grid-cols-2 gap-8">
+      <!-- Alumni Accommodations - Inn at ONU -->
+      <div class="featured-hotel-card group relative bg-[#f4f7ff] rounded-3xl overflow-hidden shadow-xl ring-2 ring-[#ea7600]">
+        <div class="absolute top-4 left-4 z-10 px-4 py-2 bg-gradient-to-r from-[#ea7600] to-[#f1d44b] text-[#212322] text-sm font-bold uppercase rounded-full flex items-center gap-2">
+          <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+          </svg>
+          Alumni
+        </div>
+        <div class="aspect-[4/3] bg-gradient-to-br from-[#212322] to-[#3a3b39] relative overflow-hidden">
+          <div class="image-carousel absolute inset-0">
+            {alumniImages.map((src, index) => (
+              <img
+                src={src}
+                alt={`Inn at ONU room ${index + 1}`}
+                class="carousel-image carousel-alumni absolute inset-0 w-full h-full object-cover"
+                style={`animation-delay: ${index * 4}s;`}
+                loading="lazy"
+              />
+            ))}
+          </div>
+          <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent"></div>
+          <div class="absolute bottom-0 left-0 right-0 p-6 text-white">
+            <p class="text-[#ea7600] font-semibold text-lg">On Campus</p>
+            <p class="text-white/80 text-sm mt-1">Walk to all events</p>
+          </div>
+        </div>
+        <div class="p-6 md:p-8">
+          <p class="text-[#ea7600] font-semibold text-sm uppercase tracking-wider mb-2">{alumniHotel.tagline}</p>
+          <h3 class="text-xl md:text-2xl font-bold text-gray-800 mb-3">
+            {alumniHotel.name}
+          </h3>
+          <p class="text-gray-600 text-sm mb-4">
+            {alumniHotel.description}
+          </p>
+          <p class="text-sm text-[#ea7600] font-medium mb-4 flex items-center gap-2">
+            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></path>
+            </svg>
+            Reserved for Phi Mu Delta alumni only
+          </p>
+
+          <div class="flex flex-wrap gap-2 mb-4">
+            {alumniHotel.amenities.map((amenity) => (
+              <span class="px-3 py-1 bg-[#ea7600]/10 text-[#ea7600] text-xs font-medium rounded-full">
+                {amenity}
+              </span>
+            ))}
+          </div>
+
+          <div class="space-y-2 text-sm text-gray-600 mb-6">
+            <p class="flex items-center gap-2">
+              <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+              </svg>
+              {alumniHotel.address}
+            </p>
+          </div>
+
+          <a href={alumniHotel.bookingUrl} target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-3 px-6 py-3 bg-gradient-to-r from-[#ea7600] to-[#f1d44b] text-[#212322] font-bold rounded-full hover:shadow-xl hover:shadow-[#ea7600]/30 hover:-translate-y-1 transition-all duration-300">
+            Book Your Room
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path>
+            </svg>
+          </a>
+        </div>
+      </div>
+
+      <!-- Undergraduate Housing -->
+      <div class="featured-hotel-card group relative bg-[#f4f7ff] rounded-3xl overflow-hidden shadow-xl ring-2 ring-[#f1d44b]">
+        <div class="absolute top-4 left-4 z-10 px-4 py-2 bg-gradient-to-r from-[#f1d44b] to-[#fde68a] text-[#212322] text-sm font-bold uppercase rounded-full flex items-center gap-2">
+          <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+            <path d="M10.394 2.08a1 1 0 00-.788 0l-7 3a1 1 0 000 1.84L5.25 8.051a.999.999 0 01.356-.257l4-1.714a1 1 0 11.788 1.838L7.667 9.088l1.94.831a1 1 0 00.787 0l7-3a1 1 0 000-1.838l-7-3zM3.31 9.397L5 10.12v4.102a8.969 8.969 0 00-1.05-.174 1 1 0 01-.89-.89 11.115 11.115 0 01.25-3.762zM9.3 16.573A9.026 9.026 0 007 14.935v-3.957l1.818.78a3 3 0 002.364 0l5.508-2.361a11.026 11.026 0 01.25 3.762 1 1 0 01-.89.89 8.968 8.968 0 00-5.35 2.524 1 1 0 01-1.4 0zM6 18a1 1 0 001-1v-2.065a8.935 8.935 0 00-2-.712V17a1 1 0 001 1z"></path>
+          </svg>
+          Undergraduates
+        </div>
+        <div class="aspect-[4/3] bg-gradient-to-br from-[#212322] to-[#3a3b39] relative overflow-hidden">
+          <div class="image-carousel absolute inset-0">
+            {undergradImages.map((src, index) => (
+              <img
+                src={src}
+                alt={`ONU residence hall ${index + 1}`}
+                class="carousel-image carousel-undergrad absolute inset-0 w-full h-full object-cover"
+                style={`animation-delay: ${index * 4}s;`}
+                loading={index === 0 ? "eager" : "lazy"}
+              />
+            ))}
+          </div>
+          <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent"></div>
+          <div class="absolute bottom-0 left-0 right-0 p-6 text-white">
+            <p class="text-[#f1d44b] font-semibold text-lg">On Campus</p>
+            <p class="text-white/80 text-sm mt-1">Live the ONU experience</p>
+          </div>
+        </div>
+        <div class="p-6 md:p-8">
+          <p class="text-[#d4a600] font-semibold text-sm uppercase tracking-wider mb-2">{undergradHousing.tagline}</p>
+          <h3 class="text-xl md:text-2xl font-bold text-gray-800 mb-3">
+            {undergradHousing.name}
+          </h3>
+          <p class="text-gray-600 text-sm mb-4">
+            {undergradHousing.description}
+          </p>
+          <p class="text-sm text-[#d4a600] font-medium mb-4 flex items-center gap-2">
+            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></path>
+            </svg>
+            Available for undergraduate members
+          </p>
+
+          <div class="flex flex-wrap gap-2 mb-4">
+            {undergradHousing.amenities.map((amenity) => (
+              <span class="px-3 py-1 bg-[#f1d44b]/20 text-[#9a7b00] text-xs font-medium rounded-full">
+                {amenity}
+              </span>
+            ))}
+          </div>
+
+          <div class="space-y-2 text-sm text-gray-600 mb-6">
+            <p class="flex items-center gap-2">
+              <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+              </svg>
+              Ohio Northern University, Ada, OH 45810
+            </p>
+          </div>
+
+          <a href={undergradHousing.bookingUrl} target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-3 px-6 py-3 bg-gradient-to-r from-[#f1d44b] to-[#fde68a] text-[#212322] font-bold rounded-full hover:shadow-xl hover:shadow-[#f1d44b]/30 hover:-translate-y-1 transition-all duration-300">
+            Contact the National Office
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path>
+            </svg>
+          </a>
+        </div>
+      </div>
+    </div>
+
+  </Container>
+</section>
+
+<script>
+  const hotelSection = document.querySelector('.accommodation-hotel-section');
+  if (hotelSection) {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            hotelSection.classList.remove('paused');
+          } else {
+            hotelSection.classList.add('paused');
+          }
+        });
+      },
+      { rootMargin: '100px', threshold: 0 }
+    );
+    observer.observe(hotelSection);
+  }
+</script>
+
+<style>
+  .accommodation-hotel-section.paused .featured-hotel-card {
+    animation-play-state: paused;
+  }
+
+  .accommodation-hotel-section.paused .carousel-image {
+    animation-play-state: paused;
+  }
+
+  .featured-hotel-card {
+    animation: fadeSlideUp 0.6s ease-out both;
+  }
+
+  .featured-hotel-card:nth-child(2) {
+    animation-delay: 0.2s;
+  }
+
+  @keyframes fadeSlideUp {
+    from {
+      opacity: 0;
+      transform: translateY(30px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  /* Image carousel - 4 images */
+  .carousel-image {
+    opacity: 0;
+    animation: carouselFade 16s infinite;
+  }
+
+  /* Undergraduate carousel - 2 images */
+  .carousel-undergrad {
+    animation: carouselFade2 8s infinite;
+  }
+
+  @keyframes carouselFade {
+    0% { opacity: 0; }
+    5% { opacity: 1; }
+    25% { opacity: 1; }
+    30% { opacity: 0; }
+    100% { opacity: 0; }
+  }
+
+  @keyframes carouselFade2 {
+    0% { opacity: 0; }
+    10% { opacity: 1; }
+    50% { opacity: 1; }
+    60% { opacity: 0; }
+    100% { opacity: 0; }
+  }
+</style>
