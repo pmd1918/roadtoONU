@@ -1,0 +1,578 @@
+---
+interface Props {
+  class?: string;
+}
+const { class: className = '' } = Astro.props;
+---
+
+<section class:list={["centennial-section", className]} id="centennial">
+  <div class="ballpit-container">
+    <canvas id="ballpit-canvas"></canvas>
+  </div>
+  
+  <div class="centennial-content">
+    <div class="centennial-badge">
+      <span class="badge-text">1926 - 2026</span>
+    </div>
+    
+    <h1 class="centennial-headline">
+      <span class="headline-100">100 Years</span>
+      <span class="headline-text">of Brotherhood at</span>
+      <span class="headline-onu">Ohio Northern</span>
+    </h1>
+    
+    <div class="centennial-photos">
+      <div class="photo-frame historic-1">
+        <img src="/onu-historical-1.jpg" alt="Founding members of Mu Beta chapter at Ohio Northern University, 1928-1929" />
+        <div class="photo-caption">Founding Members & 1928-1929 Ledger</div>
+      </div>
+      
+      <div class="photo-frame historic-2">
+        <img src="/onu-historical-2.jpg" alt="Early Mu Beta chapter members at Ohio Northern University" />
+        <div class="photo-caption">Early Brotherhood</div>
+      </div>
+    </div>
+    
+    <p class="centennial-description">
+      A century of friendship, leadership, and service. From 1926 to 2026, 
+      Mu Beta chapter at Ohio Northern University has embodied the values 
+      of Phi Mu Delta. Join us as we celebrate this historic milestone 
+      at the 62nd National Conclave.
+    </p>
+    
+    <div class="centennial-cta">
+      <a href="#registration" class="cta-button primary">
+        Celebrate With Us
+      </a>
+      <a href="#schedule" class="cta-button secondary">
+        View Schedule
+      </a>
+    </div>
+  </div>
+</section>
+
+<style>
+  .centennial-section {
+    position: relative;
+    min-height: 100vh;
+    width: 100%;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem 1rem;
+  }
+  
+  /* Ballpit background */
+  .ballpit-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+  }
+  
+  #ballpit-canvas {
+    width: 100%;
+    height: 100%;
+    display: block;
+  }
+  
+  /* Content overlay */
+  .centennial-content {
+    position: relative;
+    z-index: 10;
+    max-width: 1200px;
+    width: 100%;
+    text-align: center;
+    padding: 2rem;
+    background: rgba(33, 35, 34, 0.85);
+    backdrop-filter: blur(10px);
+    border-radius: 24px;
+    border: 2px solid rgba(234, 118, 0, 0.3);
+  }
+  
+  @media (max-width: 768px) {
+    .centennial-content {
+      padding: 1.5rem;
+      border-radius: 16px;
+    }
+  }
+  
+  /* Badge */
+  .centennial-badge {
+    display: inline-block;
+    margin-bottom: 2rem;
+    padding: 0.75rem 2rem;
+    background: linear-gradient(135deg, #ea7600, #f1d44b);
+    border-radius: 50px;
+    box-shadow: 0 4px 20px rgba(234, 118, 0, 0.4);
+    animation: pulse 3s ease-in-out infinite;
+  }
+  
+  @media (max-width: 768px) {
+    .centennial-badge {
+      padding: 0.5rem 1.5rem;
+      margin-bottom: 1.5rem;
+    }
+  }
+  
+  .badge-text {
+    font-family: 'Inter', sans-serif;
+    font-size: clamp(1rem, 2vw, 1.5rem);
+    font-weight: 900;
+    letter-spacing: 0.15em;
+    color: #212322;
+  }
+  
+  /* Headline */
+  .centennial-headline {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin-bottom: 3rem;
+  }
+  
+  @media (max-width: 768px) {
+    .centennial-headline {
+      margin-bottom: 2rem;
+    }
+  }
+  
+  .headline-100 {
+    font-family: 'Have Heart One', cursive;
+    font-size: clamp(4rem, 12vw, 10rem);
+    line-height: 0.9;
+    background: linear-gradient(135deg, #f1d44b 0%, #ea7600 50%, #f1d44b 100%);
+    background-size: 200% auto;
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: shimmer 4s ease-in-out infinite;
+  }
+  
+  .headline-text {
+    font-family: 'Inter', sans-serif;
+    font-size: clamp(1.5rem, 4vw, 3rem);
+    font-weight: 300;
+    color: #f4f7ff;
+    letter-spacing: 0.05em;
+  }
+  
+  .headline-onu {
+    font-family: 'Inter', sans-serif;
+    font-size: clamp(2rem, 6vw, 5rem);
+    font-weight: 900;
+    background: linear-gradient(90deg, #0057b8, #00b7ff);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+  
+  /* Photos */
+  .centennial-photos {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 2rem;
+    margin: 3rem auto;
+    max-width: 900px;
+  }
+  
+  @media (max-width: 768px) {
+    .centennial-photos {
+      gap: 1.5rem;
+      margin: 2rem auto;
+      grid-template-columns: 1fr;
+    }
+  }
+  
+  .photo-frame {
+    position: relative;
+    border-radius: 16px;
+    overflow: hidden;
+    background: #212322;
+    border: 3px solid #ea7600;
+    box-shadow: 0 8px 32px rgba(234, 118, 0, 0.3);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  
+  .photo-frame:hover {
+    transform: translateY(-8px) rotate(-1deg);
+    box-shadow: 0 16px 48px rgba(234, 118, 0, 0.5);
+  }
+  
+  .photo-frame img {
+    width: 100%;
+    height: auto;
+    display: block;
+    aspect-ratio: 4/3;
+    object-fit: cover;
+  }
+  
+  .photo-caption {
+    padding: 1rem;
+    background: linear-gradient(to top, rgba(33, 35, 34, 0.95), transparent);
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: #f4f7ff;
+    text-align: center;
+    letter-spacing: 0.05em;
+  }
+  
+  @media (max-width: 768px) {
+    .photo-caption {
+      font-size: 0.75rem;
+      padding: 0.75rem;
+    }
+  }
+  
+  /* Description */
+  .centennial-description {
+    font-family: 'Inter', sans-serif;
+    font-size: clamp(1rem, 2vw, 1.25rem);
+    font-weight: 400;
+    line-height: 1.8;
+    color: #f4f7ff;
+    max-width: 800px;
+    margin: 2rem auto;
+    text-align: center;
+  }
+  
+  @media (max-width: 768px) {
+    .centennial-description {
+      line-height: 1.6;
+      margin: 1.5rem auto;
+    }
+  }
+  
+  /* CTA Buttons */
+  .centennial-cta {
+    display: flex;
+    gap: 1.5rem;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-top: 3rem;
+  }
+  
+  @media (max-width: 768px) {
+    .centennial-cta {
+      gap: 1rem;
+      margin-top: 2rem;
+      flex-direction: column;
+      align-items: stretch;
+    }
+  }
+  
+  .cta-button {
+    display: inline-block;
+    padding: 1rem 2.5rem;
+    font-family: 'Inter', sans-serif;
+    font-size: 1.125rem;
+    font-weight: 700;
+    text-decoration: none;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    border-radius: 50px;
+    transition: all 0.3s ease;
+    border: 2px solid transparent;
+  }
+  
+  @media (max-width: 768px) {
+    .cta-button {
+      padding: 0.875rem 2rem;
+      font-size: 1rem;
+    }
+  }
+  
+  .cta-button.primary {
+    background: linear-gradient(135deg, #ea7600, #f1d44b);
+    color: #212322;
+    box-shadow: 0 4px 20px rgba(234, 118, 0, 0.4);
+  }
+  
+  .cta-button.primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 32px rgba(234, 118, 0, 0.6);
+  }
+  
+  .cta-button.secondary {
+    background: transparent;
+    color: #f4f7ff;
+    border-color: #f4f7ff;
+  }
+  
+  .cta-button.secondary:hover {
+    background: rgba(244, 247, 255, 0.1);
+    transform: translateY(-2px);
+  }
+  
+  /* Animations */
+  @keyframes pulse {
+    0%, 100% {
+      transform: scale(1);
+    }
+    50% {
+      transform: scale(1.05);
+    }
+  }
+  
+  @keyframes shimmer {
+    0% {
+      background-position: 200% center;
+    }
+    100% {
+      background-position: -200% center;
+    }
+  }
+</style>
+
+<script>
+  // Ballpit effect inspired by reactbits.dev
+  class Ball {
+    x: number;
+    y: number;
+    vx: number;
+    vy: number;
+    radius: number;
+    color: string;
+    
+    constructor(x: number, y: number, radius: number, color: string) {
+      this.x = x;
+      this.y = y;
+      this.vx = (Math.random() - 0.5) * 2;
+      this.vy = (Math.random() - 0.5) * 2;
+      this.radius = radius;
+      this.color = color;
+    }
+    
+    draw(ctx: CanvasRenderingContext2D) {
+      ctx.beginPath();
+      ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+      ctx.fillStyle = this.color;
+      ctx.fill();
+      
+      // Add subtle shine
+      const gradient = ctx.createRadialGradient(
+        this.x - this.radius * 0.3,
+        this.y - this.radius * 0.3,
+        0,
+        this.x,
+        this.y,
+        this.radius
+      );
+      gradient.addColorStop(0, 'rgba(255, 255, 255, 0.3)');
+      gradient.addColorStop(1, 'rgba(255, 255, 255, 0)');
+      ctx.fillStyle = gradient;
+      ctx.fill();
+      ctx.closePath();
+    }
+    
+    update(width: number, height: number, gravity: number, friction: number) {
+      // Apply gravity
+      this.vy += gravity;
+      
+      // Apply friction
+      this.vx *= friction;
+      this.vy *= friction;
+      
+      // Update position
+      this.x += this.vx;
+      this.y += this.vy;
+      
+      // Bounce off walls
+      if (this.x + this.radius > width || this.x - this.radius < 0) {
+        this.vx = -this.vx * 0.8;
+        this.x = this.x + this.radius > width ? width - this.radius : this.radius;
+      }
+      
+      if (this.y + this.radius > height || this.y - this.radius < 0) {
+        this.vy = -this.vy * 0.8;
+        this.y = this.y + this.radius > height ? height - this.radius : this.radius;
+      }
+    }
+  }
+  
+  function initBallpit() {
+    const canvas = document.getElementById('ballpit-canvas') as HTMLCanvasElement;
+    if (!canvas) return;
+    
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+    
+    // PMD colors
+    const colors = [
+      '#ea7600', // Orange
+      '#f1d44b', // Gold
+      '#212322', // Black
+    ];
+    
+    let balls: Ball[] = [];
+    let animationId: number;
+    
+    function resize() {
+      canvas.width = canvas.offsetWidth;
+      canvas.height = canvas.offsetHeight;
+      initBalls();
+    }
+    
+    function initBalls() {
+      balls = [];
+      const ballCount = Math.floor((canvas.width * canvas.height) / 15000);
+      
+      for (let i = 0; i < ballCount; i++) {
+        const radius = Math.random() * 30 + 20;
+        const x = Math.random() * (canvas.width - radius * 2) + radius;
+        const y = Math.random() * (canvas.height - radius * 2) + radius;
+        const color = colors[Math.floor(Math.random() * colors.length)];
+        
+        balls.push(new Ball(x, y, radius, color));
+      }
+    }
+    
+    function checkCollision(ball1: Ball, ball2: Ball) {
+      const dx = ball2.x - ball1.x;
+      const dy = ball2.y - ball1.y;
+      const distance = Math.sqrt(dx * dx + dy * dy);
+      
+      if (distance < ball1.radius + ball2.radius) {
+        // Simple collision response
+        const angle = Math.atan2(dy, dx);
+        const sin = Math.sin(angle);
+        const cos = Math.cos(angle);
+        
+        // Rotate ball positions
+        const x1 = 0;
+        const y1 = 0;
+        const x2 = dx * cos + dy * sin;
+        const y2 = dy * cos - dx * sin;
+        
+        // Rotate ball velocities
+        const vx1 = ball1.vx * cos + ball1.vy * sin;
+        const vy1 = ball1.vy * cos - ball1.vx * sin;
+        const vx2 = ball2.vx * cos + ball2.vy * sin;
+        const vy2 = ball2.vy * cos - ball2.vx * sin;
+        
+        // Collision reaction
+        const vxTotal = vx1 - vx2;
+        vx1 = ((ball1.radius - ball2.radius) * vx1 + 2 * ball2.radius * vx2) / (ball1.radius + ball2.radius);
+        vx2 = vxTotal + vx1;
+        
+        // Update positions to prevent overlap
+        const absV = Math.abs(vx1) + Math.abs(vx2);
+        const overlap = (ball1.radius + ball2.radius) - Math.abs(x1 - x2);
+        x1 += (vx1 / absV) * overlap;
+        x2 += (vx2 / absV) * overlap;
+        
+        // Rotate positions back
+        const x1Final = x1 * cos - y1 * sin;
+        const y1Final = y1 * cos + x1 * sin;
+        const x2Final = x2 * cos - y2 * sin;
+        const y2Final = y2 * cos + x2 * sin;
+        
+        // Update ball positions
+        ball2.x = ball1.x + x2Final;
+        ball2.y = ball1.y + y2Final;
+        ball1.x = ball1.x + x1Final;
+        ball1.y = ball1.y + y1Final;
+        
+        // Rotate velocities back
+        ball1.vx = vx1 * cos - vy1 * sin;
+        ball1.vy = vy1 * cos + vx1 * sin;
+        ball2.vx = vx2 * cos - vy2 * sin;
+        ball2.vy = vy2 * cos + vx2 * sin;
+      }
+    }
+    
+    function animate() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      
+      // Draw background gradient
+      const gradient = ctx.createLinearGradient(0, 0, 0, canvas.height);
+      gradient.addColorStop(0, '#0a0a0a');
+      gradient.addColorStop(1, '#1a1a1a');
+      ctx.fillStyle = gradient;
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      
+      // Update and draw balls
+      balls.forEach((ball, i) => {
+        ball.update(canvas.width, canvas.height, 0.3, 0.99);
+        ball.draw(ctx);
+        
+        // Check collisions with other balls
+        for (let j = i + 1; j < balls.length; j++) {
+          checkCollision(ball, balls[j]);
+        }
+      });
+      
+      animationId = requestAnimationFrame(animate);
+    }
+    
+    // Mouse interaction
+    canvas.addEventListener('mousemove', (e) => {
+      const rect = canvas.getBoundingClientRect();
+      const mouseX = e.clientX - rect.left;
+      const mouseY = e.clientY - rect.top;
+      
+      balls.forEach(ball => {
+        const dx = mouseX - ball.x;
+        const dy = mouseY - ball.y;
+        const distance = Math.sqrt(dx * dx + dy * dy);
+        
+        if (distance < 100) {
+          const force = (100 - distance) / 100;
+          ball.vx -= (dx / distance) * force * 2;
+          ball.vy -= (dy / distance) * force * 2;
+        }
+      });
+    });
+    
+    // Touch interaction for mobile
+    canvas.addEventListener('touchmove', (e) => {
+      e.preventDefault();
+      const rect = canvas.getBoundingClientRect();
+      const touch = e.touches[0];
+      const touchX = touch.clientX - rect.left;
+      const touchY = touch.clientY - rect.top;
+      
+      balls.forEach(ball => {
+        const dx = touchX - ball.x;
+        const dy = touchY - ball.y;
+        const distance = Math.sqrt(dx * dx + dy * dy);
+        
+        if (distance < 100) {
+          const force = (100 - distance) / 100;
+          ball.vx -= (dx / distance) * force * 2;
+          ball.vy -= (dy / distance) * force * 2;
+        }
+      });
+    }, { passive: false });
+    
+    // Initialize
+    resize();
+    animate();
+    
+    // Handle window resize
+    window.addEventListener('resize', resize);
+    
+    // Cleanup on page unload
+    return () => {
+      cancelAnimationFrame(animationId);
+      window.removeEventListener('resize', resize);
+    };
+  }
+  
+  // Initialize when DOM is ready
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initBallpit);
+  } else {
+    initBallpit();
+  }
+</script>

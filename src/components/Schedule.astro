@@ -1,0 +1,375 @@
+---
+interface Props {
+  class?: string;
+}
+const { class: className = '' } = Astro.props;
+
+const scheduleData = [
+  {
+    day: 'Wednesday',
+    date: 'June 25, 2026',
+    events: [
+      { time: '3:00 PM', title: 'Registration Opens', location: 'McIntosh Center', icon: '📝' },
+      { time: '6:00 PM', title: 'Welcome Reception', location: 'Campus Green', icon: '🎉' },
+      { time: '8:00 PM', title: 'Ice Breaker Social', location: 'Student Union', icon: '🧊' },
+    ]
+  },
+  {
+    day: 'Thursday',
+    date: 'June 26, 2026',
+    events: [
+      { time: '8:00 AM', title: 'Continental Breakfast', location: 'McIntosh Center', icon: '☕' },
+      { time: '9:00 AM', title: 'Opening Ceremony', location: 'Freed Center', icon: '🎭' },
+      { time: '11:00 AM', title: 'Chapter Leadership Workshop', location: 'Mathile Center', icon: '👥' },
+      { time: '12:30 PM', title: 'Lunch Break', location: 'Campus Dining', icon: '🍽️' },
+      { time: '2:00 PM', title: 'Alumni Panel Discussion', location: 'Wilson Center', icon: '💬' },
+      { time: '4:00 PM', title: 'Recreation & Free Time', location: 'Various', icon: '⚽' },
+      { time: '6:30 PM', title: 'Centennial Celebration Dinner', location: 'McIntosh Center', icon: '🎂', special: true },
+      { time: '9:00 PM', title: 'Live Entertainment', location: 'Campus Pavilion', icon: '🎸' },
+    ]
+  },
+  {
+    day: 'Friday',
+    date: 'June 27, 2026',
+    events: [
+      { time: '8:00 AM', title: 'Breakfast', location: 'McIntosh Center', icon: '🥐' },
+      { time: '9:00 AM', title: 'Business Session', location: 'Freed Center', icon: '📊' },
+      { time: '12:00 PM', title: 'Lunch Break', location: 'Campus Dining', icon: '🍽️' },
+      { time: '1:30 PM', title: 'Breakout Sessions', location: 'Various Locations', icon: '🗣️' },
+      { time: '3:30 PM', title: 'Campus Tours', location: 'Meet at Union', icon: '🏛️' },
+      { time: '6:00 PM', title: 'Brotherhood Dinner', location: 'Heritage Hall', icon: '🤝' },
+      { time: '8:00 PM', title: 'Talent Show & Games', location: 'Student Union', icon: '🎪' },
+    ]
+  },
+  {
+    day: 'Saturday',
+    date: 'June 28, 2026',
+    events: [
+      { time: '9:00 AM', title: 'Farewell Breakfast', location: 'McIntosh Center', icon: '🍳' },
+      { time: '10:30 AM', title: 'Closing Ceremony', location: 'Freed Center', icon: '🎓' },
+      { time: '12:00 PM', title: 'Departure', location: '', icon: '👋' },
+    ]
+  }
+];
+---
+
+<section class:list={["schedule-section", className]} id="schedule">
+  <div class="schedule-container">
+    <div class="schedule-header">
+      <h2 class="schedule-title">Conclave Schedule</h2>
+      <p class="schedule-subtitle">Four days of brotherhood, learning, and celebration</p>
+    </div>
+    
+    <div class="schedule-timeline">
+      {scheduleData.map((day, dayIndex) => (
+        <div class="day-block" data-day={dayIndex}>
+          <div class="day-header">
+            <div class="day-badge">
+              <span class="day-name">{day.day}</span>
+              <span class="day-date">{day.date}</span>
+            </div>
+          </div>
+          
+          <div class="events-list">
+            {day.events.map((event, eventIndex) => (
+              <div class:list={["event-card", event.special && 'event-special']}>
+                <div class="event-time">
+                  <span class="time-text">{event.time}</span>
+                </div>
+                
+                <div class="event-connector">
+                  <div class="connector-line"></div>
+                  <div class="connector-dot">
+                    <span class="event-icon">{event.icon}</span>
+                  </div>
+                </div>
+                
+                <div class="event-details">
+                  <h3 class="event-title">{event.title}</h3>
+                  {event.location && (
+                    <p class="event-location">
+                      <span class="location-icon">📍</span>
+                      {event.location}
+                    </p>
+                  )}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .schedule-section {
+    padding: 4rem 1rem;
+    background: linear-gradient(to bottom, #f4f7ff 0%, #e8ecf4 100%);
+    position: relative;
+  }
+  
+  @media (max-width: 768px) {
+    .schedule-section {
+      padding: 3rem 0.5rem;
+    }
+  }
+  
+  .schedule-container {
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  
+  .schedule-header {
+    text-align: center;
+    margin-bottom: 4rem;
+  }
+  
+  @media (max-width: 768px) {
+    .schedule-header {
+      margin-bottom: 2.5rem;
+    }
+  }
+  
+  .schedule-title {
+    font-family: 'Have Heart One', cursive;
+    font-size: clamp(2.5rem, 6vw, 4.5rem);
+    background: linear-gradient(135deg, #ea7600, #f1d44b);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 1rem;
+  }
+  
+  .schedule-subtitle {
+    font-family: 'Inter', sans-serif;
+    font-size: clamp(1rem, 2vw, 1.25rem);
+    color: #666;
+    font-weight: 400;
+  }
+  
+  .schedule-timeline {
+    display: flex;
+    flex-direction: column;
+    gap: 3rem;
+  }
+  
+  @media (max-width: 768px) {
+    .schedule-timeline {
+      gap: 2rem;
+    }
+  }
+  
+  .day-block {
+    background: white;
+    border-radius: 24px;
+    padding: 2rem;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  
+  @media (max-width: 768px) {
+    .day-block {
+      padding: 1.5rem;
+      border-radius: 16px;
+    }
+  }
+  
+  .day-block:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+  }
+  
+  .day-header {
+    margin-bottom: 2rem;
+  }
+  
+  @media (max-width: 768px) {
+    .day-header {
+      margin-bottom: 1.5rem;
+    }
+  }
+  
+  .day-badge {
+    display: inline-flex;
+    flex-direction: column;
+    padding: 1rem 2rem;
+    background: linear-gradient(135deg, #212322, #3a3c3b);
+    border-radius: 16px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+  }
+  
+  @media (max-width: 768px) {
+    .day-badge {
+      padding: 0.75rem 1.5rem;
+    }
+  }
+  
+  .day-name {
+    font-family: 'Inter', sans-serif;
+    font-size: clamp(1.5rem, 3vw, 2rem);
+    font-weight: 900;
+    color: #f1d44b;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+  
+  .day-date {
+    font-family: 'Inter', sans-serif;
+    font-size: clamp(0.875rem, 1.5vw, 1rem);
+    font-weight: 400;
+    color: #f4f7ff;
+    margin-top: 0.25rem;
+  }
+  
+  .events-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+  
+  .event-card {
+    display: grid;
+    grid-template-columns: auto auto 1fr;
+    gap: 1.5rem;
+    padding: 1.5rem 0;
+    border-bottom: 1px solid #e8ecf4;
+    transition: background-color 0.3s ease;
+  }
+  
+  @media (max-width: 768px) {
+    .event-card {
+      grid-template-columns: auto auto 1fr;
+      gap: 1rem;
+      padding: 1rem 0;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .event-card {
+      grid-template-columns: 1fr;
+      gap: 0.75rem;
+    }
+  }
+  
+  .event-card:last-child {
+    border-bottom: none;
+  }
+  
+  .event-card:hover {
+    background-color: rgba(234, 118, 0, 0.03);
+  }
+  
+  .event-card.event-special {
+    background: linear-gradient(90deg, rgba(234, 118, 0, 0.1), rgba(241, 212, 75, 0.1));
+    border-radius: 12px;
+    padding: 1.5rem;
+    margin: 0.5rem 0;
+    border: 2px solid #ea7600;
+  }
+  
+  @media (max-width: 768px) {
+    .event-card.event-special {
+      padding: 1rem;
+    }
+  }
+  
+  .event-time {
+    display: flex;
+    align-items: center;
+    min-width: 100px;
+  }
+  
+  @media (max-width: 480px) {
+    .event-time {
+      min-width: auto;
+    }
+  }
+  
+  .time-text {
+    font-family: 'Inter', sans-serif;
+    font-size: clamp(0.875rem, 1.5vw, 1rem);
+    font-weight: 700;
+    color: #212322;
+    white-space: nowrap;
+  }
+  
+  .event-connector {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 50px;
+  }
+  
+  @media (max-width: 480px) {
+    .event-connector {
+      display: none;
+    }
+  }
+  
+  .connector-line {
+    position: absolute;
+    left: 50%;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: linear-gradient(to bottom, #e8ecf4, #e8ecf4);
+    transform: translateX(-50%);
+  }
+  
+  .event-card:first-child .connector-line {
+    top: 50%;
+  }
+  
+  .event-card:last-child .connector-line {
+    bottom: 50%;
+  }
+  
+  .connector-dot {
+    position: relative;
+    z-index: 2;
+    width: 40px;
+    height: 40px;
+    background: linear-gradient(135deg, #ea7600, #f1d44b);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 8px rgba(234, 118, 0, 0.3);
+  }
+  
+  .event-icon {
+    font-size: 1.25rem;
+  }
+  
+  .event-details {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 0.5rem;
+  }
+  
+  .event-title {
+    font-family: 'Inter', sans-serif;
+    font-size: clamp(1rem, 2vw, 1.25rem);
+    font-weight: 700;
+    color: #212322;
+    margin: 0;
+  }
+  
+  .event-location {
+    font-family: 'Inter', sans-serif;
+    font-size: clamp(0.875rem, 1.5vw, 1rem);
+    font-weight: 400;
+    color: #666;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  
+  .location-icon {
+    font-size: 0.875rem;
+  }
+</style>
