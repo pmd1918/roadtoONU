@@ -4,8 +4,6 @@ import react from '@astrojs/react';
 
 // https://astro.build/config
 export default defineConfig({
-  site: 'https://pmd1918.github.io',
-  base: '/roadtoONU',
   output: "static",
   integrations: [react()],
   vite: {
