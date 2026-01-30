@@ -449,15 +449,15 @@ const { class: className = '' } = Astro.props;
         const cos = Math.cos(angle);
         
         // Rotate ball positions
-        const x1 = 0;
+        let x1 = 0;
         const y1 = 0;
-        const x2 = dx * cos + dy * sin;
+        let x2 = dx * cos + dy * sin;
         const y2 = dy * cos - dx * sin;
         
         // Rotate ball velocities
-        const vx1 = ball1.vx * cos + ball1.vy * sin;
+        let vx1 = ball1.vx * cos + ball1.vy * sin;
         const vy1 = ball1.vy * cos - ball1.vx * sin;
-        const vx2 = ball2.vx * cos + ball2.vy * sin;
+        let vx2 = ball2.vx * cos + ball2.vy * sin;
         const vy2 = ball2.vy * cos - ball2.vx * sin;
         
         // Collision reaction
