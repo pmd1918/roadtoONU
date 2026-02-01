@@ -1,9 +1,8 @@
 "use client";
 
-import { Canvas, useFrame, useThree, useLoader } from "@react-three/fiber";
+import { Canvas, useThree, useLoader } from "@react-three/fiber";
 import { Physics, RigidBody, CuboidCollider } from "@react-three/rapier";
-import { useRef, useMemo, useState, useEffect } from "react";
-import { Text } from "@react-three/drei";
+import { useRef, useMemo, useState, useEffect, Suspense } from "react";
 import * as THREE from "three";
 
 // PMD Colors - Orange, White, Black
@@ -132,19 +131,11 @@ function Rock() {
         />
       </mesh>
       
-      {/* 1926 - 2026 text */}
-      <Text
-        position={[0, -0.7, 1.4]}
-        fontSize={0.3}
-        color="#ea7600"
-        anchorX="center"
-        anchorY="middle"
-        font="/fonts/Inter-Bold.woff"
-        outlineWidth={0.02}
-        outlineColor="#000000"
-      >
-        1926 - 2026
-      </Text>
+      {/* 1926 - 2026 text as simple plane with color */}
+      <mesh position={[0, -0.7, 1.4]}>
+        <planeGeometry args={[1.6, 0.35]} />
+        <meshStandardMaterial color="#ea7600" roughness={0.8} />
+      </mesh>
     </RigidBody>
   );
 }
@@ -178,7 +169,6 @@ function Walls() {
       <RigidBody type="fixed" position={[0, 5, 10]}>
         <CuboidCollider args={[12, 12, 0.1]} />
       </RigidBody>
-      {/* Ceiling */}
       <RigidBody type="fixed" position={[0, 15, 0]}>
         <CuboidCollider args={[12, 0.1, 12]} />
       </RigidBody>
@@ -217,8 +207,8 @@ function Sky() {
   return null;
 }
 
-// Main scene
-function Scene() {
+// Main scene content
+function SceneContent() {
   return (
     <>
       <Sky />
@@ -240,9 +230,11 @@ function Scene() {
       
       <Physics gravity={[0, -9.81, 0]}>
         <Ground />
-        <Rock />
+        <Suspense fallback={null}>
+          <Rock />
+        </Suspense>
         <Walls />
-        <Balls count={40} />
+        <Balls count={35} />
       </Physics>
       
       {/* Pine trees arranged like in the photo */}
@@ -264,6 +256,7 @@ function Scene() {
 // Exported component
 export default function CentennialScene() {
   const [mounted, setMounted] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   
   useEffect(() => {
     setMounted(true);
@@ -274,6 +267,14 @@ export default function CentennialScene() {
       <div className="w-full h-full bg-gradient-to-b from-sky-400 to-green-200" />
     );
   }
+
+  if (error) {
+    return (
+      <div className="w-full h-full bg-gradient-to-b from-sky-400 to-green-200 flex items-center justify-center">
+        <p className="text-red-600">Error loading 3D scene: {error}</p>
+      </div>
+    );
+  }
   
   return (
     <Canvas
@@ -281,8 +282,13 @@ export default function CentennialScene() {
       camera={{ position: [0, 2.5, 9], fov: 45 }}
       style={{ width: "100%", height: "100%" }}
       gl={{ antialias: true, alpha: false }}
+      onCreated={({ gl }) => {
+        gl.setClearColor("#87ceeb");
+      }}
     >
-      <Scene />
+      <Suspense fallback={null}>
+        <SceneContent />
+      </Suspense>
     </Canvas>
   );
 }
