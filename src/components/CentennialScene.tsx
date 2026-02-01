@@ -1,12 +1,12 @@
 "use client";
 
-import { Canvas, useThree, useLoader } from "@react-three/fiber";
+import { Canvas, useThree, useLoader, useFrame } from "@react-three/fiber";
 import { Physics, RigidBody, CuboidCollider } from "@react-three/rapier";
 import { useRef, useMemo, useState, useEffect, Suspense } from "react";
 import * as THREE from "three";
 
 // PMD Colors - Orange, White, Black
-const BALL_COLORS = ["#ea7600", "#ffffff", "#212322"];
+const BALL_COLORS = ["#ea7600", "#ffffff", "#1a1a1a"];
 
 // Ball component with physics
 function Ball({ position, color, radius }: { position: [number, number, number]; color: string; radius: number }) {
@@ -14,31 +14,31 @@ function Ball({ position, color, radius }: { position: [number, number, number];
     <RigidBody
       position={position}
       colliders="ball"
-      restitution={0.7}
-      friction={0.3}
-      linearDamping={0.1}
-      angularDamping={0.1}
+      restitution={0.8}
+      friction={0.2}
+      linearDamping={0.05}
+      angularDamping={0.05}
     >
       <mesh castShadow>
-        <sphereGeometry args={[radius, 32, 32]} />
-        <meshStandardMaterial color={color} roughness={0.3} metalness={0.1} />
+        <sphereGeometry args={[radius, 24, 24]} />
+        <meshStandardMaterial color={color} roughness={0.2} metalness={0.1} />
       </mesh>
     </RigidBody>
   );
 }
 
-// Generate random balls
-function Balls({ count = 30 }: { count?: number }) {
+// Generate balls that start high and fall
+function Balls({ count = 25 }: { count?: number }) {
   const balls = useMemo(() => {
     return Array.from({ length: count }, (_, i) => ({
       id: i,
       position: [
-        (Math.random() - 0.5) * 12,
-        Math.random() * 8 + 5,
-        (Math.random() - 0.5) * 8,
+        (Math.random() - 0.5) * 6,
+        Math.random() * 4 + 3, // Start higher
+        (Math.random() - 0.5) * 4,
       ] as [number, number, number],
       color: BALL_COLORS[Math.floor(Math.random() * BALL_COLORS.length)],
-      radius: Math.random() * 0.25 + 0.15,
+      radius: Math.random() * 0.15 + 0.08,
     }));
   }, [count]);
 
@@ -51,58 +51,36 @@ function Balls({ count = 30 }: { count?: number }) {
   );
 }
 
-// Stylized low-poly pine tree
+// Smaller, better positioned pine trees
 function PineTree({ position, scale = 1 }: { position: [number, number, number]; scale?: number }) {
   return (
-    <group position={position} scale={scale}>
+    <group position={position} scale={scale * 0.4}>
       {/* Trunk */}
-      <mesh position={[0, 0.5, 0]} castShadow>
-        <cylinderGeometry args={[0.15, 0.2, 1, 8]} />
-        <meshStandardMaterial color="#4a3728" roughness={0.9} />
+      <mesh position={[0, 0.3, 0]} castShadow>
+        <cylinderGeometry args={[0.08, 0.12, 0.6, 6]} />
+        <meshStandardMaterial color="#3d2817" roughness={0.9} />
       </mesh>
       {/* Foliage layers */}
-      <mesh position={[0, 1.5, 0]} castShadow>
-        <coneGeometry args={[0.8, 1.5, 8]} />
+      <mesh position={[0, 0.8, 0]} castShadow>
+        <coneGeometry args={[0.5, 1, 6]} />
         <meshStandardMaterial color="#1a472a" roughness={0.8} />
       </mesh>
-      <mesh position={[0, 2.3, 0]} castShadow>
-        <coneGeometry args={[0.6, 1.2, 8]} />
+      <mesh position={[0, 1.3, 0]} castShadow>
+        <coneGeometry args={[0.4, 0.8, 6]} />
         <meshStandardMaterial color="#1e5631" roughness={0.8} />
       </mesh>
-      <mesh position={[0, 3, 0]} castShadow>
-        <coneGeometry args={[0.4, 1, 8]} />
+      <mesh position={[0, 1.7, 0]} castShadow>
+        <coneGeometry args={[0.25, 0.6, 6]} />
         <meshStandardMaterial color="#228b22" roughness={0.8} />
       </mesh>
     </group>
   );
 }
 
-// The ONU Rock with Phi Mu Delta crest
+// The ONU Rock with Phi Mu Delta crest - CENTERED and VISIBLE
 function Rock() {
   const crestTexture = useLoader(THREE.TextureLoader, "/pmd-crest.jpg");
   
-  // Create rock-like geometry
-  const rockGeometry = useMemo(() => {
-    const geo = new THREE.DodecahedronGeometry(2, 1);
-    const positions = geo.attributes.position;
-    for (let i = 0; i < positions.count; i++) {
-      const x = positions.getX(i);
-      const y = positions.getY(i);
-      const z = positions.getZ(i);
-      const yScale = y < 0 ? 0.5 : 1;
-      const noise = (Math.random() - 0.5) * 0.15;
-      positions.setXYZ(
-        i,
-        x * (1.3 + noise),
-        y * yScale * (0.85 + noise * 0.5),
-        z * (0.65 + noise)
-      );
-    }
-    geo.computeVertexNormals();
-    return geo;
-  }, []);
-
-  // Configure crest texture
   useEffect(() => {
     if (crestTexture) {
       crestTexture.colorSpace = THREE.SRGBColorSpace;
@@ -110,31 +88,30 @@ function Rock() {
   }, [crestTexture]);
 
   return (
-    <RigidBody type="fixed" position={[0, 1, 0]} colliders="hull">
-      {/* Main rock body */}
-      <mesh geometry={rockGeometry} castShadow receiveShadow>
+    <RigidBody type="fixed" position={[0, 0.5, 0]} colliders="cuboid">
+      {/* Main rock body - simple box for now */}
+      <mesh castShadow receiveShadow>
+        <boxGeometry args={[1.5, 1.8, 0.8]} />
         <meshStandardMaterial 
-          color="#1a1a1a" 
+          color="#2a2a2a" 
           roughness={0.95} 
           metalness={0.02}
         />
       </mesh>
       
-      {/* Phi Mu Delta Crest - painted on rock */}
-      <mesh position={[0, 0.4, 1.35]} rotation={[0, 0, 0]}>
-        <planeGeometry args={[1.2, 1.5]} />
+      {/* Phi Mu Delta Crest on front */}
+      <mesh position={[0, 0.15, 0.41]}>
+        <planeGeometry args={[0.9, 1.1]} />
         <meshStandardMaterial 
           map={crestTexture}
-          transparent
-          roughness={0.8}
-          metalness={0.05}
+          roughness={0.7}
         />
       </mesh>
       
-      {/* 1926 - 2026 text as simple plane with color */}
-      <mesh position={[0, -0.7, 1.4]}>
-        <planeGeometry args={[1.6, 0.35]} />
-        <meshStandardMaterial color="#ea7600" roughness={0.8} />
+      {/* 1926 - 2026 orange bar below crest */}
+      <mesh position={[0, -0.6, 0.41]}>
+        <planeGeometry args={[1.2, 0.25]} />
+        <meshStandardMaterial color="#ea7600" roughness={0.7} />
       </mesh>
     </RigidBody>
   );
@@ -143,90 +120,86 @@ function Rock() {
 // Ground plane (grass)
 function Ground() {
   return (
-    <RigidBody type="fixed" position={[0, -0.5, 0]}>
+    <RigidBody type="fixed" position={[0, -0.4, 0]}>
       <mesh receiveShadow rotation={[-Math.PI / 2, 0, 0]}>
-        <planeGeometry args={[60, 60]} />
-        <meshStandardMaterial color="#4a7c4a" roughness={0.9} />
+        <planeGeometry args={[30, 30]} />
+        <meshStandardMaterial color="#3d6b3d" roughness={0.9} />
       </mesh>
-      <CuboidCollider args={[30, 0.1, 30]} />
+      <CuboidCollider args={[15, 0.1, 15]} />
     </RigidBody>
   );
 }
 
-// Invisible walls to contain balls
+// Invisible walls to contain balls - smaller area
 function Walls() {
   return (
     <>
-      <RigidBody type="fixed" position={[-10, 5, 0]}>
-        <CuboidCollider args={[0.1, 12, 12]} />
+      {/* Left */}
+      <RigidBody type="fixed" position={[-4, 2, 0]}>
+        <CuboidCollider args={[0.1, 5, 5]} />
       </RigidBody>
-      <RigidBody type="fixed" position={[10, 5, 0]}>
-        <CuboidCollider args={[0.1, 12, 12]} />
+      {/* Right */}
+      <RigidBody type="fixed" position={[4, 2, 0]}>
+        <CuboidCollider args={[0.1, 5, 5]} />
       </RigidBody>
-      <RigidBody type="fixed" position={[0, 5, -6]}>
-        <CuboidCollider args={[12, 12, 0.1]} />
+      {/* Back */}
+      <RigidBody type="fixed" position={[0, 2, -3]}>
+        <CuboidCollider args={[5, 5, 0.1]} />
       </RigidBody>
-      <RigidBody type="fixed" position={[0, 5, 10]}>
-        <CuboidCollider args={[12, 12, 0.1]} />
+      {/* Front */}
+      <RigidBody type="fixed" position={[0, 2, 4]}>
+        <CuboidCollider args={[5, 5, 0.1]} />
       </RigidBody>
-      <RigidBody type="fixed" position={[0, 15, 0]}>
-        <CuboidCollider args={[12, 0.1, 12]} />
+      {/* Ceiling */}
+      <RigidBody type="fixed" position={[0, 6, 0]}>
+        <CuboidCollider args={[5, 0.1, 5]} />
       </RigidBody>
     </>
   );
 }
 
-// Sky gradient background
+// Sky background
 function Sky() {
   const { scene } = useThree();
   
   useEffect(() => {
     const canvas = document.createElement("canvas");
     canvas.width = 2;
-    canvas.height = 512;
+    canvas.height = 256;
     const ctx = canvas.getContext("2d")!;
     
-    const gradient = ctx.createLinearGradient(0, 0, 0, 512);
-    gradient.addColorStop(0, "#5b9bd5");
-    gradient.addColorStop(0.3, "#87ceeb");
-    gradient.addColorStop(0.6, "#b8d4e8");
-    gradient.addColorStop(1, "#d4e8f0");
+    const gradient = ctx.createLinearGradient(0, 0, 0, 256);
+    gradient.addColorStop(0, "#87ceeb");
+    gradient.addColorStop(0.5, "#b8d8eb");
+    gradient.addColorStop(1, "#e0eef5");
     
     ctx.fillStyle = gradient;
-    ctx.fillRect(0, 0, 2, 512);
+    ctx.fillRect(0, 0, 2, 256);
     
     const texture = new THREE.CanvasTexture(canvas);
-    texture.mapping = THREE.EquirectangularReflectionMapping;
     scene.background = texture;
     
-    return () => {
-      texture.dispose();
-    };
+    return () => texture.dispose();
   }, [scene]);
   
   return null;
 }
 
-// Main scene content
+// Main scene
 function SceneContent() {
   return (
     <>
       <Sky />
       
       {/* Lighting */}
-      <ambientLight intensity={0.4} />
+      <ambientLight intensity={0.5} />
       <directionalLight
-        position={[8, 12, 8]}
-        intensity={1.2}
+        position={[5, 8, 5]}
+        intensity={1}
         castShadow
-        shadow-mapSize={[2048, 2048]}
-        shadow-camera-far={50}
-        shadow-camera-left={-15}
-        shadow-camera-right={15}
-        shadow-camera-top={15}
-        shadow-camera-bottom={-15}
+        shadow-mapSize={[1024, 1024]}
       />
-      <hemisphereLight args={["#87ceeb", "#4a7c4a", 0.4]} />
+      <hemisphereLight args={["#87ceeb", "#3d6b3d", 0.3]} />
       
       <Physics gravity={[0, -9.81, 0]}>
         <Ground />
@@ -234,57 +207,46 @@ function SceneContent() {
           <Rock />
         </Suspense>
         <Walls />
-        <Balls count={35} />
+        <Balls count={30} />
       </Physics>
       
-      {/* Pine trees arranged like in the photo */}
-      <PineTree position={[-6, 0, -2]} scale={1.8} />
-      <PineTree position={[-4.5, 0, -3.5]} scale={2.2} />
-      <PineTree position={[-3, 0, -2.5]} scale={1.6} />
-      <PineTree position={[3, 0, -3]} scale={2} />
-      <PineTree position={[5, 0, -2]} scale={1.9} />
-      <PineTree position={[6.5, 0, -3.5]} scale={2.3} />
-      <PineTree position={[-7, 0, -4]} scale={2.5} />
-      <PineTree position={[7, 0, -4]} scale={2.4} />
-      <PineTree position={[0, 0, -5]} scale={2.6} />
-      <PineTree position={[-2, 0, -4.5]} scale={2.1} />
-      <PineTree position={[2, 0, -4]} scale={1.9} />
+      {/* Pine trees - smaller, in background */}
+      <PineTree position={[-3, 0, -1.5]} scale={2} />
+      <PineTree position={[-2.2, 0, -2]} scale={2.5} />
+      <PineTree position={[-1.2, 0, -1.8]} scale={1.8} />
+      <PineTree position={[1.2, 0, -1.8]} scale={2} />
+      <PineTree position={[2.2, 0, -2]} scale={2.3} />
+      <PineTree position={[3, 0, -1.5]} scale={1.9} />
+      
+      {/* Far background trees */}
+      <PineTree position={[-2.5, 0, -2.5]} scale={3} />
+      <PineTree position={[0, 0, -2.8]} scale={3.2} />
+      <PineTree position={[2.5, 0, -2.5]} scale={2.8} />
     </>
   );
 }
 
-// Exported component
+// Main component
 export default function CentennialScene() {
   const [mounted, setMounted] = useState(false);
-  const [error, setError] = useState<string | null>(null);
   
   useEffect(() => {
     setMounted(true);
   }, []);
   
   if (!mounted) {
-    return (
-      <div className="w-full h-full bg-gradient-to-b from-sky-400 to-green-200" />
-    );
-  }
-
-  if (error) {
-    return (
-      <div className="w-full h-full bg-gradient-to-b from-sky-400 to-green-200 flex items-center justify-center">
-        <p className="text-red-600">Error loading 3D scene: {error}</p>
-      </div>
-    );
+    return <div className="w-full h-full bg-gradient-to-b from-sky-300 to-green-300" />;
   }
   
   return (
     <Canvas
       shadows
-      camera={{ position: [0, 2.5, 9], fov: 45 }}
-      style={{ width: "100%", height: "100%" }}
-      gl={{ antialias: true, alpha: false }}
-      onCreated={({ gl }) => {
-        gl.setClearColor("#87ceeb");
+      camera={{ 
+        position: [0, 1.5, 4],  // Closer, centered on rock
+        fov: 50 
       }}
+      style={{ width: "100%", height: "100%" }}
+      gl={{ antialias: true }}
     >
       <Suspense fallback={null}>
         <SceneContent />
