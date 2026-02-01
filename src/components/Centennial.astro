@@ -515,45 +515,7 @@ const { class: className = '' } = Astro.props;
       animationId = requestAnimationFrame(animate);
     }
     
-    // Mouse interaction
-    canvas.addEventListener('mousemove', (e) => {
-      const rect = canvas.getBoundingClientRect();
-      const mouseX = e.clientX - rect.left;
-      const mouseY = e.clientY - rect.top;
-      
-      balls.forEach(ball => {
-        const dx = mouseX - ball.x;
-        const dy = mouseY - ball.y;
-        const distance = Math.sqrt(dx * dx + dy * dy);
-        
-        if (distance < 100) {
-          const force = (100 - distance) / 100;
-          ball.vx -= (dx / distance) * force * 2;
-          ball.vy -= (dy / distance) * force * 2;
-        }
-      });
-    });
-    
-    // Touch interaction for mobile
-    canvas.addEventListener('touchmove', (e) => {
-      e.preventDefault();
-      const rect = canvas.getBoundingClientRect();
-      const touch = e.touches[0];
-      const touchX = touch.clientX - rect.left;
-      const touchY = touch.clientY - rect.top;
-      
-      balls.forEach(ball => {
-        const dx = touchX - ball.x;
-        const dy = touchY - ball.y;
-        const distance = Math.sqrt(dx * dx + dy * dy);
-        
-        if (distance < 100) {
-          const force = (100 - distance) / 100;
-          ball.vx -= (dx / distance) * force * 2;
-          ball.vy -= (dy / distance) * force * 2;
-        }
-      });
-    }, { passive: false });
+    // User interaction removed - balloons float autonomously
     
     // Initialize
     resize();
