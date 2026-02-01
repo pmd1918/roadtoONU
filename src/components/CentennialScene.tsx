@@ -28,7 +28,7 @@ function Ball({ position, color, radius }: { position: [number, number, number];
 }
 
 // Generate balls that start high and fall
-function Balls({ count = 25 }: { count?: number }) {
+function Balls({ count = 55 }: { count?: number }) {
   const balls = useMemo(() => {
     return Array.from({ length: count }, (_, i) => ({
       id: i,
