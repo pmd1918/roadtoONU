@@ -1,4 +1,6 @@
 ---
+import CentennialScene from './CentennialScene';
+
 interface Props {
   class?: string;
 }
@@ -6,8 +8,8 @@ const { class: className = '' } = Astro.props;
 ---
 
 <section class:list={["centennial-section", className]} id="centennial">
-  <div class="ballpit-container">
-    <canvas id="ballpit-canvas"></canvas>
+  <div class="scene-container">
+    <CentennialScene client:only="react" />
   </div>
   
   <div class="centennial-content">
@@ -63,20 +65,14 @@ const { class: className = '' } = Astro.props;
     padding: 2rem 1rem;
   }
   
-  /* Ballpit background */
-  .ballpit-container {
+  /* 3D Scene background */
+  .scene-container {
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
     z-index: 0;
-  }
-  
-  #ballpit-canvas {
-    width: 100%;
-    height: 100%;
-    display: block;
   }
   
   /* Content overlay */
@@ -333,208 +329,3 @@ const { class: className = '' } = Astro.props;
     }
   }
 </style>
-
-<script>
-  // Ballpit effect inspired by reactbits.dev
-  class Ball {
-    x: number;
-    y: number;
-    vx: number;
-    vy: number;
-    radius: number;
-    color: string;
-    
-    constructor(x: number, y: number, radius: number, color: string) {
-      this.x = x;
-      this.y = y;
-      this.vx = (Math.random() - 0.5) * 2;
-      this.vy = (Math.random() - 0.5) * 2;
-      this.radius = radius;
-      this.color = color;
-    }
-    
-    draw(ctx: CanvasRenderingContext2D) {
-      ctx.beginPath();
-      ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
-      ctx.fillStyle = this.color;
-      ctx.fill();
-      
-      // Add subtle shine
-      const gradient = ctx.createRadialGradient(
-        this.x - this.radius * 0.3,
-        this.y - this.radius * 0.3,
-        0,
-        this.x,
-        this.y,
-        this.radius
-      );
-      gradient.addColorStop(0, 'rgba(255, 255, 255, 0.3)');
-      gradient.addColorStop(1, 'rgba(255, 255, 255, 0)');
-      ctx.fillStyle = gradient;
-      ctx.fill();
-      ctx.closePath();
-    }
-    
-    update(width: number, height: number, gravity: number, friction: number) {
-      // Apply gravity
-      this.vy += gravity;
-      
-      // Apply friction
-      this.vx *= friction;
-      this.vy *= friction;
-      
-      // Update position
-      this.x += this.vx;
-      this.y += this.vy;
-      
-      // Bounce off walls
-      if (this.x + this.radius > width || this.x - this.radius < 0) {
-        this.vx = -this.vx * 0.8;
-        this.x = this.x + this.radius > width ? width - this.radius : this.radius;
-      }
-      
-      if (this.y + this.radius > height || this.y - this.radius < 0) {
-        this.vy = -this.vy * 0.8;
-        this.y = this.y + this.radius > height ? height - this.radius : this.radius;
-      }
-    }
-  }
-  
-  function initBallpit() {
-    const canvas = document.getElementById('ballpit-canvas') as HTMLCanvasElement;
-    if (!canvas) return;
-    
-    const ctx = canvas.getContext('2d');
-    if (!ctx) return;
-    
-    // PMD colors
-    const colors = [
-      '#ea7600', // Orange
-      '#f1d44b', // Gold
-      '#212322', // Black
-    ];
-    
-    let balls: Ball[] = [];
-    let animationId: number;
-    
-    function resize() {
-      canvas.width = canvas.offsetWidth;
-      canvas.height = canvas.offsetHeight;
-      initBalls();
-    }
-    
-    function initBalls() {
-      balls = [];
-      const ballCount = Math.floor((canvas.width * canvas.height) / 15000);
-      
-      for (let i = 0; i < ballCount; i++) {
-        const radius = Math.random() * 30 + 20;
-        const x = Math.random() * (canvas.width - radius * 2) + radius;
-        const y = Math.random() * (canvas.height - radius * 2) + radius;
-        const color = colors[Math.floor(Math.random() * colors.length)];
-        
-        balls.push(new Ball(x, y, radius, color));
-      }
-    }
-    
-    function checkCollision(ball1: Ball, ball2: Ball) {
-      const dx = ball2.x - ball1.x;
-      const dy = ball2.y - ball1.y;
-      const distance = Math.sqrt(dx * dx + dy * dy);
-      
-      if (distance < ball1.radius + ball2.radius) {
-        // Simple collision response
-        const angle = Math.atan2(dy, dx);
-        const sin = Math.sin(angle);
-        const cos = Math.cos(angle);
-        
-        // Rotate ball positions
-        let x1 = 0;
-        const y1 = 0;
-        let x2 = dx * cos + dy * sin;
-        const y2 = dy * cos - dx * sin;
-        
-        // Rotate ball velocities
-        let vx1 = ball1.vx * cos + ball1.vy * sin;
-        const vy1 = ball1.vy * cos - ball1.vx * sin;
-        let vx2 = ball2.vx * cos + ball2.vy * sin;
-        const vy2 = ball2.vy * cos - ball2.vx * sin;
-        
-        // Collision reaction
-        const vxTotal = vx1 - vx2;
-        vx1 = ((ball1.radius - ball2.radius) * vx1 + 2 * ball2.radius * vx2) / (ball1.radius + ball2.radius);
-        vx2 = vxTotal + vx1;
-        
-        // Update positions to prevent overlap
-        const absV = Math.abs(vx1) + Math.abs(vx2);
-        const overlap = (ball1.radius + ball2.radius) - Math.abs(x1 - x2);
-        x1 += (vx1 / absV) * overlap;
-        x2 += (vx2 / absV) * overlap;
-        
-        // Rotate positions back
-        const x1Final = x1 * cos - y1 * sin;
-        const y1Final = y1 * cos + x1 * sin;
-        const x2Final = x2 * cos - y2 * sin;
-        const y2Final = y2 * cos + x2 * sin;
-        
-        // Update ball positions
-        ball2.x = ball1.x + x2Final;
-        ball2.y = ball1.y + y2Final;
-        ball1.x = ball1.x + x1Final;
-        ball1.y = ball1.y + y1Final;
-        
-        // Rotate velocities back
-        ball1.vx = vx1 * cos - vy1 * sin;
-        ball1.vy = vy1 * cos + vx1 * sin;
-        ball2.vx = vx2 * cos - vy2 * sin;
-        ball2.vy = vy2 * cos + vx2 * sin;
-      }
-    }
-    
-    function animate() {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      
-      // Draw background gradient
-      const gradient = ctx.createLinearGradient(0, 0, 0, canvas.height);
-      gradient.addColorStop(0, '#0a0a0a');
-      gradient.addColorStop(1, '#1a1a1a');
-      ctx.fillStyle = gradient;
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
-      
-      // Update and draw balls
-      balls.forEach((ball, i) => {
-        ball.update(canvas.width, canvas.height, 0.3, 0.99);
-        ball.draw(ctx);
-        
-        // Check collisions with other balls
-        for (let j = i + 1; j < balls.length; j++) {
-          checkCollision(ball, balls[j]);
-        }
-      });
-      
-      animationId = requestAnimationFrame(animate);
-    }
-    
-    // User interaction removed - balloons float autonomously
-    
-    // Initialize
-    resize();
-    animate();
-    
-    // Handle window resize
-    window.addEventListener('resize', resize);
-    
-    // Cleanup on page unload
-    return () => {
-      cancelAnimationFrame(animationId);
-      window.removeEventListener('resize', resize);
-    };
-  }
-  
-  // Initialize when DOM is ready
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initBallpit);
-  } else {
-    initBallpit();
-  }
-</script>
