@@ -60,22 +60,6 @@
       padding: 2rem 1rem;
     }
 
-    /* Full-width background that extends edge to edge */
-    .conclave-coach-section::before {
-      content: '';
-      position: absolute;
-      left: 0;
-      right: 0;
-      top: 0;
-      bottom: 0;
-      background-image: url('/images/AdobeStock_320931761 [Converted].jpg');
-      background-size: auto 100%;
-      background-repeat: repeat-x;
-      background-position: center bottom;
-      animation: scenery-scroll 15s linear infinite;
-      z-index: -1;
-    }
-
     .all-roads-heading {
       font-family: 'Have Heart One', cursive;
       font-size: clamp(2rem, 8vw, 6rem);
@@ -105,6 +89,23 @@
       margin: 0 auto;
       position: relative;
       overflow: visible;
+    }
+
+    /* Full-width background that extends edge to edge, only behind stage */
+    .stage-wrapper::before {
+      content: '';
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 100vw;
+      top: 0;
+      bottom: 0;
+      background-image: url('/images/AdobeStock_320931761 [Converted].jpg');
+      background-size: auto 100%;
+      background-repeat: repeat-x;
+      background-position: center bottom;
+      animation: scenery-scroll 15s linear infinite;
+      z-index: -1;
     }
 
     .stage {
@@ -231,10 +232,9 @@
     /* ========== COACH BUS VIDEO/GIF ========== */
     .coach-container {
       position: absolute;
-      bottom: 0;
+      bottom: -20px;
       left: 0;
       width: 100%;
-      height: 100%;
       display: flex;
       align-items: flex-end;
       justify-content: center;
@@ -244,7 +244,7 @@
     .coach-video {
       width: 100%;
       height: auto;
-      max-height: 100%;
+      max-height: 350px;
       object-fit: contain;
       object-position: bottom center;
     }
