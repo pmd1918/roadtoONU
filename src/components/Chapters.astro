@@ -314,31 +314,31 @@ window.addEventListener('chapter-marker-clicked', (event) => {
   }
   .text-center{
     margin-bottom: 20px;
-    font-size: 25px;
+    font-size: clamp(0.75rem, 2.5vw, 1.25rem);
     color: #212322;
     font-weight: 600;
     font-family: 'Inter', sans-serif;
     text-align: center;
     text-transform: uppercase;
-    letter-spacing: 0.1em;
-    line-height: 1.2;
-    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+    letter-spacing: 0.05em;
+    line-height: 1.4;
     text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
     background-color: transparent;
+    padding: 0 1rem;
   }
 
 .chapters-wrapper {
-  block-size: 60px;
+  block-size: 80px;
   position: relative;
-  clip-path: inset(-80px 0 0 0);
+  clip-path: inset(-100px 0 0 0);
   display: flex;
   justify-content: center;
 }
 
 @media (min-width: 480px) {
   .chapters-wrapper {
-    block-size: 80px;
-    clip-path: inset(-100px 0 0 0);
+    block-size: 90px;
+    clip-path: inset(-110px 0 0 0);
   }
 }
 
@@ -350,10 +350,10 @@ window.addEventListener('chapter-marker-clicked', (event) => {
 }
 
 .chapters {
-  block-size: 120px;
+  block-size: 160px;
   display: flex;
   overflow: visible;
-  min-inline-size: calc(60px * 6);
+  min-inline-size: calc(80px * 6);
   padding: 4px;
   align-content: center;
   justify-content: center;
@@ -362,7 +362,7 @@ window.addEventListener('chapter-marker-clicked', (event) => {
 
 @media (min-width: 480px) {
   .chapters {
-    block-size: 160px;
+    block-size: 180px;
     min-inline-size: calc(100px * 6);
     padding: 6px;
     max-width: 90%;
@@ -381,13 +381,13 @@ window.addEventListener('chapter-marker-clicked', (event) => {
 .chapter-cards {
   border-top-left-radius: 12px;
   border-top-right-radius: 12px;
-  block-size: 120px;
+  block-size: 160px;
   color: #ffffff;
   display: flex;
   flex-basis: 100%;
   font-weight: 500;
   justify-content: left;
-  padding: 20px 0 10px 10px;
+  padding: 16px 0 8px 8px;
   position: relative;
   transition: transform 0.3s ease;
   max-height: 100%;
@@ -421,8 +421,8 @@ window.addEventListener('chapter-marker-clicked', (event) => {
   .chapter-cards {
     border-top-left-radius: 16px;
     border-top-right-radius: 16px;
-    block-size: 160px;
-    padding: 25px;
+    block-size: 180px;
+    padding: 20px 0 10px 10px;
   }
 }
 
@@ -431,7 +431,7 @@ window.addEventListener('chapter-marker-clicked', (event) => {
     border-top-left-radius: 20px;
     border-top-right-radius: 20px;
     block-size: 200px;
-    padding: 30px;
+    padding: 25px 0 15px 15px;
   }
 }
 

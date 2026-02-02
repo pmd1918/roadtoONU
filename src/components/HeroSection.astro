@@ -332,19 +332,20 @@ import Countdown from "./Countdown.astro"
         letter-spacing: 2px;
         z-index: 1;
         transition: all 0.18s ease;
-        background: rgba(255, 255, 255, 0.25);
-        backdrop-filter: blur(40px);
+        background: transparent;
+        backdrop-filter: none;
         backface-visibility: hidden;
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15), 0 4px 16px rgba(0, 0, 0, 0.1);
-        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        box-shadow: none;
+        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
         color: #212322;
     }
 
     .commit-sponsor-btn:hover .commit-btn-inner {
-        background: rgba(0, 0, 0, 0.5);
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25), 0 8px 24px rgba(0, 0, 0, 0.15);
+        background: transparent;
+        box-shadow: none;
         transform: translateY(-1px);
         color: #f5de6f;
+        text-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
     }
 
     .commit-sponsor-btn:active {
