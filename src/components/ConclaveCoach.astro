@@ -201,18 +201,15 @@
     /* ========== STAGE WRAPPER - HANDLES SCALING ========== */
     .stage-wrapper {
       width: 100%;
+      max-width: 1200px;
       margin: 0 auto;
       position: relative;
-      overflow: hidden;
-      display: flex;
-      justify-content: center;
+      overflow: visible;
     }
 
-    /* ========== STAGE - FIXED INTERNAL SIZE, SCALED BY JS ========== */
+    /* ========== STAGE - FIXED INTERNAL SIZE, SCALED BY JS FOR MOBILE ONLY ========== */
     .stage {
       width: 1200px;
-      min-width: 1200px;
-      max-width: 1200px;
       height: 500px;
       transform-origin: top left;
       background-image: url('/images/AdobeStock_320931761 [Converted].jpg');
@@ -220,7 +217,6 @@
       background-repeat: repeat-x;
       animation: scenery-scroll 15s linear infinite;
       position: relative;
-      flex-shrink: 0;
     }
 
     /* ========== GROUND LINE ========== */
@@ -724,27 +720,25 @@
   </style>
   
   <script>
-    // Dynamic scaling based on container width
+    // Dynamic scaling for mobile only - leave desktop untouched
     function updateStageScale() {
       const wrapper = document.querySelector('.stage-wrapper');
       const stage = document.querySelector('.stage');
       if (wrapper && stage) {
-        const wrapperWidth = wrapper.offsetWidth;
+        const viewportWidth = window.innerWidth;
         
-        // Only scale DOWN for smaller screens, never scale up
-        if (wrapperWidth < 1200) {
-          const scale = wrapperWidth / 1200;
+        // Only scale on mobile/tablet (< 1200px viewport)
+        if (viewportWidth < 1200) {
+          const availableWidth = wrapper.offsetWidth;
+          const scale = availableWidth / 1200;
           stage.style.transform = `scale(${scale})`;
           wrapper.style.height = (500 * scale) + 'px';
-          stage.style.marginLeft = '0px';
+          wrapper.style.overflow = 'hidden';
         } else {
-          // At 1200px+, no scaling - just center the stage
-          stage.style.transform = 'none';
-          wrapper.style.height = '500px';
-          // Center the fixed-width stage in wider containers
-          stage.style.marginLeft = 'auto';
-          stage.style.marginRight = 'auto';
-          stage.style.position = 'relative';
+          // Desktop: no transform, natural layout
+          stage.style.transform = '';
+          wrapper.style.height = '';
+          wrapper.style.overflow = 'visible';
         }
       }
     }
