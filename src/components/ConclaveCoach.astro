@@ -203,24 +203,21 @@
       width: 100%;
       max-width: 1200px;
       margin: 0 auto;
-      aspect-ratio: 12 / 5;
       position: relative;
       overflow: hidden;
     }
 
     /* ========== STAGE - FIXED INTERNAL SIZE, SCALED BY WRAPPER ========== */
     .stage {
-      position: absolute;
       width: 1200px;
       height: 500px;
-      left: 50%;
-      top: 50%;
-      transform: translate(-50%, -50%) scale(var(--stage-scale, 1));
-      transform-origin: center center;
+      transform: scale(var(--stage-scale, 1));
+      transform-origin: top left;
       background-image: url('/images/AdobeStock_320931761 [Converted].jpg');
       background-size: auto 100%;
       background-repeat: repeat-x;
       animation: scenery-scroll 15s linear infinite;
+      position: relative;
     }
 
     /* ========== GROUND LINE ========== */
@@ -730,12 +727,16 @@
       const stage = document.querySelector('.stage');
       if (wrapper && stage) {
         const wrapperWidth = wrapper.offsetWidth;
-        const scale = Math.min(wrapperWidth / 1200, 1);
+        const scale = Math.max(Math.min(wrapperWidth / 1200, 1), 0.3); // min 30% scale
         stage.style.setProperty('--stage-scale', scale);
+        // Set wrapper height to match scaled stage
+        wrapper.style.height = (500 * scale) + 'px';
       }
     }
     
     updateStageScale();
     window.addEventListener('resize', updateStageScale);
+    // Run again after fonts load
+    document.fonts.ready.then(updateStageScale);
   </script>
 </section>
