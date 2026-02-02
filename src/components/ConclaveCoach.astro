@@ -60,6 +60,22 @@
       padding: 2rem 1rem;
     }
 
+    /* Full-width background that extends edge to edge */
+    .conclave-coach-section::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: 0;
+      bottom: 0;
+      background-image: url('/images/AdobeStock_320931761 [Converted].jpg');
+      background-size: auto 100%;
+      background-repeat: repeat-x;
+      background-position: center bottom;
+      animation: scenery-scroll 15s linear infinite;
+      z-index: -1;
+    }
+
     .all-roads-heading {
       font-family: 'Have Heart One', cursive;
       font-size: clamp(2rem, 8vw, 6rem);
@@ -88,18 +104,15 @@
       max-width: 1200px;
       margin: 0 auto;
       position: relative;
-      overflow: hidden;
+      overflow: visible;
     }
 
     .stage {
       width: 1200px;
       height: 500px;
       transform-origin: top left;
-      background-image: url('/images/AdobeStock_320931761 [Converted].jpg');
-      background-size: auto 100%;
-      background-repeat: repeat-x;
-      animation: scenery-scroll 15s linear infinite;
       position: relative;
+      /* Background now handled by section::before for full width */
     }
 
     /* ========== WELCOME SIGN ========== */
