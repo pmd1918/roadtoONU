@@ -4,19 +4,22 @@ const testimonials = [
     image: "/images/avatars/IMG_1112.JPG",
     name: "Alex Fries",
     title: "National Council member, former chapter president Nu Beta",
-    quote: "Joining Phi Mu Delta is about more than joining a chapter. It is about joining a brotherhood of future friends, colleagues and partners in your pursuit of the common good, no matter the arena you choose to enter. Conclave is where that ideal becomes real."
+    quote: "Joining Phi Mu Delta is about more than joining a chapter. It is about joining a brotherhood of future friends, colleagues and partners in your pursuit of the common good, no matter the arena you choose to enter. Conclave is where that ideal becomes real.",
+    color: "#ea7600"
   },
   {
     image: "/images/avatars/1714137500084.jpeg",
     name: "Michael Doran",
     title: "National Council member, former chapter president Mu Alpha",
-    quote: "We spend most of our lives inside our bubbles, in our own built communities. Conclaves are the chance to pop those bubbles and share ideas, successes, failures and support across the national fraternity in distance and generation. Living our creed reaching beyond the limits of distance and time to be together as brothers."
+    quote: "We spend most of our lives inside our bubbles, in our own built communities. Conclaves are the chance to pop those bubbles and share ideas, successes, failures and support across the national fraternity in distance and generation.",
+    color: "#f1d44b"
   },
   {
     image: "/images/avatars/1693961796462_orig.jpeg",
     name: "Thomas Stephen",
     title: "National Treasurer, former chapter president Nu Beta",
-    quote: "Conclave is the expression of our Phi Mu Delta values! Spending time with brothers, old and new, it reminds me of all the good we can create in the world."
+    quote: "Conclave is the expression of our Phi Mu Delta values! Spending time with brothers, old and new, it reminds me of all the good we can create in the world.",
+    color: "#ea7600"
   }
 ];
 ---
@@ -28,53 +31,51 @@ const testimonials = [
       <p class="testimonials-subtitle">Hear from brothers who've experienced the power of gathering together</p>
     </div>
 
-    <div class="slider-wrapper">
-      <button class="slider-arrow slider-arrow-left" aria-label="Previous testimonial">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <polyline points="15 18 9 12 15 6"></polyline>
-        </svg>
-      </button>
-
-      <div class="slider-track">
-        {testimonials.map((t, i) => (
-          <div class={`testimonial-card ${i === 0 ? 'active' : ''}`} data-index={i}>
-            <div class="testimonial-image-wrapper">
-              <img src={t.image} alt={t.name} class="testimonial-image" loading="lazy" />
+    <div class="slider-track">
+      {testimonials.map((t, i) => (
+        <div class={`testimonial-slide ${i === 0 ? 'active' : ''}`} data-index={i}>
+          <div class="testimonial-layout">
+            <div class="testimonial-photo-side">
+              <div class="photo-circle" style={`background: ${t.color};`}>
+                <img src={t.image} alt={t.name} class="testimonial-photo" loading="lazy" />
+              </div>
             </div>
-            <div class="testimonial-content">
-              <blockquote class="testimonial-quote">"{t.quote}"</blockquote>
+            <div class="testimonial-content-side">
+              <div class="quote-mark">"</div>
+              <blockquote class="testimonial-quote">{t.quote}</blockquote>
               <div class="testimonial-author">
-                <span class="testimonial-name">{t.name}</span>
-                <span class="testimonial-title">{t.title}</span>
+                <span class="author-name">{t.name}</span>
+                <span class="author-title">{t.title}</span>
               </div>
             </div>
           </div>
-        ))}
-      </div>
-
-      <button class="slider-arrow slider-arrow-right" aria-label="Next testimonial">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <polyline points="9 18 15 12 9 6"></polyline>
-        </svg>
-      </button>
+        </div>
+      ))}
     </div>
 
-    <div class="slider-dots">
-      {testimonials.map((_, i) => (
-        <button class={`slider-dot ${i === 0 ? 'active' : ''}`} data-index={i} aria-label={`Go to testimonial ${i + 1}`}></button>
-      ))}
+    <div class="slider-nav">
+      <button class="nav-arrow nav-prev" aria-label="Previous">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M19 12H5M12 19l-7-7 7-7"/>
+        </svg>
+      </button>
+      <button class="nav-arrow nav-next" aria-label="Next">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M5 12h14M12 5l7 7-7 7"/>
+        </svg>
+      </button>
     </div>
   </div>
 </section>
 
 <style>
   .testimonials-section {
-    background: #212322;
-    padding: 5rem 1rem;
+    background: linear-gradient(180deg, #f8f9fa 0%, #e9ecef 100%);
+    padding: 5rem 1.5rem;
   }
 
   .testimonials-container {
-    max-width: 900px;
+    max-width: 1000px;
     margin: 0 auto;
   }
 
@@ -86,81 +87,106 @@ const testimonials = [
   .testimonials-title {
     font-family: 'Have Heart One', cursive;
     font-size: clamp(2.5rem, 6vw, 4rem);
-    color: white;
-    margin-bottom: 0.75rem;
+    color: #212322;
+    margin-bottom: 0.5rem;
   }
 
   .testimonials-subtitle {
     font-family: 'Inter', sans-serif;
     font-size: clamp(0.9rem, 2vw, 1.1rem);
     font-weight: 300;
-    color: #9ca3af;
-  }
-
-  .slider-wrapper {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    position: relative;
+    color: #6b7280;
   }
 
   .slider-track {
-    flex: 1;
-    overflow: hidden;
     position: relative;
     min-height: 400px;
+    background: white;
+    border-radius: 20px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+    overflow: hidden;
   }
 
-  .testimonial-card {
+  .testimonial-slide {
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
+    height: 100%;
     opacity: 0;
-    transform: translateX(50px);
+    transform: translateX(30px);
     transition: all 0.5s ease;
     pointer-events: none;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-    padding: 2rem;
   }
 
-  .testimonial-card.active {
+  .testimonial-slide.active {
     opacity: 1;
     transform: translateX(0);
     pointer-events: auto;
   }
 
-  .testimonial-image-wrapper {
-    width: 120px;
-    height: 120px;
-    border-radius: 50%;
-    overflow: hidden;
-    margin-bottom: 1.5rem;
-    border: 4px solid #ea7600;
-    box-shadow: 0 8px 30px rgba(234, 118, 0, 0.3);
+  .testimonial-layout {
+    display: grid;
+    grid-template-columns: 1fr 1.5fr;
+    height: 100%;
+    min-height: 400px;
   }
 
-  .testimonial-image {
+  .testimonial-photo-side {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+    background: linear-gradient(135deg, #f0f4f8 0%, #e2e8f0 100%);
+  }
+
+  .photo-circle {
+    width: 220px;
+    height: 220px;
+    border-radius: 50%;
+    padding: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .testimonial-photo {
     width: 100%;
     height: 100%;
+    border-radius: 50%;
     object-fit: cover;
+    border: 4px solid white;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
   }
 
-  .testimonial-content {
-    max-width: 700px;
+  .testimonial-content-side {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 3rem;
+    position: relative;
+  }
+
+  .quote-mark {
+    font-family: Georgia, serif;
+    font-size: 6rem;
+    line-height: 1;
+    color: #ea7600;
+    opacity: 0.3;
+    position: absolute;
+    top: 1rem;
+    left: 2rem;
   }
 
   .testimonial-quote {
     font-family: 'Inter', sans-serif;
-    font-size: clamp(1rem, 2vw, 1.2rem);
-    font-weight: 300;
+    font-size: clamp(0.95rem, 1.5vw, 1.1rem);
+    font-weight: 400;
     line-height: 1.8;
-    color: #e5e7eb;
+    color: #374151;
     margin-bottom: 1.5rem;
-    font-style: italic;
+    position: relative;
+    z-index: 1;
   }
 
   .testimonial-author {
@@ -169,91 +195,79 @@ const testimonials = [
     gap: 0.25rem;
   }
 
-  .testimonial-name {
+  .author-name {
     font-family: 'Inter', sans-serif;
     font-size: 1.1rem;
-    font-weight: 600;
-    color: #ea7600;
+    font-weight: 700;
+    color: #212322;
   }
 
-  .testimonial-title {
+  .author-title {
     font-family: 'Inter', sans-serif;
     font-size: 0.85rem;
     font-weight: 400;
-    color: #9ca3af;
+    color: #6b7280;
   }
 
-  .slider-arrow {
+  .slider-nav {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin-top: 2rem;
+  }
+
+  .nav-arrow {
     width: 50px;
     height: 50px;
     border-radius: 50%;
-    background: rgba(234, 118, 0, 0.15);
-    border: 2px solid #ea7600;
-    color: #ea7600;
+    background: white;
+    border: 2px solid #e5e7eb;
+    color: #374151;
     cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
     transition: all 0.3s ease;
-    flex-shrink: 0;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
   }
 
-  .slider-arrow:hover {
+  .nav-arrow:hover {
     background: #ea7600;
-    color: #212322;
+    border-color: #ea7600;
+    color: white;
     transform: scale(1.1);
   }
 
-  .slider-dots {
-    display: flex;
-    justify-content: center;
-    gap: 0.75rem;
-    margin-top: 2rem;
-  }
-
-  .slider-dot {
-    width: 12px;
-    height: 12px;
-    border-radius: 50%;
-    background: rgba(234, 118, 0, 0.3);
-    border: none;
-    cursor: pointer;
-    transition: all 0.3s ease;
-  }
-
-  .slider-dot.active,
-  .slider-dot:hover {
-    background: #ea7600;
-    transform: scale(1.2);
-  }
-
   @media (max-width: 768px) {
-    .slider-arrow {
-      width: 40px;
-      height: 40px;
+    .testimonial-layout {
+      grid-template-columns: 1fr;
+      grid-template-rows: auto 1fr;
     }
 
-    .slider-track {
-      min-height: 450px;
+    .testimonial-photo-side {
+      padding: 2rem 1rem 1rem;
     }
 
-    .testimonial-card {
-      padding: 1rem;
+    .photo-circle {
+      width: 150px;
+      height: 150px;
+      padding: 8px;
     }
 
-    .testimonial-image-wrapper {
-      width: 100px;
-      height: 100px;
-    }
-  }
-
-  @media (max-width: 480px) {
-    .slider-arrow {
-      display: none;
+    .testimonial-content-side {
+      padding: 1.5rem 2rem 2rem;
+      text-align: center;
     }
 
-    .slider-wrapper {
-      padding: 0;
+    .quote-mark {
+      font-size: 4rem;
+      top: 0.5rem;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+
+    .testimonial-author {
+      align-items: center;
     }
 
     .slider-track {
@@ -263,19 +277,15 @@ const testimonials = [
 </style>
 
 <script>
-  const cards = document.querySelectorAll('.testimonial-card');
-  const dots = document.querySelectorAll('.slider-dot');
-  const prevBtn = document.querySelector('.slider-arrow-left');
-  const nextBtn = document.querySelector('.slider-arrow-right');
+  const slides = document.querySelectorAll('.testimonial-slide');
+  const prevBtn = document.querySelector('.nav-prev');
+  const nextBtn = document.querySelector('.nav-next');
   let current = 0;
-  const total = cards.length;
+  const total = slides.length;
 
   function showSlide(index) {
-    cards.forEach((card, i) => {
-      card.classList.toggle('active', i === index);
-    });
-    dots.forEach((dot, i) => {
-      dot.classList.toggle('active', i === index);
+    slides.forEach((slide, i) => {
+      slide.classList.toggle('active', i === index);
     });
     current = index;
   }
@@ -291,16 +301,11 @@ const testimonials = [
   prevBtn?.addEventListener('click', prevSlide);
   nextBtn?.addEventListener('click', nextSlide);
 
-  dots.forEach((dot, i) => {
-    dot.addEventListener('click', () => showSlide(i));
-  });
-
-  // Auto-advance every 6 seconds
-  setInterval(nextSlide, 6000);
+  // Auto-advance every 8 seconds
+  setInterval(nextSlide, 8000);
 
   // Touch/swipe support
   let touchStartX = 0;
-  let touchEndX = 0;
   const track = document.querySelector('.slider-track');
   
   track?.addEventListener('touchstart', (e) => {
@@ -308,7 +313,7 @@ const testimonials = [
   }, { passive: true });
 
   track?.addEventListener('touchend', (e) => {
-    touchEndX = e.changedTouches[0].screenX;
+    const touchEndX = e.changedTouches[0].screenX;
     if (touchStartX - touchEndX > 50) nextSlide();
     if (touchEndX - touchStartX > 50) prevSlide();
   }, { passive: true });
