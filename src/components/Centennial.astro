@@ -21,14 +21,9 @@ const { class: className = '' } = Astro.props;
     </h1>
     
     <div class="centennial-photos">
-      <div class="photo-frame historic-1">
-        <img src="/onu-historical-1.jpg" alt="Founding members of Mu Beta chapter at Ohio Northern University, 1928-1929" />
-        <div class="photo-caption">Founding Members & 1928-1929 Ledger</div>
-      </div>
-      
-      <div class="photo-frame historic-2">
-        <img src="/onu-historical-2.jpg" alt="Early Mu Beta chapter members at Ohio Northern University" />
-        <div class="photo-caption">Early Brotherhood</div>
+      <div class="photo-frame generations">
+        <img src="/images/mu-beta-generations.jpg" alt="Mu Beta brothers past and present - 1926 founders and current members united at the ONU rock" />
+        <div class="photo-caption">1926 — 2026: A Century of Brotherhood</div>
       </div>
     </div>
     
@@ -163,18 +158,14 @@ const { class: className = '' } = Astro.props;
   
   /* Photos */
   .centennial-photos {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 2rem;
     margin: 3rem auto;
-    max-width: 900px;
+    max-width: 1000px;
+    width: 100%;
   }
   
   @media (max-width: 768px) {
     .centennial-photos {
-      gap: 1.5rem;
       margin: 2rem auto;
-      grid-template-columns: 1fr;
     }
   }
   
@@ -189,7 +180,7 @@ const { class: className = '' } = Astro.props;
   }
   
   .photo-frame:hover {
-    transform: translateY(-8px) rotate(-1deg);
+    transform: translateY(-4px);
     box-shadow: 0 16px 48px rgba(234, 118, 0, 0.5);
   }
   
@@ -197,8 +188,6 @@ const { class: className = '' } = Astro.props;
     width: 100%;
     height: auto;
     display: block;
-    aspect-ratio: 4/3;
-    object-fit: cover;
   }
   
   .photo-caption {
