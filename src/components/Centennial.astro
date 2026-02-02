@@ -16,8 +16,8 @@ const { class: className = '' } = Astro.props;
     </div>
     
     <h1 class="centennial-headline">
-      <span class="headline-100">100 Years</span>
-      <span class="headline-text">of Brotherhood at</span>
+      <span class="headline-main">100 Years of Brotherhood</span>
+      <span class="headline-text">at</span>
       <span class="headline-onu">Ohio Northern</span>
     </h1>
     
@@ -138,21 +138,16 @@ const { class: className = '' } = Astro.props;
     }
   }
   
-  .headline-100 {
+  .headline-main {
     font-family: 'Have Heart One', cursive;
-    font-size: clamp(4rem, 12vw, 10rem);
-    line-height: 0.9;
-    background: linear-gradient(135deg, #f1d44b 0%, #ea7600 50%, #f1d44b 100%);
-    background-size: 200% auto;
-    background-clip: text;
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    animation: shimmer 4s ease-in-out infinite;
+    font-size: clamp(3rem, 10vw, 8rem);
+    line-height: 1;
+    color: #ea7600;
   }
   
   .headline-text {
     font-family: 'Inter', sans-serif;
-    font-size: clamp(1.5rem, 4vw, 3rem);
+    font-size: clamp(1.25rem, 3vw, 2rem);
     font-weight: 300;
     color: #f4f7ff;
     letter-spacing: 0.05em;
