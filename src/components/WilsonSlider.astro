@@ -1,0 +1,248 @@
+---
+const images = [
+  { src: '/images/wilson-factory/Exterior-of-Ada-football-factory-2024-1-1024x717.jpg', alt: 'Wilson Football Factory Exterior' },
+  { src: '/images/wilson-factory/Inside-of-the-Wilson-Ada-factory-2024-1920x1080.jpg', alt: 'Inside the Wilson Factory' },
+  { src: '/images/wilson-factory/Craftswoman-at-Ada-factory-1920x1080.jpg', alt: 'Craftswoman at Work' },
+  { src: '/images/wilson-factory/Craftsmen-at-Ada-factory-1-1920x1080.jpg', alt: 'Craftsmen at Work' },
+  { src: '/images/wilson-factory/Wilson-ball-in-the-making-1920x1080.jpg', alt: 'Football in the Making' },
+  { src: '/images/wilson-factory/Ada-factory-lobby-1920x1080.jpg', alt: 'Factory Lobby' },
+  { src: '/images/wilson-factory/Retail-pop-up-in-Ada-factory-1920x1080.jpg', alt: 'Retail Pop-up Shop' },
+];
+---
+
+<section class="wilson-slider-section">
+  <div class="slider-container">
+    <h2 class="slider-heading">Wilson Football Factory</h2>
+    <p class="slider-subheading">Tour the state-of-the-art facility in Ada, Ohio — just minutes from ONU</p>
+    
+    <div class="slider-wrapper">
+      <div class="slider-track" id="wilson-slider-track">
+        {images.map((image, index) => (
+          <div class="slide" data-index={index}>
+            <img src={image.src} alt={image.alt} loading="lazy" />
+          </div>
+        ))}
+      </div>
+      
+      <button class="slider-btn prev" id="wilson-prev" aria-label="Previous slide">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M15 18l-6-6 6-6"/>
+        </svg>
+      </button>
+      <button class="slider-btn next" id="wilson-next" aria-label="Next slide">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M9 18l6-6-6-6"/>
+        </svg>
+      </button>
+    </div>
+    
+    <div class="slider-dots" id="wilson-dots">
+      {images.map((_, index) => (
+        <button class={`dot ${index === 0 ? 'active' : ''}`} data-index={index} aria-label={`Go to slide ${index + 1}`}></button>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .wilson-slider-section {
+    background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%);
+    padding: 4rem 1rem;
+    overflow: hidden;
+  }
+  
+  .slider-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    text-align: center;
+  }
+  
+  .slider-heading {
+    font-family: 'Have Heart', cursive;
+    font-size: clamp(2.5rem, 6vw, 4rem);
+    background: linear-gradient(135deg, #ea7600, #f1d44b);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 0.5rem;
+  }
+  
+  .slider-subheading {
+    font-family: 'Inter', sans-serif;
+    font-size: clamp(1rem, 2vw, 1.25rem);
+    color: #a0a0a0;
+    margin-bottom: 2rem;
+  }
+  
+  .slider-wrapper {
+    position: relative;
+    overflow: hidden;
+    border-radius: 12px;
+  }
+  
+  .slider-track {
+    display: flex;
+    transition: transform 0.5s ease-in-out;
+  }
+  
+  .slide {
+    min-width: 100%;
+    aspect-ratio: 16/9;
+  }
+  
+  .slide img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  
+  .slider-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: rgba(234, 118, 0, 0.9);
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    transition: all 0.3s ease;
+    z-index: 10;
+  }
+  
+  .slider-btn:hover {
+    background: #ea7600;
+    transform: translateY(-50%) scale(1.1);
+  }
+  
+  .slider-btn svg {
+    width: 24px;
+    height: 24px;
+  }
+  
+  .slider-btn.prev {
+    left: 1rem;
+  }
+  
+  .slider-btn.next {
+    right: 1rem;
+  }
+  
+  @media (max-width: 768px) {
+    .slider-btn {
+      width: 36px;
+      height: 36px;
+    }
+    .slider-btn svg {
+      width: 18px;
+      height: 18px;
+    }
+    .slider-btn.prev {
+      left: 0.5rem;
+    }
+    .slider-btn.next {
+      right: 0.5rem;
+    }
+  }
+  
+  .slider-dots {
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+    margin-top: 1.5rem;
+  }
+  
+  .dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.3);
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+  
+  .dot:hover {
+    background: rgba(255, 255, 255, 0.5);
+  }
+  
+  .dot.active {
+    background: #ea7600;
+    transform: scale(1.2);
+  }
+</style>
+
+<script>
+  const track = document.getElementById('wilson-slider-track');
+  const prevBtn = document.getElementById('wilson-prev');
+  const nextBtn = document.getElementById('wilson-next');
+  const dotsContainer = document.getElementById('wilson-dots');
+  const dots = dotsContainer?.querySelectorAll('.dot');
+  const totalSlides = 7;
+  let currentIndex = 0;
+  let autoplayInterval: ReturnType<typeof setInterval>;
+  
+  function updateSlider() {
+    if (track) {
+      track.style.transform = `translateX(-${currentIndex * 100}%)`;
+    }
+    dots?.forEach((dot, index) => {
+      dot.classList.toggle('active', index === currentIndex);
+    });
+  }
+  
+  function nextSlide() {
+    currentIndex = (currentIndex + 1) % totalSlides;
+    updateSlider();
+  }
+  
+  function prevSlide() {
+    currentIndex = (currentIndex - 1 + totalSlides) % totalSlides;
+    updateSlider();
+  }
+  
+  function goToSlide(index: number) {
+    currentIndex = index;
+    updateSlider();
+  }
+  
+  function startAutoplay() {
+    autoplayInterval = setInterval(nextSlide, 4000);
+  }
+  
+  function stopAutoplay() {
+    clearInterval(autoplayInterval);
+  }
+  
+  // Event listeners
+  prevBtn?.addEventListener('click', () => {
+    stopAutoplay();
+    prevSlide();
+    startAutoplay();
+  });
+  
+  nextBtn?.addEventListener('click', () => {
+    stopAutoplay();
+    nextSlide();
+    startAutoplay();
+  });
+  
+  dots?.forEach((dot, index) => {
+    dot.addEventListener('click', () => {
+      stopAutoplay();
+      goToSlide(index);
+      startAutoplay();
+    });
+  });
+  
+  // Start autoplay
+  startAutoplay();
+  
+  // Pause on hover
+  track?.parentElement?.addEventListener('mouseenter', stopAutoplay);
+  track?.parentElement?.addEventListener('mouseleave', startAutoplay);
+</script>
