@@ -42,10 +42,12 @@
         
         <!-- Coach Bus Video (WebM with transparency) -->
         <div class="coach-container">
-          <video class="coach-video" autoplay loop muted playsinline>
+          <!-- Video for Chrome/Firefox -->
+          <video class="coach-video" autoplay loop muted playsinline id="coach-video">
             <source src="/images/conclave-coach.webm" type="video/webm">
-            <source src="/images/conclave-coach.mp4" type="video/mp4">
           </video>
+          <!-- GIF fallback for Safari (has transparency) -->
+          <img src="/images/conclave-coach.gif" class="coach-gif" id="coach-gif" alt="Conclave Coach Bus" style="display: none;" />
         </div>
       </div>
     </div>
@@ -236,7 +238,8 @@
       pointer-events: none;
     }
 
-    .coach-video {
+    .coach-video,
+    .coach-gif {
       width: 150%;
       height: auto;
       max-height: 400px;
@@ -279,5 +282,16 @@
     updateStageScale();
     window.addEventListener('resize', updateStageScale);
     document.fonts.ready.then(updateStageScale);
+    
+    // Safari detection - use GIF instead of WebM (Safari doesn't support WebM alpha)
+    const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+    if (isSafari) {
+      const video = document.getElementById('coach-video');
+      const gif = document.getElementById('coach-gif');
+      if (video && gif) {
+        video.style.display = 'none';
+        gif.style.display = 'block';
+      }
+    }
   </script>
 </section>
