@@ -17,7 +17,7 @@ const { class: className = '' } = Astro.props;
     
     <h1 class="centennial-headline">
       <span class="headline-main">100 Years of Brotherhood</span>
-      <span class="headline-text">Mu Beta Chapter at Ohio Northern University</span>
+      <span class="headline-sub">Mu Beta Chapter at Ohio Northern University</span>
     </h1>
     
     <div class="centennial-photos">
@@ -131,14 +131,15 @@ const { class: className = '' } = Astro.props;
   
   .headline-main {
     font-family: 'Have Heart One', cursive;
-    font-size: clamp(3rem, 10vw, 8rem);
+    font-size: clamp(2.5rem, 8vw, 7rem);
     line-height: 1;
     color: #ea7600;
+    white-space: nowrap;
   }
   
-  .headline-text {
+  .headline-sub {
     font-family: 'Inter', sans-serif;
-    font-size: clamp(1.25rem, 3vw, 2rem);
+    font-size: clamp(1rem, 2.5vw, 1.75rem);
     font-weight: 300;
     color: #f4f7ff;
     letter-spacing: 0.05em;
