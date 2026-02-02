@@ -18,11 +18,16 @@ const images = [
   
   <div class="slider-wrapper">
     <div class="slider-track" id="wilson-slider-track">
+      {/* Original slides */}
       {images.map((image, index) => (
         <div class="slide" data-index={index}>
           <img src={image.src} alt={image.alt} loading="lazy" />
         </div>
       ))}
+      {/* Duplicate first slide for seamless loop */}
+      <div class="slide" data-index="0">
+        <img src={images[0].src} alt={images[0].alt} loading="lazy" />
+      </div>
     </div>
   </div>
 </section>
@@ -65,6 +70,10 @@ const images = [
     transition: transform 0.8s ease-in-out;
   }
   
+  .slider-track.no-transition {
+    transition: none;
+  }
+  
   .slide {
     min-width: 100%;
     aspect-ratio: 16/9;
@@ -83,9 +92,21 @@ const images = [
   let currentIndex = 0;
   
   function nextSlide() {
-    currentIndex = (currentIndex + 1) % totalSlides;
+    currentIndex++;
     if (track) {
       track.style.transform = `translateX(-${currentIndex * 100}%)`;
+      
+      // When we reach the duplicate slide, reset to the real first slide
+      if (currentIndex === totalSlides) {
+        setTimeout(() => {
+          track.classList.add('no-transition');
+          currentIndex = 0;
+          track.style.transform = `translateX(0)`;
+          // Force reflow
+          track.offsetHeight;
+          track.classList.remove('no-transition');
+        }, 800); // Wait for transition to complete
+      }
     }
   }
   
