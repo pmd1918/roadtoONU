@@ -112,3 +112,51 @@
       60%, 100% { content: '...'; }
     }
   </style>
+
+  <script>
+    const words = ['Brotherhood', 'Service', 'Democracy'];
+    const wordEl = document.querySelector('.creed-word');
+    const section = document.querySelector('.creed-wrap');
+    let currentIndex = 0;
+    let interval;
+
+    function cycleWord() {
+      if (wordEl) {
+        wordEl.classList.remove('is-highlight');
+        wordEl.textContent = words[currentIndex];
+        
+        // Trigger highlight animation
+        setTimeout(() => wordEl.classList.add('is-highlight'), 50);
+        
+        currentIndex = (currentIndex + 1) % words.length;
+      }
+    }
+
+    function startCycle() {
+      cycleWord();
+      interval = setInterval(cycleWord, 2500);
+    }
+
+    function stopCycle() {
+      clearInterval(interval);
+    }
+
+    // Intersection Observer to only animate when visible
+    if (section) {
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              section.classList.remove('paused');
+              startCycle();
+            } else {
+              section.classList.add('paused');
+              stopCycle();
+            }
+          });
+        },
+        { threshold: 0.3 }
+      );
+      observer.observe(section);
+    }
+  </script>
