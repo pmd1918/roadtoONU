@@ -56,11 +56,11 @@
   <style>
     .conclave-coach-section {
       text-align: center;
-      overflow: hidden;
+      overflow: visible;
       width: 100%;
       position: relative;
       padding: 1rem 1rem 0 1rem;
-      margin-bottom: -3rem;
+      margin-bottom: 0;
     }
 
     .all-roads-heading {
@@ -108,9 +108,10 @@
 
     .stage {
       width: 1200px;
-      height: 500px;
+      height: 550px;
       transform-origin: top left;
       position: relative;
+      overflow: visible;
       /* Background now handled by section::before for full width */
     }
 
@@ -230,20 +231,22 @@
     /* ========== COACH BUS VIDEO/GIF ========== */
     .coach-container {
       position: absolute;
-      bottom: 1px;
+      bottom: 0;
       left: 0;
       width: 100%;
+      height: auto;
       display: flex;
       align-items: flex-end;
       justify-content: center;
       pointer-events: none;
+      overflow: visible;
     }
 
     .coach-video,
     .coach-gif {
-      width: 150%;
+      width: 130%;
       height: auto;
-      max-height: 400px;
+      max-height: 450px;
       object-fit: contain;
       object-position: bottom center;
     }
@@ -263,8 +266,8 @@
   <script>
     // Dynamic scaling for mobile
     function updateStageScale() {
-      const wrapper = document.querySelector('.stage-wrapper');
-      const stage = document.querySelector('.stage');
+      const wrapper = document.querySelector('.stage-wrapper') as HTMLElement;
+      const stage = document.querySelector('.stage') as HTMLElement;
       if (wrapper && stage) {
         const viewportWidth = window.innerWidth;
         
@@ -272,10 +275,10 @@
           const availableWidth = wrapper.offsetWidth;
           const scale = availableWidth / 1200;
           stage.style.transform = `scale(${scale})`;
-          wrapper.style.height = (500 * scale) + 'px';
+          wrapper.style.height = (550 * scale) + 'px';
         } else {
           stage.style.transform = '';
-          wrapper.style.height = '';
+          wrapper.style.height = '550px';
         }
       }
     }
