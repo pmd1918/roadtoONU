@@ -207,11 +207,10 @@
       overflow: hidden;
     }
 
-    /* ========== STAGE - FIXED INTERNAL SIZE, SCALED BY WRAPPER ========== */
+    /* ========== STAGE - FIXED INTERNAL SIZE, SCALED BY JS ========== */
     .stage {
       width: 1200px;
       height: 500px;
-      transform: scale(var(--stage-scale, 1));
       transform-origin: top left;
       background-image: url('/images/AdobeStock_320931761 [Converted].jpg');
       background-size: auto 100%;
@@ -727,16 +726,23 @@
       const stage = document.querySelector('.stage');
       if (wrapper && stage) {
         const wrapperWidth = wrapper.offsetWidth;
-        const scale = Math.max(Math.min(wrapperWidth / 1200, 1), 0.3); // min 30% scale
-        stage.style.setProperty('--stage-scale', scale);
+        const scale = Math.max(Math.min(wrapperWidth / 1200, 1), 0.28);
+        
+        // Apply scale
+        stage.style.transform = `scale(${scale})`;
+        
         // Set wrapper height to match scaled stage
         wrapper.style.height = (500 * scale) + 'px';
+        
+        // Center the stage: offset = (wrapperWidth - scaledWidth) / 2
+        const scaledWidth = 1200 * scale;
+        const offset = (wrapperWidth - scaledWidth) / 2;
+        stage.style.marginLeft = offset + 'px';
       }
     }
     
     updateStageScale();
     window.addEventListener('resize', updateStageScale);
-    // Run again after fonts load
     document.fonts.ready.then(updateStageScale);
   </script>
 </section>
