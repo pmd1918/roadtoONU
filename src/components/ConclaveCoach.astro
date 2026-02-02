@@ -726,7 +726,8 @@
       const stage = document.querySelector('.stage');
       if (wrapper && stage) {
         const wrapperWidth = wrapper.offsetWidth;
-        const scale = Math.max(Math.min(wrapperWidth / 1200, 1), 0.28);
+        // Scale to fit wrapper exactly - no minimum
+        const scale = Math.min(wrapperWidth / 1200, 1);
         
         // Apply scale
         stage.style.transform = `scale(${scale})`;
@@ -734,10 +735,8 @@
         // Set wrapper height to match scaled stage
         wrapper.style.height = (500 * scale) + 'px';
         
-        // Center the stage: offset = (wrapperWidth - scaledWidth) / 2
-        const scaledWidth = 1200 * scale;
-        const offset = (wrapperWidth - scaledWidth) / 2;
-        stage.style.marginLeft = offset + 'px';
+        // No margin needed - scale ensures it fits exactly
+        stage.style.marginLeft = '0px';
       }
     }
     
