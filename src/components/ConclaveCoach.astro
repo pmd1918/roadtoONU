@@ -40,12 +40,12 @@
         <div class="sign-post-left"></div>
         <div class="sign-post-right"></div>
         
-        <!-- Coach Bus Video/GIF -->
+        <!-- Coach Bus Video (WebM with transparency) -->
         <div class="coach-container">
           <video class="coach-video" autoplay loop muted playsinline>
+            <source src="/images/conclave-coach.webm" type="video/webm">
             <source src="/images/conclave-coach.mp4" type="video/mp4">
           </video>
-          <img class="coach-gif" src="/images/conclave-coach.gif" alt="Conclave Coach" loading="lazy">
         </div>
       </div>
     </div>
@@ -228,24 +228,12 @@
       pointer-events: none;
     }
 
-    .coach-video,
-    .coach-gif {
+    .coach-video {
       width: 100%;
       height: auto;
       max-height: 100%;
       object-fit: contain;
       object-position: bottom center;
-      mix-blend-mode: screen;
-    }
-
-    /* Use video where supported, fallback to GIF */
-    .coach-gif {
-      display: none;
-    }
-
-    @supports not (mix-blend-mode: multiply) {
-      .coach-video { display: none; }
-      .coach-gif { display: block; }
     }
 
     /* ========== ANIMATIONS ========== */
