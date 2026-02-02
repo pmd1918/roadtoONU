@@ -34,7 +34,7 @@ const undergradImages = [
 <section id="hotel-accommodations" class="accommodation-hotel-section paused py-16 sm:py-20 md:py-24 bg-[#f4f7ff]">
   <Container>
     <div class="mb-6">
-      <h2 class="text-3xl sm:text-4xl md:text-5xl font-bold text-gray-800">
+      <h2 class="accommodation-title">
         Where to Stay
       </h2>
     </div>
@@ -203,6 +203,16 @@ const undergradImages = [
 </script>
 
 <style>
+  .accommodation-title {
+    font-family: 'Have Heart', cursive;
+    font-size: clamp(2.5rem, 6vw, 4.5rem);
+    background: linear-gradient(135deg, #ea7600, #f1d44b);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-align: center;
+  }
+
   .accommodation-hotel-section.paused .featured-hotel-card {
     animation-play-state: paused;
   }

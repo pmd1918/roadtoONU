@@ -1,5 +1,4 @@
 ---
-import GlowingCard from '../components/GlowingCard.astro';
 import Features from '../components/Features.astro';
 import HeroSection from '../components/HeroSection.astro';
 import Layout from '../layouts/Layout.astro';
@@ -11,27 +10,20 @@ import Chapters from '../components/Chapters.astro';
 import Registration from '../components/Registration.astro';
 import AccommodationHotel from '../components/AccommodationHotel.astro';
 import Centennial from '../components/Centennial.astro';
-import Schedule from '../components/Schedule.astro';
 import WilsonSlider from '../components/WilsonSlider.astro';
 ---
 
 <Layout title="Road to ONU - 62nd National Conclave">
-	<main class="space-y-40 mb-60">
+	<main class="space-y-32 mb-20">
 		<HeroSection/>
 		<Centennial/>
 		<Features/>
 		<WilsonSlider/>
-		<Schedule/>
 		<AccommodationHotel/>
 		<Registration/>
 		<Creed/>
 		<Chapters/>
-		<div class="-mt-45">
-		<GlowingCard/>
-	</div>
-		<div class="-mt-40">
-			<ConclaveCoach />
-			</div>
+		<ConclaveCoach />
 		<TravelCalculator/>
 		<Testimonials/>
 	</main>

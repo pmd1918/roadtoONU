@@ -16,6 +16,7 @@ const images = [
     <div class="slider-content">
       <h2 class="slider-heading">The Star Of Your Favorite Football Moment</h2>
       <p class="slider-subheading">Made In Ada, Ohio</p>
+      <a href="https://www.amersports.com/newsroom/crafting-a-legacy-in-wilsons-new-football-factory-in-ada-ohio/" class="read-more-btn" id="wilson-read-more">Read More</a>
     </div>
     <div class="slider-track" id="wilson-slider-track">
       {/* Original slides */}
@@ -47,7 +48,7 @@ const images = [
   .slider-overlay {
     position: absolute;
     inset: 0;
-    background: rgba(33, 35, 34, 0.25);
+    background: rgba(33, 35, 34, 0.55);
     z-index: 2;
     pointer-events: none;
   }
@@ -62,20 +63,18 @@ const images = [
     z-index: 3;
     text-align: center;
     padding: 1rem;
+    gap: 0.5rem;
   }
   
   .slider-heading {
     font-family: 'Have Heart', cursive;
-    font-size: clamp(2.5rem, 6vw, 5rem);
-    background: linear-gradient(to top, #f1d44b, #ea7600);
-    background-clip: text;
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.2)) drop-shadow(0 2px 20px rgba(255, 255, 255, 0.8));
+    font-size: clamp(1.8rem, 5vw, 5rem);
+    color: #f4f7ff;
+    filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3)) drop-shadow(0 2px 20px rgba(255, 255, 255, 0.5));
     margin-bottom: 0.75rem;
-    max-width: 900px;
     line-height: 1.2;
     letter-spacing: 0.02em;
+    white-space: nowrap;
   }
   
   .slider-subheading {
@@ -86,6 +85,28 @@ const images = [
     text-shadow: 0 1px 5px rgba(255, 255, 255, 0.8);
     text-transform: uppercase;
     letter-spacing: 0.1em;
+  }
+  
+  .read-more-btn {
+    display: inline-block;
+    margin-top: 0.75rem;
+    padding: 0.6rem 1.5rem;
+    font-family: 'Inter', sans-serif;
+    font-size: clamp(0.75rem, 1.5vw, 0.9rem);
+    font-weight: 600;
+    color: #212322;
+    background: linear-gradient(135deg, #ea7600, #f1d44b);
+    border-radius: 50px;
+    text-decoration: none;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    box-shadow: 0 4px 15px rgba(234, 118, 0, 0.4);
+    transition: all 0.3s ease;
+  }
+  
+  .read-more-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(234, 118, 0, 0.5);
   }
   
   .slider-track {
@@ -143,4 +164,23 @@ const images = [
   
   // Auto-rotate every 4 seconds
   setInterval(nextSlide, 4000);
+  
+  // Handle Read More button - popup on mobile, new tab on desktop
+  const readMoreBtn = document.getElementById('wilson-read-more');
+  if (readMoreBtn) {
+    readMoreBtn.addEventListener('click', (e) => {
+      const isMobile = window.innerWidth < 768;
+      const url = readMoreBtn.getAttribute('href');
+      
+      if (isMobile && url) {
+        e.preventDefault();
+        // Open as popup on mobile
+        window.open(url, 'WilsonArticle', 'width=400,height=600,scrollbars=yes,resizable=yes');
+      } else {
+        // Open in new tab on desktop
+        readMoreBtn.setAttribute('target', '_blank');
+        readMoreBtn.setAttribute('rel', 'noopener noreferrer');
+      }
+    });
+  }
 </script>
