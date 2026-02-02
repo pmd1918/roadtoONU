@@ -242,15 +242,6 @@
       max-height: 400px;
       object-fit: contain;
       object-position: bottom center;
-      /* Hide green screen in browsers that don't support alpha */
-      mix-blend-mode: multiply;
-    }
-    
-    /* Safari-specific: try screen blend mode instead */
-    @supports (-webkit-touch-callout: none) {
-      .coach-video {
-        mix-blend-mode: screen;
-      }
     }
 
     /* ========== ANIMATIONS ========== */
