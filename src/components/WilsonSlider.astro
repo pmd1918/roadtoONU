@@ -76,7 +76,13 @@ const images = [
   
   .slide {
     min-width: 100%;
-    aspect-ratio: 16/9;
+    aspect-ratio: 21/9;
+  }
+  
+  @media (max-width: 768px) {
+    .slide {
+      aspect-ratio: 16/9;
+    }
   }
   
   .slide img {
