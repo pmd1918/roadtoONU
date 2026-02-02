@@ -201,15 +201,18 @@
     /* ========== STAGE WRAPPER - HANDLES SCALING ========== */
     .stage-wrapper {
       width: 100%;
-      max-width: 1200px;
       margin: 0 auto;
       position: relative;
       overflow: hidden;
+      display: flex;
+      justify-content: center;
     }
 
     /* ========== STAGE - FIXED INTERNAL SIZE, SCALED BY JS ========== */
     .stage {
       width: 1200px;
+      min-width: 1200px;
+      max-width: 1200px;
       height: 500px;
       transform-origin: top left;
       background-image: url('/images/AdobeStock_320931761 [Converted].jpg');
@@ -217,6 +220,7 @@
       background-repeat: repeat-x;
       animation: scenery-scroll 15s linear infinite;
       position: relative;
+      flex-shrink: 0;
     }
 
     /* ========== GROUND LINE ========== */
@@ -726,17 +730,22 @@
       const stage = document.querySelector('.stage');
       if (wrapper && stage) {
         const wrapperWidth = wrapper.offsetWidth;
-        // Scale to fit wrapper exactly - no minimum
-        const scale = Math.min(wrapperWidth / 1200, 1);
         
-        // Apply scale
-        stage.style.transform = `scale(${scale})`;
-        
-        // Set wrapper height to match scaled stage
-        wrapper.style.height = (500 * scale) + 'px';
-        
-        // No margin needed - scale ensures it fits exactly
-        stage.style.marginLeft = '0px';
+        // Only scale DOWN for smaller screens, never scale up
+        if (wrapperWidth < 1200) {
+          const scale = wrapperWidth / 1200;
+          stage.style.transform = `scale(${scale})`;
+          wrapper.style.height = (500 * scale) + 'px';
+          stage.style.marginLeft = '0px';
+        } else {
+          // At 1200px+, no scaling - just center the stage
+          stage.style.transform = 'none';
+          wrapper.style.height = '500px';
+          // Center the fixed-width stage in wider containers
+          stage.style.marginLeft = 'auto';
+          stage.style.marginRight = 'auto';
+          stage.style.position = 'relative';
+        }
       }
     }
     
