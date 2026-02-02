@@ -67,11 +67,11 @@ const images = [
   .slider-heading {
     font-family: 'Have Heart', cursive;
     font-size: clamp(2.5rem, 6vw, 5rem);
-    color: #1a1a1a;
-    text-shadow: 
-      0 4px 8px rgba(0, 0, 0, 0.15),
-      0 8px 24px rgba(0, 0, 0, 0.1),
-      0 2px 40px rgba(255, 255, 255, 1);
+    background: linear-gradient(to top, #f1d44b, #ea7600);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.2)) drop-shadow(0 2px 20px rgba(255, 255, 255, 0.8));
     margin-bottom: 0.75rem;
     max-width: 900px;
     line-height: 1.2;
