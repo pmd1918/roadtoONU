@@ -151,7 +151,7 @@ import Container from '../components/Container.astro';
 
           <div class="tier tier-democracy sold-out">
             <div class="tier-header">
-              <span class="tier-label">Democracy Sponsors</span>
+              <span class="tier-label">Democracy Sponsor</span>
               <div class="sold-out-banner">SOLD OUT</div>
             </div>
             <div class="tier-body">
@@ -172,10 +172,7 @@ import Container from '../components/Container.astro';
               <a href="mailto:give@phimudelta.org?subject=Chapter%20Supporter%20Inquiry" class="tier-link">Count me in →</a>
             </div>
           </div>
-        </div>
 
-        <!-- Friend of PMD - Centered below -->
-        <div class="tier-friend-row">
           <div class="tier tier-bronze">
             <div class="tier-header">
               <span class="tier-label">Friend of PMD</span>
@@ -213,13 +210,18 @@ import Container from '../components/Container.astro';
             <span class="event-price">$1,500</span>
           </div>
           <div class="event-item">
-            <span class="event-name">Leadership Workshop <span class="event-x2">x2</span></span>
+            <span class="event-name">Leadership Workshops x2</span>
             <span class="event-desc">Undergrad development sessions.</span>
             <span class="event-price">$1,500</span>
           </div>
           <div class="event-item">
             <span class="event-name">Brotherhood Night</span>
             <span class="event-desc">Wednesday welcome reception.</span>
+            <span class="event-price">$500</span>
+          </div>
+          <div class="event-item">
+            <span class="event-name">Thursday Pool Party</span>
+            <span class="event-desc">Sponsor Thursday's brotherhood time.</span>
             <span class="event-price">$500</span>
           </div>
         </div>
@@ -262,8 +264,12 @@ import Container from '../components/Container.astro';
             <span class="perk-desc">Workshop Materials</span>
           </div>
           <div class="perk-box">
-            <span class="perk-name">Ritual</span>
+            <span class="perk-name">Ritual Items and Props</span>
             <span class="perk-desc">Sacred Ceremonies</span>
+          </div>
+          <div class="perk-box">
+            <span class="perk-name">AV/Tech</span>
+            <span class="perk-desc">Help Us Amplify Conclave</span>
           </div>
         </div>
         
@@ -307,15 +313,7 @@ import Container from '../components/Container.astro';
 
   /* Featured Sponsors - matching main page */
   .sponsor-unified-gradient {
-    background: linear-gradient(
-      180deg,
-      #ea7600 0%,
-      #f1d44b 20%,
-      #f4f7ff 40%,
-      #f4f7ff 60%,
-      #f1d44b 80%,
-      #ea7600 100%
-    );
+    background: linear-gradient(180deg, #ea7600 0%, #f1d44b 100%);
     position: relative;
   }
 
@@ -686,7 +684,7 @@ import Container from '../components/Container.astro';
 
   .event-x2 {
     font-family: 'Have Heart', cursive;
-    font-size: 1rem;
+    font-size: 1.125rem;
     color: #f1d44b;
     margin-left: 0.5rem;
   }

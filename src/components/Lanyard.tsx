@@ -161,7 +161,7 @@ function Badge({ modelPath, positionIndex, index, total, maxSpeed = 50, minSpeed
   useRopeJoint(j2, j3, [[0, 0, 0], [0, 0, 0], 1]);
   useSphericalJoint(j3, card, [
     [0, 0, 0],
-    [0, 2.1, 0]
+    [0, 2.75, 0]
   ]);
 
   useEffect(() => {
@@ -216,7 +216,7 @@ function Badge({ modelPath, positionIndex, index, total, maxSpeed = 50, minSpeed
 
   return (
     <>
-      <group position={[xOffset, 8, zOffset]} rotation={[0, fanAngle, 0]}>
+      <group position={[xOffset, 12, zOffset]} rotation={[0, fanAngle, 0]}>
         <RigidBody ref={fixed} {...segmentProps} type="fixed" />
         <RigidBody position={[0.5, 0, 0]} ref={j1} {...segmentProps}>
           <BallCollider args={[0.1]} />

@@ -2,9 +2,8 @@
 import Container from "./Container.astro";
 import ZoomableMap from '../components/ZoomableMap.astro';
 ---
-<head>
+<section class="chapters-section">
   <h1 class="map-header">Our Chapters & Alumni Associations</h1>
-<body>
   <div class="map-section-wrapper">
     <ZoomableMap />
   </div>
@@ -100,7 +99,7 @@ import ZoomableMap from '../components/ZoomableMap.astro';
         <div class="chapter-cards" data-chapter-designation="Μ Ψ" data-full-chapter-designation="Mu Psi" university="Stockton College" founded="Provisional Charter" chapterstatus="Provisional" alumniassociation="none"></div>
   </section>
   </div>
-</body>
+</section>
 <script is:inline>
 // Add hover content to each chapter card
 document.querySelectorAll('.chapter-cards').forEach(card => {
@@ -302,6 +301,11 @@ window.addEventListener('chapter-marker-clicked', (event) => {
 
 </script>
 <style>
+  .chapters-section {
+    overflow: visible;
+    position: relative;
+  }
+
   .map-header{
     margin-bottom: 20px;
     padding-top: 2rem;
@@ -330,6 +334,7 @@ window.addEventListener('chapter-marker-clicked', (event) => {
     padding: 0 1rem;
     position: relative;
     z-index: 1;
+    pointer-events: none;
   }
 
 .chapters-wrapper {
@@ -344,7 +349,7 @@ window.addEventListener('chapter-marker-clicked', (event) => {
   scrollbar-width: none;
   -ms-overflow-style: none;
   padding: 0 2rem;
-  z-index: 5;
+  z-index: 50;
 }
 
 .chapters-wrapper::-webkit-scrollbar {
