@@ -48,7 +48,14 @@ const { class: className = '' } = Astro.props;
     align-items: center;
     justify-content: center;
     padding: 2rem 1rem;
+    margin-top: -4rem;
     background: #212322;
+  }
+
+  @media (min-width: 768px) {
+    .centennial-section {
+      margin-top: -5rem;
+    }
   }
   
   /* Fireworks background */
