@@ -24,7 +24,7 @@ interface LanyardProps {
 }
 
 export default function Lanyard({
-  position = [0, 0, 30],
+  position = [0, 0, 50],
   gravity = [0, -40, 0],
   fov = 20,
   transparent = true
@@ -161,7 +161,7 @@ function Badge({ modelPath, positionIndex, index, total, maxSpeed = 50, minSpeed
   useRopeJoint(j2, j3, [[0, 0, 0], [0, 0, 0], 1]);
   useSphericalJoint(j3, card, [
     [0, 0, 0],
-    [0, 1.45, 0]
+    [0, 1.8, 0]
   ]);
 
   useEffect(() => {
