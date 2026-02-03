@@ -213,6 +213,7 @@ function Badge({ modelPath, index, total, maxSpeed = 50, minSpeed = 0, isMobile 
         <group
           scale={2.25}
           position={[0, -1.2, -0.05]}
+          rotation={[Math.PI / 2, 0, 0]}
           onPointerOver={() => hover(true)}
           onPointerOut={() => hover(false)}
           onPointerUp={(e: any) => {
