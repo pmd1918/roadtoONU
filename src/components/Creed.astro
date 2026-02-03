@@ -123,7 +123,9 @@
 
     async function typeWord(word: string) {
       isTyping = true;
-      highlightBox?.classList.remove('visible');
+      
+      // Show highlight as soon as typing starts
+      highlightBox?.classList.add('visible');
       
       // Type each character
       for (let i = 0; i <= word.length; i++) {
@@ -132,10 +134,6 @@
         await new Promise(r => animationTimeout = window.setTimeout(r, 80));
       }
       
-      // Show highlight after typing completes
-      await new Promise(r => animationTimeout = window.setTimeout(r, 200));
-      highlightBox?.classList.add('visible');
-      
       // Wait before deleting
       await new Promise(r => animationTimeout = window.setTimeout(r, 1500));
       
@@ -143,14 +141,27 @@
       for (let i = word.length; i >= 0; i--) {
         if (!isTyping) return;
         wordEl.textContent = word.slice(0, i);
-        if (i === word.length) {
-          highlightBox?.classList.remove('visible');
-        }
         await new Promise(r => animationTimeout = window.setTimeout(r, 50));
       }
       
+      // Hide highlight after word is deleted
+      highlightBox?.classList.remove('visible');
+      
+      // Type ellipses
+      for (let i = 1; i <= 3; i++) {
+        if (!isTyping) return;
+        wordEl.textContent = '.'.repeat(i);
+        await new Promise(r => animationTimeout = window.setTimeout(r, 200));
+      }
+      
+      // Pause on ellipses
+      await new Promise(r => animationTimeout = window.setTimeout(r, 400));
+      
+      // Clear ellipses
+      wordEl.textContent = '';
+      
       // Small pause before next word
-      await new Promise(r => animationTimeout = window.setTimeout(r, 300));
+      await new Promise(r => animationTimeout = window.setTimeout(r, 200));
     }
 
     async function cycleWords() {
