@@ -2,8 +2,11 @@
     <div class="container">
       <span class="creed-line">
         <span class="creed-prefix">I believe in</span>
-        <span class="creed-word">Brotherhood</span>
-        <span class="creed-ellipsis">...</span>
+        <span class="creed-highlight-wrapper">
+          <span class="creed-highlight-box"></span>
+          <span class="creed-word"></span>
+        </span>
+        <span class="creed-cursor"></span>
       </span>
     </div>
   </section>
@@ -36,7 +39,7 @@
     .creed-line {
       display: flex;
       flex-wrap: nowrap;
-      align-items: baseline;
+      align-items: center;
       justify-content: center;
       gap: 0.5rem;
       font-family: 'Inter', sans-serif;
@@ -51,62 +54,124 @@
       letter-spacing: 0.05em;
     }
 
+    .creed-highlight-wrapper {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      min-width: 10ch;
+      height: 1.4em;
+    }
+
+    .creed-highlight-box {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(135deg, #ea7600, #f1d44b);
+      border-radius: 0.15em;
+      z-index: 1;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .creed-highlight-box.visible {
+      opacity: 1;
+    }
+
     .creed-word {
+      position: relative;
+      z-index: 2;
       font-size: clamp(1.5rem, 5vw, 4.5rem);
       font-weight: 900;
-      background: linear-gradient(135deg, #ea7600, #f1d44b);
-      background-clip: text;
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
+      color: #212322;
       text-transform: uppercase;
       letter-spacing: 0.05em;
-      min-width: 8ch;
-      text-align: center;
-      transition: filter 0.3s ease, text-shadow 0.3s ease;
+      padding: 0.1em 0.25em;
       display: inline-block;
+      min-height: 1.2em;
+      line-height: 1.2;
     }
 
-    .creed-word.is-highlight {
-      filter: brightness(1.2);
-      text-shadow: 0 0 30px rgba(234, 118, 0, 0.6), 0 0 60px rgba(241, 212, 75, 0.4);
+    .creed-cursor {
+      display: inline-block;
+      width: 3px;
+      height: clamp(1.5rem, 5vw, 4.5rem);
+      background-color: #ea7600;
+      margin-left: 4px;
+      animation: blink-cursor 0.7s step-end infinite;
     }
 
-    .creed-ellipsis {
-      font-size: clamp(1.2rem, 3.5vw, 3rem);
-      font-weight: 300;
-      color: #f4f7ff;
-      letter-spacing: 0.2em;
+    .creed-wrap.paused .creed-cursor {
+      animation-play-state: paused;
+    }
+
+    @keyframes blink-cursor {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0; }
     }
   </style>
 
   <script>
     const words = ['Brotherhood', 'Service', 'Democracy'];
     const wordEl = document.querySelector('.creed-word') as HTMLElement;
+    const highlightBox = document.querySelector('.creed-highlight-box') as HTMLElement;
     const section = document.querySelector('.creed-wrap');
-    let currentIndex = 0;
-    let interval: number | undefined;
+    let currentWordIndex = 0;
+    let isTyping = false;
+    let animationTimeout: number | undefined;
 
-    function cycleWord() {
-      if (wordEl) {
-        wordEl.classList.remove('is-highlight');
-        wordEl.textContent = words[currentIndex];
-        
-        // Trigger highlight animation
-        setTimeout(() => wordEl.classList.add('is-highlight'), 50);
-        
-        currentIndex = (currentIndex + 1) % words.length;
+    async function typeWord(word: string) {
+      isTyping = true;
+      highlightBox?.classList.remove('visible');
+      
+      // Type each character
+      for (let i = 0; i <= word.length; i++) {
+        if (!isTyping) return;
+        wordEl.textContent = word.slice(0, i);
+        await new Promise(r => animationTimeout = window.setTimeout(r, 80));
+      }
+      
+      // Show highlight after typing completes
+      await new Promise(r => animationTimeout = window.setTimeout(r, 200));
+      highlightBox?.classList.add('visible');
+      
+      // Wait before deleting
+      await new Promise(r => animationTimeout = window.setTimeout(r, 1500));
+      
+      // Delete each character
+      for (let i = word.length; i >= 0; i--) {
+        if (!isTyping) return;
+        wordEl.textContent = word.slice(0, i);
+        if (i === word.length) {
+          highlightBox?.classList.remove('visible');
+        }
+        await new Promise(r => animationTimeout = window.setTimeout(r, 50));
+      }
+      
+      // Small pause before next word
+      await new Promise(r => animationTimeout = window.setTimeout(r, 300));
+    }
+
+    async function cycleWords() {
+      while (isTyping) {
+        await typeWord(words[currentWordIndex]);
+        currentWordIndex = (currentWordIndex + 1) % words.length;
       }
     }
 
     function startCycle() {
-      cycleWord();
-      interval = window.setInterval(cycleWord, 2500);
+      if (!isTyping) {
+        isTyping = true;
+        cycleWords();
+      }
     }
 
     function stopCycle() {
-      if (interval) {
-        clearInterval(interval);
-        interval = undefined;
+      isTyping = false;
+      if (animationTimeout) {
+        clearTimeout(animationTimeout);
+        animationTimeout = undefined;
       }
     }
 

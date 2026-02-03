@@ -5,7 +5,7 @@ import Container from "./Container.astro"
 
 <div id="features" class="paused">
   <Container>
-    <div class="md:w-2/3 lg:w-1/2">
+    <div class="w-full text-center">
       <h2 class="features-title">Conclave Schedule</h2>
       <p class="text-sm sm:text-base text-gray-600">Four days of brotherhood, celebration, and making memories at Ohio Northern University.</p>
     </div>
@@ -150,7 +150,7 @@ import Container from "./Container.astro"
 
 <style>
   #features {
-    margin-top: -2rem;
+    margin-top: -3rem;
   }
 
   .features-title {
@@ -161,6 +161,7 @@ import Container from "./Container.astro"
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     margin: 0 0 1rem 0;
+    text-align: center;
   }
 
   #features.paused .shimmer-word {

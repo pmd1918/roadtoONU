@@ -267,15 +267,15 @@ import Countdown from "./Countdown.astro"
     }
 
     /* Commit to Sponsor Button */
-    @property --btn-angle {
+    @property --commit-angle {
         syntax: "<angle>";
         initial-value: 0deg;
         inherits: false;
     }
 
-    @keyframes btn-rotate {
-        0% { --btn-angle: 0deg; }
-        100% { --btn-angle: 360deg; }
+    @keyframes commit-rotate {
+        0% { --commit-angle: 0deg; }
+        100% { --commit-angle: 360deg; }
     }
 
     .commit-sponsor-btn {
@@ -304,14 +304,14 @@ import Countdown from "./Countdown.astro"
         background-size: 100% 100%;
         background-position: 0px 0px;
         background-image: conic-gradient(
-            from var(--btn-angle) at 50% 50%,
+            from var(--commit-angle) at 50% 50%,
             rgba(0,0,0,0) 0%,
             rgba(0,0,0,0) 33%,
             #f1d44b 50%,
             rgba(0,0,0,0) 66%,
             rgba(0,0,0,0) 100%
         );
-        animation: btn-rotate 2s infinite linear;
+        animation: commit-rotate 2s infinite linear;
     }
 
     .commit-sponsor-btn:before {
@@ -332,20 +332,19 @@ import Countdown from "./Countdown.astro"
         letter-spacing: 2px;
         z-index: 1;
         transition: all 0.18s ease;
-        background: transparent;
-        backdrop-filter: none;
+        background: rgba(255, 255, 255, 0.25);
+        backdrop-filter: blur(40px);
         backface-visibility: hidden;
-        box-shadow: none;
-        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15), 0 4px 16px rgba(0, 0, 0, 0.1);
+        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
         color: #212322;
     }
 
     .commit-sponsor-btn:hover .commit-btn-inner {
-        background: transparent;
-        box-shadow: none;
+        background: rgba(0, 0, 0, 0.5);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25), 0 8px 24px rgba(0, 0, 0, 0.15);
         transform: translateY(-1px);
         color: #f5de6f;
-        text-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
     }
 
     .commit-sponsor-btn:active {
