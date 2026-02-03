@@ -47,7 +47,7 @@ export default function Lanyard({
         gl={{ alpha: transparent }}
         onCreated={({ gl }) => gl.setClearColor(new THREE.Color(0x000000), transparent ? 0 : 1)}
       >
-        <ambientLight intensity={1.5} />
+        <ambientLight intensity={0.8} />
         <Physics gravity={gravity} timeStep={isMobile ? 1 / 30 : 1 / 60}>
           {BADGE_CONFIGS.map((config, index) => (
             <Badge 
