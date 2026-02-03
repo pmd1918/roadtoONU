@@ -16,7 +16,7 @@ const images = [
     <div class="slider-content">
       <h2 class="slider-heading">The Star Of Your Favorite Football Moment</h2>
       <p class="slider-subheading">Made In Ada, Ohio</p>
-      <a href="https://www.amersports.com/newsroom/crafting-a-legacy-in-wilsons-new-football-factory-in-ada-ohio/" class="read-more-btn" id="wilson-read-more">Read More</a>
+      <a href="https://www.wilson.com/en-us/explore/football/ada-ohio-factory" class="read-more-btn" id="wilson-read-more">More</a>
     </div>
     <div class="slider-track" id="wilson-slider-track">
       {/* Original slides */}
@@ -30,6 +30,7 @@ const images = [
         <img src={images[0].src} alt={images[0].alt} loading="lazy" />
       </div>
     </div>
+    <a href="https://www.amersports.com/newsroom/crafting-a-legacy-in-wilsons-new-football-factory-in-ada-ohio/" class="photo-credit" target="_blank" rel="noopener">Photos: Amer Sports</a>
   </div>
 </section>
 
@@ -135,6 +136,22 @@ const images = [
     object-fit: cover;
     filter: blur(8px);
     transform: scale(1.05);
+  }
+
+  .photo-credit {
+    position: absolute;
+    bottom: 0.75rem;
+    right: 1rem;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.625rem;
+    color: rgba(255, 255, 255, 0.5);
+    text-decoration: none;
+    z-index: 10;
+    transition: color 0.2s;
+  }
+
+  .photo-credit:hover {
+    color: rgba(255, 255, 255, 0.8);
   }
 </style>
 

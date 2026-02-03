@@ -36,10 +36,10 @@ import Container from '../components/Container.astro';
             <div class="p-1 sm:p-2 grayscale transition duration-200 hover:grayscale-0 focus-within:grayscale-0 active:grayscale-0 flex-shrink-0" tabindex="0">
               <div class="flex items-center gap-2 2xl:gap-4">
                 <div class="block text-right">
-                  <h1 class="text-xs sm:text-sm font-bold text-[#212322] leading-tight whitespace-nowrap">The Phi Mu Delta</h1>
-                  <h2 class="text-xs sm:text-sm font-normal text-[#212322] leading-tight whitespace-nowrap">Educational Foundation</h2>
+                  <h1 class="text-xs sm:text-sm font-bold text-[#212322] leading-tight whitespace-nowrap">The Mu Beta</h1>
+                  <h2 class="text-xs sm:text-sm font-normal text-[#212322] leading-tight whitespace-nowrap">Alumni Association</h2>
                 </div>
-                <img src="/images/orange-black.png" class="h-10 sm:h-12 md:h-14 lg:h-16 xl:h-20 2xl:h-24 w-auto" loading="lazy" alt="Educational Foundation logo" />
+                <img src="/images/sponsors/Nu Beta Alumni Association Logo - gold.png" class="h-10 sm:h-12 md:h-14 lg:h-16 xl:h-20 2xl:h-24 w-auto" loading="lazy" alt="Mu Beta Alumni Association logo" />
               </div>
             </div>
             <div class="text-center px-2 flex-shrink min-w-0">
@@ -85,8 +85,8 @@ import Container from '../components/Container.astro';
               funds scholarships, and makes this weekend unforgettable.
             </p>
             <p class="ask-cta-text">
-              In return? Your name in front of motivated professionals, future leaders, 
-              and a network that remembers who showed up.
+              In return? Your name in front of motivated professionals, your brothers, 
+              future leaders and a network that remembers who showed up.
             </p>
           </div>
           <div class="ask-stats">
@@ -136,6 +136,19 @@ import Container from '../components/Container.astro';
             </div>
           </div>
 
+          <div class="tier tier-centennial sold-out">
+            <div class="tier-header">
+              <span class="tier-label">Centennial Partner</span>
+              <div class="sold-out-banner">SOLD OUT</div>
+            </div>
+            <div class="tier-body">
+              <div class="claimed-item">
+                <span class="claimed-check">✓</span>
+                <span class="claimed-text">Claimed by The Mu Beta Alumni Association</span>
+              </div>
+            </div>
+          </div>
+
           <div class="tier tier-democracy sold-out">
             <div class="tier-header">
               <span class="tier-label">Democracy Sponsors</span>
@@ -146,17 +159,13 @@ import Container from '../components/Container.astro';
                 <span class="claimed-check">✓</span>
                 <span class="claimed-text">Claimed by The Nu Beta Alumni Association</span>
               </div>
-              <div class="claimed-item">
-                <span class="claimed-check">✓</span>
-                <span class="claimed-text">Claimed by The Mu Beta Alumni Association</span>
-              </div>
             </div>
           </div>
 
           <div class="tier tier-silver">
             <div class="tier-header">
               <span class="tier-label">Chapter Supporter</span>
-              <span class="tier-amount">$1,000</span>
+              <span class="tier-amount">$1,600</span>
             </div>
             <div class="tier-body">
               <p>Program listing, banquet recognition, 1 registration, and our genuine appreciation.</p>
@@ -170,7 +179,7 @@ import Container from '../components/Container.astro';
           <div class="tier tier-bronze">
             <div class="tier-header">
               <span class="tier-label">Friend of PMD</span>
-              <span class="tier-amount">$500</span>
+              <span class="tier-amount">$1,000</span>
             </div>
             <div class="tier-body">
               <p>Name in program, public thank you. Simple, meaningful.</p>
@@ -194,24 +203,24 @@ import Container from '../components/Container.astro';
             <span class="event-price">$3,000</span>
           </div>
           <div class="event-item">
-            <span class="event-name">Centennial Celebration</span>
-            <span class="event-desc">Mu Beta's 100-year moment.</span>
+            <span class="event-name">Chapter of the Year Presentation</span>
+            <span class="event-desc">This year's best chapter.</span>
             <span class="event-price">$2,500</span>
           </div>
           <div class="event-item">
             <span class="event-name">Wilson Factory Tour</span>
             <span class="event-desc">Where every NFL ball is made.</span>
-            <span class="event-price">$2,000</span>
+            <span class="event-price">$1,500</span>
           </div>
           <div class="event-item">
-            <span class="event-name">Leadership Workshop</span>
+            <span class="event-name">Leadership Workshop <span class="event-x2">x2</span></span>
             <span class="event-desc">Undergrad development sessions.</span>
             <span class="event-price">$1,500</span>
           </div>
           <div class="event-item">
             <span class="event-name">Brotherhood Night</span>
             <span class="event-desc">Wednesday welcome reception.</span>
-            <span class="event-price">$1,000</span>
+            <span class="event-price">$500</span>
           </div>
         </div>
       </Container>
@@ -220,7 +229,7 @@ import Container from '../components/Container.astro';
     <!-- Pick Your Perk -->
     <section class="perks-section">
       <Container>
-        <h2>Pick Your Perk</h2>
+        <h2>Pick Your Impact</h2>
         <p class="perks-intro">Smaller sponsorships, big impact.</p>
         
         <div class="perks-grid">
@@ -244,9 +253,21 @@ import Container from '../components/Container.astro';
             <span class="perk-name">Meals</span>
             <span class="perk-desc">Fuel the Brotherhood</span>
           </div>
+          <div class="perk-box">
+            <span class="perk-name">Programs</span>
+            <span class="perk-desc">Event Booklets</span>
+          </div>
+          <div class="perk-box">
+            <span class="perk-name">Undergrad Workbooks</span>
+            <span class="perk-desc">Workshop Materials</span>
+          </div>
+          <div class="perk-box">
+            <span class="perk-name">Ritual</span>
+            <span class="perk-desc">Sacred Ceremonies</span>
+          </div>
         </div>
         
-        <p class="perks-cta">Interested? <a href="mailto:give@phimudelta.org?subject=Perk%20Sponsorship">Reach out</a> and we'll share details.</p>
+        <p class="perks-cta">Interested? <a href="mailto:give@phimudelta.org?subject=Impact%20Sponsorship">Reach out</a> and we'll share details.</p>
       </Container>
     </section>
 
@@ -522,6 +543,7 @@ import Container from '../components/Container.astro';
 
   .tier-platinum .tier-header { background: linear-gradient(135deg, #ea7600, #f1d44b); }
   .tier-gold .tier-header { background: #f1d44b; }
+  .tier-centennial .tier-header { background: #212322; }
   .tier-democracy .tier-header { background: #212322; }
   .tier-silver .tier-header { background: #d1d5db; }
   .tier-bronze .tier-header { background: #d4a574; }
@@ -536,6 +558,7 @@ import Container from '../components/Container.astro';
   }
 
   .tier-platinum .tier-label { color: #fff; }
+  .tier-centennial .tier-label { color: #fff; }
   .tier-democracy .tier-label { color: #fff; }
 
   .tier-amount {
@@ -659,6 +682,13 @@ import Container from '../components/Container.astro';
     font-size: 1.125rem;
     font-weight: 700;
     color: #f4f7ff;
+  }
+
+  .event-x2 {
+    font-family: 'Have Heart', cursive;
+    font-size: 1rem;
+    color: #f1d44b;
+    margin-left: 0.5rem;
   }
 
   .event-desc {

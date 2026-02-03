@@ -60,14 +60,14 @@ import Countdown from "./Countdown.astro"
                   <div class="p-1 sm:p-2 grayscale transition duration-200 hover:grayscale-0 focus-within:grayscale-0 active:grayscale-0 flex-shrink-0" tabindex="0">
                       <div class="flex items-center gap-2 2xl:gap-4">
                           <div class="block text-right">
-                              <h1 class="text-xs sm:text-sm font-bold text-[#212322] leading-tight whitespace-nowrap">The Phi Mu Delta</h1>
-                              <h2 class="text-xs sm:text-sm font-normal text-[#212322] leading-tight whitespace-nowrap">Educational Foundation</h2>
+                              <h1 class="text-xs sm:text-sm font-bold text-[#212322] leading-tight whitespace-nowrap">The Mu Beta</h1>
+                              <h2 class="text-xs sm:text-sm font-normal text-[#212322] leading-tight whitespace-nowrap">Alumni Association</h2>
                           </div>
                           <img
-                              src="./images/orange-black.png"
+                              src="./images/sponsors/Nu Beta Alumni Association Logo - gold.png"
                               class="h-10 sm:h-12 md:h-14 lg:h-16 xl:h-20 2xl:h-24 w-auto"
                               loading="lazy"
-                              alt="Educational Foundation logo"
+                              alt="Mu Beta Alumni Association logo"
                           />
                       </div>
                   </div>
@@ -256,6 +256,15 @@ import Countdown from "./Countdown.astro"
         to   { transform: translateX(0); }
     }
 
+    @keyframes hero-divider-marquee-reverse {
+        from { transform: translateX(0); }
+        to   { transform: translateX(-50%); }
+    }
+
+    .hero-divider-bottom .hero-divider-track {
+        animation: hero-divider-marquee-reverse 25s linear infinite;
+    }
+
     /* Reduced motion */
     @media (prefers-reduced-motion: reduce) {
         .hero-divider::after {
@@ -346,11 +355,7 @@ import Countdown from "./Countdown.astro"
         background: linear-gradient(
             180deg,
             #ea7600 0%,
-            #f1d44b 20%,
-            #f4f7ff 40%,
-            #f4f7ff 60%,
-            #f1d44b 80%,
-            #ea7600 100%
+            #f1d44b 100%
         ) !important;
         position: relative;
         z-index: 10;
