@@ -102,12 +102,12 @@ const undergradImages = [
             </p>
           </div>
 
-          <a href={alumniHotel.bookingUrl} target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-3 px-6 py-3 bg-gradient-to-r from-[#ea7600] to-[#f1d44b] text-[#212322] font-bold rounded-full hover:shadow-xl hover:shadow-[#ea7600]/30 hover:-translate-y-1 transition-all duration-300">
+          <button id="alumni-book-btn" type="button" class="inline-flex items-center gap-3 px-6 py-3 bg-gradient-to-r from-[#ea7600] to-[#f1d44b] text-[#212322] font-bold rounded-full hover:shadow-xl hover:shadow-[#ea7600]/30 hover:-translate-y-1 transition-all duration-300 cursor-pointer">
             Book Your Room
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path>
             </svg>
-          </a>
+          </button>
         </div>
       </div>
 
@@ -266,4 +266,137 @@ const undergradImages = [
     60% { opacity: 0; }
     100% { opacity: 0; }
   }
+
+  /* Alumni confirmation modal */
+  .alumni-modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(4px);
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s, visibility 0.3s;
+  }
+
+  .alumni-modal-overlay.active {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  .alumni-modal {
+    background: #f4f7ff;
+    border-radius: 1.5rem;
+    padding: 2rem;
+    max-width: 420px;
+    width: 90%;
+    text-align: center;
+    transform: scale(0.9);
+    transition: transform 0.3s;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+  }
+
+  .alumni-modal-overlay.active .alumni-modal {
+    transform: scale(1);
+  }
+
+  .alumni-modal h3 {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #212322;
+    margin-bottom: 1rem;
+  }
+
+  .alumni-modal p {
+    color: #4b5563;
+    margin-bottom: 1.5rem;
+    line-height: 1.6;
+  }
+
+  .alumni-modal-buttons {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+  }
+
+  .alumni-modal-cancel {
+    padding: 0.75rem 1.5rem;
+    border-radius: 9999px;
+    background: #e5e7eb;
+    color: #374151;
+    font-weight: 600;
+    border: none;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+
+  .alumni-modal-cancel:hover {
+    background: #d1d5db;
+  }
+
+  .alumni-modal-confirm {
+    padding: 0.75rem 1.5rem;
+    border-radius: 9999px;
+    background: linear-gradient(135deg, #ea7600, #f1d44b);
+    color: #212322;
+    font-weight: 700;
+    border: none;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+
+  .alumni-modal-confirm:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(234, 118, 0, 0.4);
+  }
 </style>
+
+<!-- Alumni Confirmation Modal -->
+<div id="alumni-modal-overlay" class="alumni-modal-overlay">
+  <div class="alumni-modal">
+    <h3>Alumni Room Reservation</h3>
+    <p>Rooms at The Inn at ONU are reserved for alumni and their guests only. By clicking below you are confirming you are an alumni of Phi Mu Delta or a guest.</p>
+    <div class="alumni-modal-buttons">
+      <button id="alumni-modal-cancel" class="alumni-modal-cancel">Cancel</button>
+      <button id="alumni-modal-confirm" class="alumni-modal-confirm">I Confirm</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  const bookBtn = document.getElementById('alumni-book-btn');
+  const modalOverlay = document.getElementById('alumni-modal-overlay');
+  const cancelBtn = document.getElementById('alumni-modal-cancel');
+  const confirmBtn = document.getElementById('alumni-modal-confirm');
+  const bookingUrl = 'https://www.innatonu.com/';
+
+  bookBtn?.addEventListener('click', () => {
+    modalOverlay?.classList.add('active');
+  });
+
+  cancelBtn?.addEventListener('click', () => {
+    modalOverlay?.classList.remove('active');
+  });
+
+  confirmBtn?.addEventListener('click', () => {
+    window.open(bookingUrl, '_blank', 'noopener,noreferrer');
+    modalOverlay?.classList.remove('active');
+  });
+
+  // Close on overlay click
+  modalOverlay?.addEventListener('click', (e) => {
+    if (e.target === modalOverlay) {
+      modalOverlay.classList.remove('active');
+    }
+  });
+
+  // Close on Escape key
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && modalOverlay?.classList.contains('active')) {
+      modalOverlay.classList.remove('active');
+    }
+  });
+</script>
