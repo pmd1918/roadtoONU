@@ -353,28 +353,28 @@ window.addEventListener('chapter-marker-clicked', (event) => {
   block-size: 160px;
   display: flex;
   overflow: visible;
-  min-inline-size: calc(80px * 6);
+  min-inline-size: calc(32px * 35);
   padding: 4px;
   align-content: center;
   justify-content: center;
-  max-width: 95%;
+  max-width: 100%;
 }
 
 @media (min-width: 480px) {
   .chapters {
     block-size: 180px;
-    min-inline-size: calc(100px * 6);
+    min-inline-size: calc(36px * 35);
     padding: 6px;
-    max-width: 90%;
+    max-width: 100%;
   }
 }
 
 @media (min-width: 768px) {
   .chapters {
     block-size: 200px;
-    min-inline-size: calc(150px * 6);
+    min-inline-size: calc(42px * 35);
     padding: 8px;
-    max-width: 80%;
+    max-width: 100%;
   }
 }
 
@@ -385,6 +385,7 @@ window.addEventListener('chapter-marker-clicked', (event) => {
   color: #ffffff;
   display: flex;
   flex-basis: 100%;
+  min-width: 32px;
   font-weight: 500;
   justify-content: left;
   padding: 16px 0 8px 8px;
