@@ -16,7 +16,7 @@ import Lanyard from "./Lanyard";
       
       <div class="registration-highlights">
         <div class="highlight-item">
-          <span class="highlight-icon">🤝</span>
+          <img src="https://cdn-icons-png.flaticon.com/512/3220/3220788.png" alt="Brotherhood" class="highlight-icon-img" />
           <h3 class="highlight-title">Brotherhood Reunion</h3>
           <p class="highlight-text">
             Reconnect with brothers from across the nation and forge new bonds 
@@ -25,7 +25,7 @@ import Lanyard from "./Lanyard";
         </div>
         
         <div class="highlight-item">
-          <span class="highlight-icon">💯</span>
+          <img src="https://cdn-icons-png.flaticon.com/512/9451/9451844.png" alt="Centennial" class="highlight-icon-img" />
           <h3 class="highlight-title">Historic Milestone</h3>
           <p class="highlight-text">
             Be part of Mu Beta chapter's 100-year celebration at Ohio Northern 
@@ -34,17 +34,16 @@ import Lanyard from "./Lanyard";
         </div>
         
         <div class="highlight-item">
-          <span class="highlight-icon">🏈</span>
+          <img src="https://cdn-icons-png.flaticon.com/512/2813/2813821.png" alt="Football" class="highlight-icon-img" />
           <h3 class="highlight-title">Wilson Factory Tour</h3>
           <p class="highlight-text">
             Go behind the scenes at the world-famous Wilson Football Factory—where 
-            every NFL game ball is handcrafted. See skilled artisans at work and 
-            hold a piece of football history.
+            every NFL game ball is handcrafted.
           </p>
         </div>
         
         <div class="highlight-item">
-          <span class="highlight-icon">💼</span>
+          <img src="https://cdn-icons-png.flaticon.com/512/1069/1069806.png" alt="Network" class="highlight-icon-img" />
           <h3 class="highlight-title">Network & Grow</h3>
           <p class="highlight-text">
             Connect with alumni leaders, attend workshops, and build professional 
@@ -130,8 +129,8 @@ import Lanyard from "./Lanyard";
   
   .registration-intro {
     font-family: 'Inter', sans-serif;
-    font-size: clamp(1.125rem, 2vw, 1.5rem);
-    font-weight: 300;
+    font-size: clamp(0.875rem, 1.5vw, 1rem);
+    font-weight: 400;
     color: #f4f7ff;
     line-height: 1.6;
     margin-bottom: 3rem;
@@ -168,9 +167,20 @@ import Lanyard from "./Lanyard";
     font-size: 2.5rem;
   }
   
+  .highlight-icon-img {
+    width: 32px;
+    height: 32px;
+    object-fit: contain;
+  }
+  
   @media (max-width: 768px) {
     .highlight-icon {
       font-size: 2rem;
+    }
+    
+    .highlight-icon-img {
+      width: 28px;
+      height: 28px;
     }
   }
   
