@@ -58,25 +58,18 @@
       position: relative;
       display: inline-flex;
       align-items: center;
-      min-width: 10ch;
-      height: 1.4em;
     }
 
     .creed-highlight-box {
       position: absolute;
       top: 0;
       left: 0;
-      right: 0;
       bottom: 0;
+      width: 0;
       background: linear-gradient(135deg, #ea7600, #f1d44b);
       border-radius: 0.15em;
       z-index: 1;
-      opacity: 0;
-      transition: opacity 0.3s ease;
-    }
-
-    .creed-highlight-box.visible {
-      opacity: 1;
+      transition: width 0.05s ease-out;
     }
 
     .creed-word {
@@ -89,8 +82,11 @@
       letter-spacing: 0.05em;
       padding: 0.1em 0.25em;
       display: inline-block;
-      min-height: 1.2em;
       line-height: 1.2;
+    }
+
+    .creed-word:empty {
+      padding: 0;
     }
 
     .creed-cursor {
@@ -98,7 +94,7 @@
       width: 3px;
       height: clamp(1.5rem, 5vw, 4.5rem);
       background-color: #ea7600;
-      margin-left: 4px;
+      margin-left: 2px;
       animation: blink-cursor 0.7s step-end infinite;
     }
 
@@ -121,57 +117,57 @@
     let isTyping = false;
     let animationTimeout: number | undefined;
 
+    function updateHighlightWidth() {
+      if (highlightBox && wordEl) {
+        const width = wordEl.offsetWidth;
+        highlightBox.style.width = width > 0 ? width + 'px' : '0';
+      }
+    }
+
     async function typeWord(word: string) {
       isTyping = true;
+      wordEl.style.color = '#212322';
       
-      // Show highlight as soon as typing starts
-      highlightBox?.classList.add('visible');
-      
-      // Type each character
+      // Type each character of the word
       for (let i = 0; i <= word.length; i++) {
         if (!isTyping) return;
         wordEl.textContent = word.slice(0, i);
+        updateHighlightWidth();
         await new Promise(r => animationTimeout = window.setTimeout(r, 80));
       }
       
-      // Wait before deleting
-      await new Promise(r => animationTimeout = window.setTimeout(r, 1500));
+      // Pause on complete word
+      await new Promise(r => animationTimeout = window.setTimeout(r, 1000));
       
-      // Delete each character
+      // Type ellipsis after the word (word + ...)
+      for (let i = 1; i <= 3; i++) {
+        if (!isTyping) return;
+        wordEl.textContent = word + '.'.repeat(i);
+        updateHighlightWidth();
+        await new Promise(r => animationTimeout = window.setTimeout(r, 150));
+      }
+      
+      // Pause with ellipsis
+      await new Promise(r => animationTimeout = window.setTimeout(r, 500));
+      
+      // Delete ellipsis first
+      for (let i = 2; i >= 0; i--) {
+        if (!isTyping) return;
+        wordEl.textContent = word + '.'.repeat(i);
+        updateHighlightWidth();
+        await new Promise(r => animationTimeout = window.setTimeout(r, 80));
+      }
+      
+      // Delete the word
       for (let i = word.length; i >= 0; i--) {
         if (!isTyping) return;
         wordEl.textContent = word.slice(0, i);
+        updateHighlightWidth();
         await new Promise(r => animationTimeout = window.setTimeout(r, 50));
       }
       
-      // Hide highlight after word is deleted
-      highlightBox?.classList.remove('visible');
-      
-      // Change color for ellipses (light on dark bg)
-      wordEl.style.color = '#f4f7ff';
-      
-      // Type ellipses
-      for (let i = 1; i <= 3; i++) {
-        if (!isTyping) return;
-        wordEl.textContent = '.'.repeat(i);
-        await new Promise(r => animationTimeout = window.setTimeout(r, 200));
-      }
-      
-      // Pause on ellipses
-      await new Promise(r => animationTimeout = window.setTimeout(r, 400));
-      
-      // Delete ellipses one by one
-      for (let i = 2; i >= 0; i--) {
-        if (!isTyping) return;
-        wordEl.textContent = '.'.repeat(i);
-        await new Promise(r => animationTimeout = window.setTimeout(r, 100));
-      }
-      
-      // Reset color for next word
-      wordEl.style.color = '#212322';
-      
       // Small pause before next word
-      await new Promise(r => animationTimeout = window.setTimeout(r, 200));
+      await new Promise(r => animationTimeout = window.setTimeout(r, 300));
     }
 
     async function cycleWords() {
