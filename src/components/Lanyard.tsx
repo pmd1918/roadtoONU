@@ -47,7 +47,7 @@ export default function Lanyard({
         gl={{ alpha: transparent }}
         onCreated={({ gl }) => gl.setClearColor(new THREE.Color(0x000000), transparent ? 0 : 1)}
       >
-        <ambientLight intensity={Math.PI} />
+        <ambientLight intensity={1.5} />
         <Physics gravity={gravity} timeStep={isMobile ? 1 / 30 : 1 / 60}>
           {BADGE_CONFIGS.map((config, index) => (
             <Badge 
@@ -161,7 +161,7 @@ function Badge({ modelPath, positionIndex, index, total, maxSpeed = 50, minSpeed
   useRopeJoint(j2, j3, [[0, 0, 0], [0, 0, 0], 1]);
   useSphericalJoint(j3, card, [
     [0, 0, 0],
-    [0, 1.8, 0]
+    [0, 2.1, 0]
   ]);
 
   useEffect(() => {
@@ -216,7 +216,7 @@ function Badge({ modelPath, positionIndex, index, total, maxSpeed = 50, minSpeed
 
   return (
     <>
-      <group position={[xOffset, 4, zOffset]} rotation={[0, fanAngle, 0]}>
+      <group position={[xOffset, 8, zOffset]} rotation={[0, fanAngle, 0]}>
         <RigidBody ref={fixed} {...segmentProps} type="fixed" />
         <RigidBody position={[0.5, 0, 0]} ref={j1} {...segmentProps}>
           <BallCollider args={[0.1]} />

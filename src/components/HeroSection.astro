@@ -74,7 +74,7 @@ import Countdown from "./Countdown.astro"
                   <!-- Center Text -->
                   <div class="text-center px-2 flex-shrink min-w-0">
                       <h1 class="font-bold uppercase leading-tight text-white" style="font-size: clamp(0.875rem, 2.5vw, 2.25rem);">Featured Sponsors</h1>
-                      <a href="mailto:give@phimudelta.org?subject=Conclave%20Sponsorship" class="commit-sponsor-btn mt-2">
+                      <a href="/sponsorship" class="commit-sponsor-btn mt-2">
                           <span class="commit-btn-inner">Commit to Sponsor</span>
                       </a>
                   </div>
@@ -351,19 +351,9 @@ import Countdown from "./Countdown.astro"
             #f4f7ff 60%,
             #f1d44b 80%,
             #ea7600 100%
-        );
+        ) !important;
         position: relative;
         z-index: 10;
-        isolation: isolate;
-    }
-
-    /* Solid backing to block video bleed-through */
-    .sponsor-unified-gradient::before {
-        content: "";
-        position: absolute;
-        inset: 0;
-        background: #f4f7ff;
-        z-index: -1;
     }
 
     /* Make dividers transparent so gradient shows through */
