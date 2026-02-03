@@ -487,26 +487,29 @@ window.addEventListener('chapter-marker-clicked', (event) => {
   justify-content: flex-start;
   text-align: left;
   position: absolute;
-  top: 8px;
-  left: 24px;
-  right: 4px;
+  top: 4px;
+  left: 2px;
+  right: 2px;
   overflow: hidden;
-  max-height: calc(100% - 16px);
+  max-height: calc(100% - 8px);
+  padding-left: 18px;
 }
 
 @media (min-width: 480px) {
   .chapter-cards-hover-content {
-    top: 12px;
-    left: 30px;
-    right: 6px;
+    top: 8px;
+    left: 4px;
+    right: 4px;
+    padding-left: 22px;
   }
 }
 
 @media (min-width: 768px) {
   .chapter-cards-hover-content {
-    top: 16px;
-    left: 36px;
-    right: 8px;
+    top: 12px;
+    left: 6px;
+    right: 6px;
+    padding-left: 26px;
   }
 }
 
