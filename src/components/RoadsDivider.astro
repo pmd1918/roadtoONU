@@ -17,7 +17,7 @@
     .roads-divider {
         position: relative;
         width: 100%;
-        height: 2.5rem;
+        height: clamp(1.75rem, 3vw, 2.5rem);
         overflow: hidden;
         z-index: 10;
         background: linear-gradient(180deg, #ea7600 0%, #f1d44b 100%);
@@ -40,21 +40,21 @@
         flex: 0 0 auto;
         display: flex;
         align-items: center;
-        gap: 1rem;
+        gap: clamp(0.5rem, 1.5vw, 1rem);
         white-space: nowrap;
-        padding-right: 1rem;
+        padding-right: clamp(0.5rem, 1.5vw, 1rem);
     }
 
     .roads-divider-content img {
-        width: 20px;
-        height: 20px;
+        width: clamp(12px, 2vw, 20px);
+        height: clamp(12px, 2vw, 20px);
         display: block;
         flex: 0 0 auto;
     }
 
     .roads-divider-text {
         font-family: 'Have Heart', cursive;
-        font-size: 1.25rem;
+        font-size: clamp(0.85rem, 1.5vw, 1.25rem);
         color: #212322;
         font-weight: 400;
     }
@@ -62,19 +62,6 @@
     @keyframes roads-divider-marquee {
         from { transform: translateX(0); }
         to   { transform: translateX(-50%); }
-    }
-
-    @media (max-width: 768px) {
-        .roads-divider {
-            height: 2rem;
-        }
-        .roads-divider-content img {
-            width: 16px;
-            height: 16px;
-        }
-        .roads-divider-text {
-            font-size: 1rem;
-        }
     }
 
     @media (prefers-reduced-motion: reduce) {

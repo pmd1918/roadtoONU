@@ -338,12 +338,13 @@ window.addEventListener('chapter-marker-clicked', (event) => {
   }
 
 .chapters-wrapper {
-  block-size: 80px;
+  block-size: clamp(60px, 10vw, 100px);
   position: relative;
   display: flex;
   justify-content: center;
   overflow: visible;
-  padding: 0 2rem;
+  clip-path: inset(-500px 0 0 0);
+  padding: 0 clamp(1rem, 3vw, 2rem);
   z-index: 50;
 }
 
@@ -351,58 +352,28 @@ window.addEventListener('chapter-marker-clicked', (event) => {
   display: none;
 }
 
-@media (min-width: 480px) {
-  .chapters-wrapper {
-    block-size: 90px;
-  }
-}
-
-@media (min-width: 768px) {
-  .chapters-wrapper {
-    block-size: 100px;
-  }
-}
-
 .chapters {
-  block-size: 160px;
+  block-size: clamp(140px, 18vw, 200px);
   display: flex;
   overflow: visible;
-  min-inline-size: calc(32px * 35);
-  padding: 4px;
+  min-inline-size: calc(clamp(28px, 4vw, 42px) * 35);
+  padding: clamp(4px, 0.8vw, 8px);
   align-content: center;
   justify-content: center;
   max-width: 100%;
 }
 
-@media (min-width: 480px) {
-  .chapters {
-    block-size: 180px;
-    min-inline-size: calc(36px * 35);
-    padding: 6px;
-    max-width: 100%;
-  }
-}
-
-@media (min-width: 768px) {
-  .chapters {
-    block-size: 200px;
-    min-inline-size: calc(42px * 35);
-    padding: 8px;
-    max-width: 100%;
-  }
-}
-
 .chapter-cards {
-  border-top-left-radius: 12px;
-  border-top-right-radius: 12px;
-  block-size: 160px;
+  border-top-left-radius: clamp(8px, 1.2vw, 12px);
+  border-top-right-radius: clamp(8px, 1.2vw, 12px);
+  block-size: clamp(140px, 18vw, 200px);
   color: #ffffff;
   display: flex;
   flex-basis: 100%;
-  min-width: 32px;
+  min-width: clamp(28px, 4vw, 42px);
   font-weight: 500;
   justify-content: left;
-  padding: 16px 0 8px 8px;
+  padding: clamp(12px, 1.5vw, 16px) 0 clamp(6px, 0.8vw, 8px) clamp(6px, 0.8vw, 8px);
   position: relative;
   transition: transform 0.3s ease;
   max-height: 100%;
