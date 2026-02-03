@@ -9,15 +9,15 @@ import * as THREE from 'three';
 
 extend({ MeshLineGeometry, MeshLineMaterial });
 
-// Badge file paths
+// Badge file paths - ordered 6-4-2-1-3-5-7 for V-shape arrangement
 const BADGE_PATHS = [
-  '/lanyard/card1.glb',
-  '/lanyard/card2.glb', 
-  '/lanyard/card3.glb',
+  '/lanyard/card6.glb',  // Far left
   '/lanyard/card4.glb',
+  '/lanyard/card2.glb',
+  '/lanyard/card1.glb',  // Center
+  '/lanyard/card3.glb',
   '/lanyard/card5.glb',
-  '/lanyard/card6.glb',
-  '/lanyard/card7.glb',
+  '/lanyard/card7.glb',  // Far right
 ];
 
 interface LanyardProps {
@@ -140,11 +140,20 @@ function Badge({ modelPath, index, total, maxSpeed = 50, minSpeed = 0, isMobile 
   const spacing = isMobile ? 3.5 : 3;
   const xOffset = (index - (total - 1) / 2) * spacing;
   
-  // Stagger vertical positions slightly for visual interest
-  const yOffset = Math.sin(index * 0.8) * 0.5;
+  // Distance from center (0 = center, 3 = far edge)
+  const distanceFromCenter = Math.abs(index - (total - 1) / 2);
   
-  // Slight z variation for depth
-  const zOffset = Math.cos(index * 0.6) * 0.3;
+  // Stagger vertical positions slightly for visual interest
+  const yOffset = Math.sin(index * 0.8) * 0.3;
+  
+  // V-shape: outer badges pushed back (positive Z), center forward
+  // Creates a V when viewed from above
+  const zOffset = distanceFromCenter * 1.2;
+  
+  // Fan angle: outer badges rotate outward on Y-axis
+  // Left side (index < center) rotates positive, right side rotates negative
+  const centerIndex = (total - 1) / 2;
+  const fanAngle = (index - centerIndex) * 0.15; // ~8.5 degrees per step
 
   useRopeJoint(fixed, j1, [[0, 0, 0], [0, 0, 0], 1]);
   useRopeJoint(j1, j2, [[0, 0, 0], [0, 0, 0], 1]);
@@ -192,7 +201,7 @@ function Badge({ modelPath, index, total, maxSpeed = 50, minSpeed = 0, isMobile 
   });
 
   return (
-    <group position={[xOffset, 4 + yOffset, zOffset]}>
+    <group position={[xOffset, 4 + yOffset, zOffset]} rotation={[0, fanAngle, 0]}>
       <RigidBody ref={fixed} {...segmentProps} type="fixed" />
       <RigidBody position={[0.5, 0, 0]} ref={j1} {...segmentProps}>
         <BallCollider args={[0.1]} />
