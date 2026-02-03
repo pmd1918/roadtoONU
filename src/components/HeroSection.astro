@@ -353,6 +353,17 @@ import Countdown from "./Countdown.astro"
             #ea7600 100%
         );
         position: relative;
+        z-index: 10;
+        isolation: isolate;
+    }
+
+    /* Solid backing to block video bleed-through */
+    .sponsor-unified-gradient::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: #f4f7ff;
+        z-index: -1;
     }
 
     /* Make dividers transparent so gradient shows through */
