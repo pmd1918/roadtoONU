@@ -477,8 +477,8 @@ window.addEventListener('chapter-marker-clicked', (event) => {
   }
 }
 
-/* Hover content (name and code shown on hover) */
-.chapter-cards-hover-content {
+/* Hover content (name and code shown on hover) - global for dynamically created elements */
+:global(.chapter-cards-hover-content) {
   opacity: 0;
   visibility: hidden;
   transition: opacity 0.3s ease, visibility 0.3s ease;
@@ -496,7 +496,7 @@ window.addEventListener('chapter-marker-clicked', (event) => {
 }
 
 @media (min-width: 480px) {
-  .chapter-cards-hover-content {
+  :global(.chapter-cards-hover-content) {
     top: 8px;
     left: 60px;
     right: 4px;
@@ -504,7 +504,7 @@ window.addEventListener('chapter-marker-clicked', (event) => {
 }
 
 @media (min-width: 768px) {
-  .chapter-cards-hover-content {
+  :global(.chapter-cards-hover-content) {
     top: 12px;
     left: 70px;
     right: 6px;
@@ -512,13 +512,13 @@ window.addEventListener('chapter-marker-clicked', (event) => {
 }
 
 @media (hover: hover) {
-  .chapter-cards:hover .chapter-cards-hover-content {
+  .chapter-cards:hover :global(.chapter-cards-hover-content) {
     opacity: 1;
     visibility: visible;
   }
 }
 
-.chapter-cards-hover-name {
+:global(.chapter-cards-hover-name) {
   font-size: 9px;
   line-height: 12px;
   letter-spacing: 0.05em;
@@ -529,7 +529,7 @@ window.addEventListener('chapter-marker-clicked', (event) => {
   padding-left: 8px;
 }
 
-.chapter-cards-hover-code {
+:global(.chapter-cards-hover-code) {
   font-size: 7px;
   line-height: 10px;
   word-wrap: break-word;
@@ -540,22 +540,22 @@ window.addEventListener('chapter-marker-clicked', (event) => {
 }
 
 @media (min-width: 480px) {
-  .chapter-cards-hover-name {
+  :global(.chapter-cards-hover-name) {
     font-size: 11px;
     line-height: 15px;
   }
-  .chapter-cards-hover-code {
+  :global(.chapter-cards-hover-code) {
     font-size: 9px;
     line-height: 13px;
   }
 }
 
 @media (min-width: 768px) {
-  .chapter-cards-hover-name {
+  :global(.chapter-cards-hover-name) {
     font-size: 14px;
     line-height: 20px;
   }
-  .chapter-cards-hover-code {
+  :global(.chapter-cards-hover-code) {
     font-size: 11px;
     line-height: 16px;
   }
