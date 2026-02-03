@@ -147,6 +147,9 @@
       // Hide highlight after word is deleted
       highlightBox?.classList.remove('visible');
       
+      // Change color for ellipses (light on dark bg)
+      wordEl.style.color = '#f4f7ff';
+      
       // Type ellipses
       for (let i = 1; i <= 3; i++) {
         if (!isTyping) return;
@@ -157,8 +160,15 @@
       // Pause on ellipses
       await new Promise(r => animationTimeout = window.setTimeout(r, 400));
       
-      // Clear ellipses
-      wordEl.textContent = '';
+      // Delete ellipses one by one
+      for (let i = 2; i >= 0; i--) {
+        if (!isTyping) return;
+        wordEl.textContent = '.'.repeat(i);
+        await new Promise(r => animationTimeout = window.setTimeout(r, 100));
+      }
+      
+      // Reset color for next word
+      wordEl.style.color = '#212322';
       
       // Small pause before next word
       await new Promise(r => animationTimeout = window.setTimeout(r, 200));
