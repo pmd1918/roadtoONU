@@ -50,8 +50,8 @@ import Countdown from "./Countdown.astro"
         </div>
       </div>
     </div>
-    <!-- Content Below Background -->
-    <div class="bg-[#f4f7ff]">
+    <!-- Content Below Background - Gradient flows from top marquee -->
+    <div class="sponsor-gradient-section">
         <Container>
             <div class="flex flex-nowrap justify-center items-center gap-2 sm:gap-3 lg:gap-6 xl:gap-10 py-4">
                 <!-- Left Logo -->
@@ -71,7 +71,7 @@ import Countdown from "./Countdown.astro"
                 </div>
                 <!-- Center Text -->
                 <div class="text-center px-2 flex-shrink min-w-0">
-                    <h1 class="font-bold uppercase leading-tight text-[#ea7600]" style="font-size: clamp(0.875rem, 2.5vw, 2.25rem);">Featured Sponsors</h1>
+                    <h1 class="font-bold uppercase leading-tight text-white" style="font-size: clamp(0.875rem, 2.5vw, 2.25rem);">Featured Sponsors</h1>
                     <a href="mailto:give@phimudelta.org?subject=Conclave%20Sponsorship" class="commit-sponsor-btn mt-2">
                         <span class="commit-btn-inner">Commit to Sponsor</span>
                     </a>
@@ -249,8 +249,8 @@ import Countdown from "./Countdown.astro"
     }
 
     @keyframes hero-divider-marquee {
-        from { transform: translateX(0); }
-        to   { transform: translateX(-50%); }
+        from { transform: translateX(-50%); }
+        to   { transform: translateX(0); }
     }
 
     /* Reduced motion */
@@ -299,34 +299,6 @@ import Countdown from "./Countdown.astro"
         position: relative;
         padding: 1px;
         text-decoration: none;
-        transition: all 0.18s ease-in-out;
-    }
-
-    .commit-sponsor-btn:after,
-    .commit-sponsor-btn:before {
-        content: "";
-        display: block;
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        border-radius: calc(100px + 1.5px);
-        background-size: 100% 100%;
-        background-position: 0px 0px;
-        background-image: conic-gradient(
-            from var(--commit-angle) at 50% 50%,
-            rgba(0,0,0,0) 0%,
-            rgba(0,0,0,0) 33%,
-            #f1d44b 50%,
-            rgba(0,0,0,0) 66%,
-            rgba(0,0,0,0) 100%
-        );
-        animation: commit-rotate 2s infinite linear;
-    }
-
-    .commit-sponsor-btn:before {
-        filter: blur(20px);
     }
 
     .commit-btn-inner {
@@ -342,24 +314,20 @@ import Countdown from "./Countdown.astro"
         text-transform: uppercase;
         letter-spacing: clamp(0.5px, 0.1vw, 2px);
         z-index: 1;
-        transition: all 0.18s ease;
-        background: rgba(255, 255, 255, 0.25);
+        background: rgba(0, 0, 0, 0.75);
         backdrop-filter: blur(40px);
-        backface-visibility: hidden;
+        -webkit-backdrop-filter: blur(40px);
         box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15), 0 4px 16px rgba(0, 0, 0, 0.1);
-        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-        color: #212322;
+        color: #ffffff;
     }
 
     .commit-sponsor-btn:hover .commit-btn-inner {
-        background: rgba(0, 0, 0, 0.5);
+        background: rgba(0, 0, 0, 0.9);
         box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25), 0 8px 24px rgba(0, 0, 0, 0.15);
-        transform: translateY(-1px);
-        color: #f5de6f;
     }
 
     .commit-sponsor-btn:active {
-        transform: scale(0.95);
+        transform: scale(0.98);
     }
 
     @media (max-width: 768px) {
@@ -368,5 +336,19 @@ import Countdown from "./Countdown.astro"
             font-size: 0.8125rem;
             letter-spacing: 0.5px;
         }
+    }
+
+    /* Sponsor section with flowing gradient from marquees */
+    .sponsor-gradient-section {
+        background: linear-gradient(
+            180deg,
+            #ea7600 0%,
+            #f1d44b 15%,
+            #f4f7ff 40%,
+            #f4f7ff 60%,
+            #f1d44b 85%,
+            #ea7600 100%
+        );
+        position: relative;
     }
 </style>

@@ -5,7 +5,9 @@ import ZoomableMap from '../components/ZoomableMap.astro';
 <head>
   <h1 class="map-header">Our Chapters & Alumni Associations</h1>
 <body>
-  <ZoomableMap />
+  <div class="map-section-wrapper">
+    <ZoomableMap />
+  </div>
   <!-- CONTENT AREA -->
   <h1 class="text-center">
     <span class="material-symbols-outlined icon-inline">arrow_downward</span>
@@ -633,5 +635,12 @@ window.addEventListener('chapter-marker-clicked', (event) => {
   'wght' 400,
   'GRAD' 0,
   'opsz' 24
+}
+
+.map-section-wrapper {
+  position: relative;
+  overflow: hidden;
+  max-height: 60vh;
+  width: 100%;
 }
 </style>

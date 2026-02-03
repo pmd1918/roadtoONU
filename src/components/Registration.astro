@@ -56,9 +56,6 @@ import Lanyard from "./Lanyard";
         <a href="#" class="cta-button primary">
           Preregister Now
         </a>
-        <p class="registration-note">
-          Early bird registration ends March 1, 2026
-        </p>
       </div>
     </div>
     
@@ -74,20 +71,20 @@ import Lanyard from "./Lanyard";
     width: 100%;
     min-height: 100vh;
     background: #212322;
-    padding: 4rem 2rem;
+    padding: 2rem 2rem 0 2rem;
     overflow: visible;
-    margin-top: -4rem;
+    margin-bottom: -4rem;
   }
   
   @media (min-width: 768px) {
     .registration-section {
-      margin-top: -5rem;
+      margin-bottom: -5rem;
     }
   }
   
   @media (max-width: 768px) {
     .registration-section {
-      padding: 3rem 1.5rem;
+      padding: 1.5rem 1.5rem 0 1.5rem;
     }
   }
   
@@ -150,48 +147,29 @@ import Lanyard from "./Lanyard";
   .registration-highlights {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    gap: 2rem;
-    margin-bottom: 3rem;
-  }
-  
-  @media (max-width: 768px) {
-    .registration-highlights {
-      grid-template-columns: 1fr;
-      gap: 1.5rem;
-      margin-bottom: 2rem;
-    }
+    gap: clamp(0.75rem, 2vw, 2rem);
+    margin-bottom: clamp(1.5rem, 3vw, 3rem);
   }
   
   .highlight-item {
     display: flex;
     flex-direction: column;
-    gap: 0.75rem;
+    gap: clamp(0.25rem, 0.75vw, 0.75rem);
   }
   
   .highlight-icon {
-    font-size: 2.5rem;
+    font-size: clamp(1.5rem, 2.5vw, 2.5rem);
   }
   
   .highlight-icon-img {
-    width: 32px;
-    height: 32px;
+    width: clamp(20px, 3vw, 32px);
+    height: clamp(20px, 3vw, 32px);
     object-fit: contain;
-  }
-  
-  @media (max-width: 768px) {
-    .highlight-icon {
-      font-size: 2rem;
-    }
-    
-    .highlight-icon-img {
-      width: 28px;
-      height: 28px;
-    }
   }
   
   .highlight-title {
     font-family: 'Inter', sans-serif;
-    font-size: clamp(1.125rem, 2vw, 1.25rem);
+    font-size: clamp(0.7rem, 1.5vw, 1.25rem);
     font-weight: 700;
     color: #f1d44b;
     margin: 0;
@@ -199,10 +177,10 @@ import Lanyard from "./Lanyard";
   
   .highlight-text {
     font-family: 'Inter', sans-serif;
-    font-size: clamp(0.875rem, 1.5vw, 1rem);
+    font-size: clamp(0.6rem, 1.2vw, 1rem);
     font-weight: 400;
     color: #c8ccd4;
-    line-height: 1.6;
+    line-height: 1.5;
     margin: 0;
   }
   

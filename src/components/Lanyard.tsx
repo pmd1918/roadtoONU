@@ -1,7 +1,7 @@
 'use client';
 import { useEffect, useRef, useState } from 'react';
-import { Canvas, useFrame } from '@react-three/fiber';
-import { useGLTF, Environment, Lightformer } from '@react-three/drei';
+import { Canvas, useFrame, useThree } from '@react-three/fiber';
+import { useGLTF, useTexture, Environment, Lightformer } from '@react-three/drei';
 import { BallCollider, CuboidCollider, Physics, RigidBody, useRopeJoint, useSphericalJoint } from '@react-three/rapier';
 import { MeshLineGeometry, MeshLineMaterial } from 'meshline';
 import { extend } from '@react-three/fiber';
@@ -9,15 +9,11 @@ import * as THREE from 'three';
 
 extend({ MeshLineGeometry, MeshLineMaterial });
 
-// Badge file paths - ordered 6-4-2-1-3-5-7 for V-shape arrangement
-const BADGE_PATHS = [
-  '/lanyard/card6.glb',  // Far left
-  '/lanyard/card4.glb',
-  '/lanyard/card2.glb',
-  '/lanyard/card1.glb',  // Center
-  '/lanyard/card3.glb',
-  '/lanyard/card5.glb',
-  '/lanyard/card7.glb',  // Far right
+// Badge file paths - only 1, 2, 3 with badge 1 in front (center)
+const BADGE_CONFIGS = [
+  { path: '/lanyard/card2.glb', position: -1 },  // Left
+  { path: '/lanyard/card1.glb', position: 0 },   // Center (front)
+  { path: '/lanyard/card3.glb', position: 1 },   // Right
 ];
 
 interface LanyardProps {
@@ -28,9 +24,9 @@ interface LanyardProps {
 }
 
 export default function Lanyard({
-  position = [0, 0, 50],
+  position = [0, 0, 30],
   gravity = [0, -40, 0],
-  fov = 25,
+  fov = 20,
   transparent = true
 }: LanyardProps) {
   const [isMobile, setIsMobile] = useState(() =>
@@ -43,9 +39,6 @@ export default function Lanyard({
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
-  // Show fewer badges on mobile for performance
-  const badgeCount = isMobile ? 4 : 7;
-
   return (
     <div className="relative z-0 w-full h-full">
       <Canvas
@@ -56,12 +49,13 @@ export default function Lanyard({
       >
         <ambientLight intensity={Math.PI} />
         <Physics gravity={gravity} timeStep={isMobile ? 1 / 30 : 1 / 60}>
-          {BADGE_PATHS.slice(0, badgeCount).map((path, index) => (
+          {BADGE_CONFIGS.map((config, index) => (
             <Badge 
-              key={path} 
-              modelPath={path} 
-              index={index} 
-              total={badgeCount}
+              key={config.path} 
+              modelPath={config.path} 
+              positionIndex={config.position}
+              index={index}
+              total={BADGE_CONFIGS.length}
               isMobile={isMobile} 
             />
           ))}
@@ -103,6 +97,7 @@ export default function Lanyard({
 
 interface BadgeProps {
   modelPath: string;
+  positionIndex: number; // -1 = left, 0 = center, 1 = right
   index: number;
   total: number;
   maxSpeed?: number;
@@ -110,7 +105,8 @@ interface BadgeProps {
   isMobile?: boolean;
 }
 
-function Badge({ modelPath, index, total, maxSpeed = 50, minSpeed = 0, isMobile = false }: BadgeProps) {
+function Badge({ modelPath, positionIndex, index, total, maxSpeed = 50, minSpeed = 10, isMobile = false }: BadgeProps) {
+  const band = useRef<THREE.Mesh>(null);
   const fixed = useRef<any>(null);
   const j1 = useRef<any>(null);
   const j2 = useRef<any>(null);
@@ -126,41 +122,46 @@ function Badge({ modelPath, index, total, maxSpeed = 50, minSpeed = 0, isMobile 
     type: 'dynamic' as const,
     canSleep: true,
     colliders: false as const,
-    angularDamping: 4,
-    linearDamping: 4
+    angularDamping: 2,
+    linearDamping: 2
   };
 
-  // Load this badge's model
+  // Load badge model and lanyard texture
   const { nodes, materials } = useGLTF(modelPath) as any;
+  const texture = useTexture('/lanyard/lanyard.png');
+  texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
+
+  const { width, height } = useThree((state) => state.size);
+  const [curve] = useState(() => {
+    const c = new THREE.CatmullRomCurve3([
+      new THREE.Vector3(), 
+      new THREE.Vector3(), 
+      new THREE.Vector3(), 
+      new THREE.Vector3()
+    ]);
+    c.curveType = 'chordal';
+    return c;
+  });
 
   const [dragged, drag] = useState<THREE.Vector3 | false>(false);
   const [hovered, hover] = useState(false);
 
-  // Calculate horizontal offset to spread badges across
-  const spacing = isMobile ? 3.5 : 3;
-  const xOffset = (index - (total - 1) / 2) * spacing;
+  // Horizontal spacing between badges
+  const spacing = isMobile ? 4 : 5;
+  const xOffset = positionIndex * spacing;
   
-  // Distance from center (0 = center, 3 = far edge)
-  const distanceFromCenter = Math.abs(index - (total - 1) / 2);
+  // V-shape: center badge (positionIndex=0) is forward, side badges are back
+  const zOffset = Math.abs(positionIndex) * 2;
   
-  // Stagger vertical positions slightly for visual interest
-  const yOffset = Math.sin(index * 0.8) * 0.3;
-  
-  // V-shape: outer badges pushed back (positive Z), center forward
-  // Creates a V when viewed from above
-  const zOffset = distanceFromCenter * 1.2;
-  
-  // Fan angle: outer badges rotate outward on Y-axis
-  // Left side (index < center) rotates positive, right side rotates negative
-  const centerIndex = (total - 1) / 2;
-  const fanAngle = (index - centerIndex) * 0.15; // ~8.5 degrees per step
+  // Fan angle: side badges angle outward
+  const fanAngle = positionIndex * 0.2;
 
   useRopeJoint(fixed, j1, [[0, 0, 0], [0, 0, 0], 1]);
   useRopeJoint(j1, j2, [[0, 0, 0], [0, 0, 0], 1]);
   useRopeJoint(j2, j3, [[0, 0, 0], [0, 0, 0], 1]);
   useSphericalJoint(j3, card, [
     [0, 0, 0],
-    [0, 1.5, 0]
+    [0, 1.45, 0]
   ]);
 
   useEffect(() => {
@@ -183,6 +184,7 @@ function Badge({ modelPath, index, total, maxSpeed = 50, minSpeed = 0, isMobile 
       });
     }
     if (fixed.current) {
+      // Update lerped positions for smooth band
       [j1, j2].forEach(ref => {
         if (!ref.current.lerped) {
           ref.current.lerped = new THREE.Vector3().copy(ref.current.translation());
@@ -193,7 +195,19 @@ function Badge({ modelPath, index, total, maxSpeed = 50, minSpeed = 0, isMobile 
           delta * (minSpeed + clampedDistance * (maxSpeed - minSpeed))
         );
       });
+
+      // Update curve points for the lanyard band
+      curve.points[0].copy(j3.current.translation());
+      curve.points[1].copy(j2.current.lerped);
+      curve.points[2].copy(j1.current.lerped);
+      curve.points[3].copy(fixed.current.translation());
       
+      // Update the band mesh geometry
+      if (band.current) {
+        (band.current.geometry as any).setPoints(curve.getPoints(isMobile ? 16 : 32));
+      }
+      
+      // Dampen card rotation
       ang.copy(card.current.angvel());
       rot.copy(card.current.rotation());
       card.current.setAngvel({ x: ang.x, y: ang.y - rot.y * 0.25, z: ang.z });
@@ -201,48 +215,66 @@ function Badge({ modelPath, index, total, maxSpeed = 50, minSpeed = 0, isMobile 
   });
 
   return (
-    <group position={[xOffset, 4 + yOffset, zOffset]} rotation={[0, fanAngle, 0]}>
-      <RigidBody ref={fixed} {...segmentProps} type="fixed" />
-      <RigidBody position={[0.5, 0, 0]} ref={j1} {...segmentProps}>
-        <BallCollider args={[0.1]} />
-      </RigidBody>
-      <RigidBody position={[1, 0, 0]} ref={j2} {...segmentProps}>
-        <BallCollider args={[0.1]} />
-      </RigidBody>
-      <RigidBody position={[1.5, 0, 0]} ref={j3} {...segmentProps}>
-        <BallCollider args={[0.1]} />
-      </RigidBody>
-      <RigidBody
-        position={[2, 0, 0]}
-        ref={card}
-        {...segmentProps}
-        type={dragged ? 'kinematicPosition' : 'dynamic'}
-      >
-        <CuboidCollider args={[0.8, 1.125, 0.01]} />
-        <group
-          scale={2.25}
-          position={[0, -1.2, -0.05]}
-          rotation={[Math.PI / 2, 0, 0]}
-          onPointerOver={() => hover(true)}
-          onPointerOut={() => hover(false)}
-          onPointerUp={(e: any) => {
-            e.target.releasePointerCapture(e.pointerId);
-            drag(false);
-          }}
-          onPointerDown={(e: any) => {
-            e.target.setPointerCapture(e.pointerId);
-            drag(new THREE.Vector3().copy(e.point).sub(vec.copy(card.current.translation())));
-          }}
+    <>
+      <group position={[xOffset, 4, zOffset]} rotation={[0, fanAngle, 0]}>
+        <RigidBody ref={fixed} {...segmentProps} type="fixed" />
+        <RigidBody position={[0.5, 0, 0]} ref={j1} {...segmentProps}>
+          <BallCollider args={[0.1]} />
+        </RigidBody>
+        <RigidBody position={[1, 0, 0]} ref={j2} {...segmentProps}>
+          <BallCollider args={[0.1]} />
+        </RigidBody>
+        <RigidBody position={[1.5, 0, 0]} ref={j3} {...segmentProps}>
+          <BallCollider args={[0.1]} />
+        </RigidBody>
+        <RigidBody
+          position={[2, 0, 0]}
+          ref={card}
+          {...segmentProps}
+          type={dragged ? 'kinematicPosition' : 'dynamic'}
         >
-          {/* Badge card - render with all embedded materials */}
-          <primitive object={nodes.card.clone()} />
-          <mesh geometry={nodes.clip.geometry} material={materials.metal} material-roughness={0.3} />
-          <mesh geometry={nodes.clamp.geometry} material={materials.metal} />
-        </group>
-      </RigidBody>
-    </group>
+          <CuboidCollider args={[0.8, 1.125, 0.01]} />
+          <group
+            scale={1.5}
+            position={[0, -1.2, -0.05]}
+            rotation={[Math.PI / 2, 0, 0]}
+            onPointerOver={() => hover(true)}
+            onPointerOut={() => hover(false)}
+            onPointerUp={(e: any) => {
+              e.target.releasePointerCapture(e.pointerId);
+              drag(false);
+            }}
+            onPointerDown={(e: any) => {
+              e.target.setPointerCapture(e.pointerId);
+              drag(new THREE.Vector3().copy(e.point).sub(vec.copy(card.current.translation())));
+            }}
+          >
+            {/* Badge card with embedded materials */}
+            <primitive object={nodes.card.clone()} />
+            <mesh geometry={nodes.clip.geometry} material={materials.metal} material-roughness={0.3} />
+            <mesh geometry={nodes.clamp.geometry} material={materials.metal} />
+          </group>
+        </RigidBody>
+      </group>
+      
+      {/* Lanyard band/strap */}
+      <mesh ref={band}>
+        {/* @ts-ignore */}
+        <meshLineGeometry />
+        {/* @ts-ignore */}
+        <meshLineMaterial
+          color="white"
+          depthTest={false}
+          resolution={isMobile ? [1000, 2000] : [width, height]}
+          useMap
+          map={texture}
+          repeat={[-4, 1]}
+          lineWidth={1}
+        />
+      </mesh>
+    </>
   );
 }
 
-// Preload all badge models
-BADGE_PATHS.forEach(path => useGLTF.preload(path));
+// Preload badge models
+BADGE_CONFIGS.forEach(config => useGLTF.preload(config.path));
