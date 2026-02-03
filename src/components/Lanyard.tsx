@@ -1,12 +1,24 @@
 'use client';
 import { useEffect, useRef, useState } from 'react';
-import { Canvas, extend, useFrame } from '@react-three/fiber';
-import { useGLTF, useTexture, Environment, Lightformer } from '@react-three/drei';
+import { Canvas, useFrame } from '@react-three/fiber';
+import { useGLTF, Environment, Lightformer } from '@react-three/drei';
 import { BallCollider, CuboidCollider, Physics, RigidBody, useRopeJoint, useSphericalJoint } from '@react-three/rapier';
 import { MeshLineGeometry, MeshLineMaterial } from 'meshline';
+import { extend } from '@react-three/fiber';
 import * as THREE from 'three';
 
 extend({ MeshLineGeometry, MeshLineMaterial });
+
+// Badge file paths
+const BADGE_PATHS = [
+  '/lanyard/card1.glb',
+  '/lanyard/card2.glb', 
+  '/lanyard/card3.glb',
+  '/lanyard/card4.glb',
+  '/lanyard/card5.glb',
+  '/lanyard/card6.glb',
+  '/lanyard/card7.glb',
+];
 
 interface LanyardProps {
   position?: [number, number, number];
@@ -16,9 +28,9 @@ interface LanyardProps {
 }
 
 export default function Lanyard({
-  position = [0, 0, 30],
+  position = [0, 0, 50],
   gravity = [0, -40, 0],
-  fov = 20,
+  fov = 25,
   transparent = true
 }: LanyardProps) {
   const [isMobile, setIsMobile] = useState(() =>
@@ -31,8 +43,11 @@ export default function Lanyard({
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
+  // Show fewer badges on mobile for performance
+  const badgeCount = isMobile ? 4 : 7;
+
   return (
-    <div className="relative z-0 w-full h-screen flex justify-center items-center">
+    <div className="relative z-0 w-full h-full">
       <Canvas
         camera={{ position: position, fov: fov }}
         dpr={[1, isMobile ? 1.5 : 2]}
@@ -41,7 +56,15 @@ export default function Lanyard({
       >
         <ambientLight intensity={Math.PI} />
         <Physics gravity={gravity} timeStep={isMobile ? 1 / 30 : 1 / 60}>
-          <Band isMobile={isMobile} />
+          {BADGE_PATHS.slice(0, badgeCount).map((path, index) => (
+            <Badge 
+              key={path} 
+              modelPath={path} 
+              index={index} 
+              total={badgeCount}
+              isMobile={isMobile} 
+            />
+          ))}
         </Physics>
         <Environment blur={0.75}>
           <Lightformer
@@ -78,14 +101,16 @@ export default function Lanyard({
   );
 }
 
-interface BandProps {
+interface BadgeProps {
+  modelPath: string;
+  index: number;
+  total: number;
   maxSpeed?: number;
   minSpeed?: number;
   isMobile?: boolean;
 }
 
-function Band({ maxSpeed = 50, minSpeed = 0, isMobile = false }: BandProps) {
-  const band = useRef<THREE.Mesh>(null);
+function Badge({ modelPath, index, total, maxSpeed = 50, minSpeed = 0, isMobile = false }: BadgeProps) {
   const fixed = useRef<any>(null);
   const j1 = useRef<any>(null);
   const j2 = useRef<any>(null);
@@ -105,21 +130,21 @@ function Band({ maxSpeed = 50, minSpeed = 0, isMobile = false }: BandProps) {
     linearDamping: 4
   };
 
-  // Load assets from public folder
-  const { nodes, materials } = useGLTF('/lanyard/card.glb') as any;
-  const texture = useTexture('/lanyard/lanyard.png');
-
-  const [curve] = useState(
-    () => new THREE.CatmullRomCurve3([
-      new THREE.Vector3(),
-      new THREE.Vector3(),
-      new THREE.Vector3(),
-      new THREE.Vector3()
-    ])
-  );
+  // Load this badge's model
+  const { nodes, materials } = useGLTF(modelPath) as any;
 
   const [dragged, drag] = useState<THREE.Vector3 | false>(false);
   const [hovered, hover] = useState(false);
+
+  // Calculate horizontal offset to spread badges across
+  const spacing = isMobile ? 3.5 : 3;
+  const xOffset = (index - (total - 1) / 2) * spacing;
+  
+  // Stagger vertical positions slightly for visual interest
+  const yOffset = Math.sin(index * 0.8) * 0.5;
+  
+  // Slight z variation for depth
+  const zOffset = Math.cos(index * 0.6) * 0.3;
 
   useRopeJoint(fixed, j1, [[0, 0, 0], [0, 0, 0], 1]);
   useRopeJoint(j1, j2, [[0, 0, 0], [0, 0, 0], 1]);
@@ -159,86 +184,55 @@ function Band({ maxSpeed = 50, minSpeed = 0, isMobile = false }: BandProps) {
           delta * (minSpeed + clampedDistance * (maxSpeed - minSpeed))
         );
       });
-      curve.points[0].copy(j3.current.translation());
-      curve.points[1].copy(j2.current.lerped);
-      curve.points[2].copy(j1.current.lerped);
-      curve.points[3].copy(fixed.current.translation());
-      (band.current as any)?.geometry.setPoints(curve.getPoints(isMobile ? 16 : 32));
+      
       ang.copy(card.current.angvel());
       rot.copy(card.current.rotation());
       card.current.setAngvel({ x: ang.x, y: ang.y - rot.y * 0.25, z: ang.z });
     }
   });
 
-  curve.curveType = 'chordal';
-  texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
-
   return (
-    <>
-      <group position={[0, 4, 0]}>
-        <RigidBody ref={fixed} {...segmentProps} type="fixed" />
-        <RigidBody position={[0.5, 0, 0]} ref={j1} {...segmentProps}>
-          <BallCollider args={[0.1]} />
-        </RigidBody>
-        <RigidBody position={[1, 0, 0]} ref={j2} {...segmentProps}>
-          <BallCollider args={[0.1]} />
-        </RigidBody>
-        <RigidBody position={[1.5, 0, 0]} ref={j3} {...segmentProps}>
-          <BallCollider args={[0.1]} />
-        </RigidBody>
-        <RigidBody
-          position={[2, 0, 0]}
-          ref={card}
-          {...segmentProps}
-          type={dragged ? 'kinematicPosition' : 'dynamic'}
+    <group position={[xOffset, 4 + yOffset, zOffset]}>
+      <RigidBody ref={fixed} {...segmentProps} type="fixed" />
+      <RigidBody position={[0.5, 0, 0]} ref={j1} {...segmentProps}>
+        <BallCollider args={[0.1]} />
+      </RigidBody>
+      <RigidBody position={[1, 0, 0]} ref={j2} {...segmentProps}>
+        <BallCollider args={[0.1]} />
+      </RigidBody>
+      <RigidBody position={[1.5, 0, 0]} ref={j3} {...segmentProps}>
+        <BallCollider args={[0.1]} />
+      </RigidBody>
+      <RigidBody
+        position={[2, 0, 0]}
+        ref={card}
+        {...segmentProps}
+        type={dragged ? 'kinematicPosition' : 'dynamic'}
+      >
+        <CuboidCollider args={[0.8, 1.125, 0.01]} />
+        <group
+          scale={2.25}
+          position={[0, -1.2, -0.05]}
+          onPointerOver={() => hover(true)}
+          onPointerOut={() => hover(false)}
+          onPointerUp={(e: any) => {
+            e.target.releasePointerCapture(e.pointerId);
+            drag(false);
+          }}
+          onPointerDown={(e: any) => {
+            e.target.setPointerCapture(e.pointerId);
+            drag(new THREE.Vector3().copy(e.point).sub(vec.copy(card.current.translation())));
+          }}
         >
-          <CuboidCollider args={[0.8, 1.125, 0.01]} />
-          <group
-            scale={2.25}
-            position={[0, -1.2, -0.05]}
-            onPointerOver={() => hover(true)}
-            onPointerOut={() => hover(false)}
-            onPointerUp={(e: any) => {
-              e.target.releasePointerCapture(e.pointerId);
-              drag(false);
-            }}
-            onPointerDown={(e: any) => {
-              e.target.setPointerCapture(e.pointerId);
-              drag(new THREE.Vector3().copy(e.point).sub(vec.copy(card.current.translation())));
-            }}
-          >
-            <mesh geometry={nodes.card.geometry}>
-              <meshPhysicalMaterial
-                map={materials.base.map}
-                map-anisotropy={16}
-                clearcoat={isMobile ? 0 : 1}
-                clearcoatRoughness={0.15}
-                roughness={0.9}
-                metalness={0.8}
-              />
-            </mesh>
-            <mesh geometry={nodes.clip.geometry} material={materials.metal} material-roughness={0.3} />
-            <mesh geometry={nodes.clamp.geometry} material={materials.metal} />
-          </group>
-        </RigidBody>
-      </group>
-      <mesh ref={band}>
-        {/* @ts-ignore */}
-        <meshLineGeometry />
-        {/* @ts-ignore */}
-        <meshLineMaterial
-          color="white"
-          depthTest={false}
-          resolution={isMobile ? [1000, 2000] : [1000, 1000]}
-          useMap
-          map={texture}
-          repeat={[-4, 1]}
-          lineWidth={1}
-        />
-      </mesh>
-    </>
+          {/* Badge card - render with all embedded materials */}
+          <primitive object={nodes.card.clone()} />
+          <mesh geometry={nodes.clip.geometry} material={materials.metal} material-roughness={0.3} />
+          <mesh geometry={nodes.clamp.geometry} material={materials.metal} />
+        </group>
+      </RigidBody>
+    </group>
   );
 }
 
-// Preload the GLB model
-useGLTF.preload('/lanyard/card.glb');
+// Preload all badge models
+BADGE_PATHS.forEach(path => useGLTF.preload(path));

@@ -62,11 +62,9 @@ import Lanyard from "./Lanyard";
       </div>
     </div>
     
-    <!-- Lanyard component requires /lanyard/card.glb and /lanyard/lanyard.png assets
     <div class="lanyard-wrapper">
       <Lanyard client:only="react" />
     </div>
-    -->
   </div>
 </section>
 
@@ -75,9 +73,16 @@ import Lanyard from "./Lanyard";
     position: relative;
     width: 100%;
     min-height: 100vh;
-    background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%);
+    background: #212322;
     padding: 4rem 2rem;
     overflow: visible;
+    margin-top: -4rem;
+  }
+  
+  @media (min-width: 768px) {
+    .registration-section {
+      margin-top: -5rem;
+    }
   }
   
   @media (max-width: 768px) {
@@ -216,9 +221,9 @@ import Lanyard from "./Lanyard";
   
   .cta-button {
     display: inline-block;
-    padding: 1.25rem 3rem;
+    padding: 0.75rem 1.75rem;
     font-family: 'Inter', sans-serif;
-    font-size: 1.25rem;
+    font-size: 0.9rem;
     font-weight: 700;
     text-decoration: none;
     text-transform: uppercase;
@@ -231,8 +236,8 @@ import Lanyard from "./Lanyard";
   
   @media (max-width: 768px) {
     .cta-button {
-      padding: 1rem 2rem;
-      font-size: 1.125rem;
+      padding: 0.6rem 1.5rem;
+      font-size: 0.8rem;
     }
   }
   

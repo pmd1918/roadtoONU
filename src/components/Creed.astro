@@ -93,7 +93,7 @@
       display: inline-block;
       width: 3px;
       height: clamp(1.5rem, 5vw, 4.5rem);
-      background-color: #ea7600;
+      background-color: #f4f7ff;
       margin-left: 2px;
       animation: blink-cursor 0.7s step-end infinite;
     }
@@ -128,40 +128,23 @@
       isTyping = true;
       wordEl.style.color = '#212322';
       
-      // Type each character of the word
-      for (let i = 0; i <= word.length; i++) {
+      const fullText = word + '...';
+      
+      // Type the full string (word + ellipsis) as one continuous sequence
+      for (let i = 0; i <= fullText.length; i++) {
         if (!isTyping) return;
-        wordEl.textContent = word.slice(0, i);
+        wordEl.textContent = fullText.slice(0, i);
         updateHighlightWidth();
         await new Promise(r => animationTimeout = window.setTimeout(r, 80));
       }
       
-      // Pause on complete word
-      await new Promise(r => animationTimeout = window.setTimeout(r, 1000));
+      // Timer/pause before deleting
+      await new Promise(r => animationTimeout = window.setTimeout(r, 1500));
       
-      // Type ellipsis after the word (word + ...)
-      for (let i = 1; i <= 3; i++) {
+      // Delete the full string
+      for (let i = fullText.length; i >= 0; i--) {
         if (!isTyping) return;
-        wordEl.textContent = word + '.'.repeat(i);
-        updateHighlightWidth();
-        await new Promise(r => animationTimeout = window.setTimeout(r, 150));
-      }
-      
-      // Pause with ellipsis
-      await new Promise(r => animationTimeout = window.setTimeout(r, 500));
-      
-      // Delete ellipsis first
-      for (let i = 2; i >= 0; i--) {
-        if (!isTyping) return;
-        wordEl.textContent = word + '.'.repeat(i);
-        updateHighlightWidth();
-        await new Promise(r => animationTimeout = window.setTimeout(r, 80));
-      }
-      
-      // Delete the word
-      for (let i = word.length; i >= 0; i--) {
-        if (!isTyping) return;
-        wordEl.textContent = word.slice(0, i);
+        wordEl.textContent = fullText.slice(0, i);
         updateHighlightWidth();
         await new Promise(r => animationTimeout = window.setTimeout(r, 50));
       }
