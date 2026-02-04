@@ -4,6 +4,15 @@ import Container from '../components/Container.astro';
 ---
 
 <Layout title="Sponsor the 62nd National Conclave - Phi Mu Delta">
+  <!-- Sticky Header -->
+  <header class="sponsor-sticky-header">
+    <a href="/" class="header-btn home-btn">Home</a>
+    <a href="/" class="header-logo">
+      <img src="/PhiMuDeltaLogo-MultiColor.png" alt="Phi Mu Delta" />
+    </a>
+    <a href="/#registration" class="header-btn register-btn">Register</a>
+  </header>
+
   <main class="sponsorship-page">
     
     <!-- Hero -->
@@ -125,17 +134,6 @@ import Container from '../components/Container.astro';
             </div>
           </div>
 
-          <div class="tier tier-gold">
-            <div class="tier-header">
-              <span class="tier-label">Brotherhood Sponsor</span>
-              <span class="tier-amount">$2,500</span>
-            </div>
-            <div class="tier-body">
-              <p>Logo on signage and materials, program ad, banquet recognition, 2 registrations, social shoutouts.</p>
-              <a href="mailto:give@phimudelta.org?subject=Brotherhood%20Sponsor%20Inquiry" class="tier-link">I'm in →</a>
-            </div>
-          </div>
-
           <div class="tier tier-centennial sold-out">
             <div class="tier-header">
               <span class="tier-label">Centennial Partner</span>
@@ -159,6 +157,17 @@ import Container from '../components/Container.astro';
                 <span class="claimed-check">✓</span>
                 <span class="claimed-text">Claimed by The Nu Beta Alumni Association</span>
               </div>
+            </div>
+          </div>
+
+          <div class="tier tier-gold">
+            <div class="tier-header">
+              <span class="tier-label">Brotherhood Sponsor</span>
+              <span class="tier-amount">$2,500</span>
+            </div>
+            <div class="tier-body">
+              <p>Logo on signage and materials, program ad, banquet recognition, 2 registrations, social shoutouts.</p>
+              <a href="mailto:give@phimudelta.org?subject=Brotherhood%20Sponsor%20Inquiry" class="tier-link">I'm in →</a>
             </div>
           </div>
 
@@ -212,16 +221,16 @@ import Container from '../components/Container.astro';
           <div class="event-item">
             <span class="event-name">Leadership Workshops <span class="event-x2">x2</span></span>
             <span class="event-desc">Undergrad development sessions.</span>
-            <span class="event-price">$1,500</span>
+            <span class="event-price">$1,000</span>
           </div>
           <div class="event-item">
             <span class="event-name">Brotherhood Night</span>
-            <span class="event-desc">Wednesday welcome reception.</span>
+            <span class="event-desc">Wednesday's brotherhood time.</span>
             <span class="event-price">$500</span>
           </div>
           <div class="event-item">
             <span class="event-name">Thursday Pool Party</span>
-            <span class="event-desc">Sponsor Thursday's brotherhood time.</span>
+            <span class="event-desc">Thursday's brotherhood time.</span>
             <span class="event-price">$500</span>
           </div>
         </div>
@@ -245,7 +254,7 @@ import Container from '../components/Container.astro';
           </div>
           <div class="perk-box">
             <span class="perk-name">Swag Bags</span>
-            <span class="perk-desc">Undergrad Welcome Kits</span>
+            <span class="perk-desc">Delegate Kits</span>
           </div>
           <div class="perk-box">
             <span class="perk-name">Photobooth</span>
@@ -264,8 +273,8 @@ import Container from '../components/Container.astro';
             <span class="perk-desc">Workshop Materials</span>
           </div>
           <div class="perk-box">
-            <span class="perk-name">Ritual Items and Props</span>
-            <span class="perk-desc">Sacred Ceremonies</span>
+            <span class="perk-name">Ceremonies</span>
+            <span class="perk-desc">Ritual items</span>
           </div>
           <div class="perk-box">
             <span class="perk-name">AV/Tech</span>
@@ -281,7 +290,7 @@ import Container from '../components/Container.astro';
     <section class="inkind-section">
       <Container>
         <div class="inkind-box">
-          <h3>Not writing a check?</h3>
+          <h3>Can't Write A Check?</h3>
           <p>
             We also accept in-kind support—raffle items, merchandise, services, whatever you've got. 
             If it helps make the weekend better, we want to hear about it.
@@ -297,6 +306,7 @@ import Container from '../components/Container.astro';
         <div class="cta-inner">
           <h2>Questions? Ideas?</h2>
           <p>We're flexible. Let's figure out what works.</p>
+          <p class="contact-info">Contact: Alex Fries — give@phimudelta.org</p>
           <a href="mailto:give@phimudelta.org?subject=Sponsorship%20Inquiry" class="cta-button">Get in touch</a>
           <a href="/" class="back-link">← Back to Conclave site</a>
         </div>
@@ -307,8 +317,65 @@ import Container from '../components/Container.astro';
 </Layout>
 
 <style>
+  /* Sticky Header */
+  .sponsor-sticky-header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.75rem 1.5rem;
+    background: rgba(33, 35, 34, 0.95);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .header-logo {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+
+  .header-logo img {
+    height: 40px;
+    width: auto;
+  }
+
+  .header-btn {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.875rem;
+    font-weight: 600;
+    text-decoration: none;
+    padding: 0.5rem 1.25rem;
+    border-radius: 50px;
+    transition: all 0.2s ease;
+  }
+
+  .home-btn {
+    color: #f4f7ff;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+  }
+
+  .home-btn:hover {
+    border-color: #ea7600;
+    color: #ea7600;
+  }
+
+  .register-btn {
+    background: linear-gradient(135deg, #ea7600, #f1d44b);
+    color: #212322;
+  }
+
+  .register-btn:hover {
+    box-shadow: 0 4px 12px rgba(234, 118, 0, 0.4);
+  }
+
   .sponsorship-page {
     background: #f4f7ff;
+    padding-top: 60px; /* Account for sticky header */
   }
 
   /* Featured Sponsors - matching main page */
@@ -357,6 +424,15 @@ import Container from '../components/Container.astro';
     to { transform: translateX(0); }
   }
 
+  @keyframes marquee-scroll-reverse {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
+
+  .hero-divider-bottom .hero-divider-track {
+    animation-name: marquee-scroll-reverse;
+  }
+
   .sponsor-content-section {
     background: transparent;
     position: relative;
@@ -365,7 +441,7 @@ import Container from '../components/Container.astro';
   /* Hero */
   .sponsor-hero {
     background: #212322;
-    padding: 8rem 2rem 5rem;
+    padding: 5rem 2rem;
     text-align: center;
   }
 
@@ -683,8 +759,9 @@ import Container from '../components/Container.astro';
   }
 
   .event-x2 {
-    font-family: 'Have Heart', cursive;
-    font-size: 1.125rem;
+    font-family: 'Inter', sans-serif;
+    font-size: inherit;
+    font-weight: 700;
     color: #f1d44b;
     margin-left: 0.5rem;
   }
@@ -863,7 +940,12 @@ import Container from '../components/Container.astro';
     font-family: 'Inter', sans-serif;
     font-size: 1.125rem;
     color: #212322;
-    margin: 0 0 2rem;
+    margin: 0 0 1rem;
+  }
+
+  .contact-info {
+    font-weight: 600;
+    margin-bottom: 1.5rem !important;
   }
 
   .cta-button {
