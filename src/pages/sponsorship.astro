@@ -17,9 +17,9 @@ import Container from '../components/Container.astro';
         <span class="btn-inner">Home</span>
       </a>
       
-      <!-- Register Button (right of logo) -->
-      <a class="sponsor-nav-btn register-btn" href="#" id="sponsor-register-btn">
-        <span class="btn-inner">Preregister</span>
+      <!-- Sponsor Button (right of logo) -->
+      <a class="sponsor-nav-btn register-btn" href="mailto:give@phimudelta.org?subject=Sponsorship%20Inquiry">
+        <span class="btn-inner">Sponsor</span>
       </a>
     </div>
   </header>
@@ -1095,14 +1095,3 @@ import Container from '../components/Container.astro';
     opacity: 1;
   }
 </style>
-
-<script>
-  // Preregister button opens modal
-  const registerBtn = document.getElementById('sponsor-register-btn');
-  if (registerBtn) {
-    registerBtn.addEventListener('click', (e) => {
-      e.preventDefault();
-      window.dispatchEvent(new CustomEvent('open-preregister-modal'));
-    });
-  }
-</script>
