@@ -102,13 +102,47 @@ const { class: className = '' } = Astro.props;
   </Container>
 </section>
 
-<!-- Mapbox GL JS -->
-<script src='https://api.mapbox.com/mapbox-gl-js/v3.0.1/mapbox-gl.js' is:inline></script>
-<link href='https://api.mapbox.com/mapbox-gl-js/v3.0.1/mapbox-gl.css' rel='stylesheet' />
-
-<!-- Inject Mapbox Token -->
+<!-- Mapbox Token (script loads lazily) -->
 <script is:inline define:vars={{ mapboxToken: import.meta.env.PUBLIC_MAPBOX_TOKEN }}>
   window.MAPBOX_TOKEN = mapboxToken;
+  window.MAPBOX_LOADED = false;
+  
+  // Lazy load Mapbox when section becomes visible
+  function loadMapbox() {
+    if (window.MAPBOX_LOADED) return;
+    window.MAPBOX_LOADED = true;
+    
+    // Load CSS
+    const link = document.createElement('link');
+    link.href = 'https://api.mapbox.com/mapbox-gl-js/v3.0.1/mapbox-gl.css';
+    link.rel = 'stylesheet';
+    document.head.appendChild(link);
+    
+    // Load JS
+    const script = document.createElement('script');
+    script.src = 'https://api.mapbox.com/mapbox-gl-js/v3.0.1/mapbox-gl.js';
+    script.onload = () => {
+      if (typeof initMap === 'function') initMap();
+    };
+    document.head.appendChild(script);
+  }
+  
+  // Use IntersectionObserver to lazy load
+  const mapSection = document.getElementById('travel');
+  if (mapSection && 'IntersectionObserver' in window) {
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          loadMapbox();
+          observer.disconnect();
+        }
+      });
+    }, { rootMargin: '200px' }); // Load 200px before visible
+    observer.observe(mapSection);
+  } else {
+    // Fallback: load immediately
+    loadMapbox();
+  }
 </script>
 
 <style>
