@@ -5,14 +5,16 @@ const testimonials = [
     name: "Alex Fries",
     title: "National Council member, former chapter president Nu Beta",
     quote: "Joining Phi Mu Delta is about more than joining a chapter. It is about joining a brotherhood of future friends, colleagues and partners in your pursuit of the common good, no matter the arena you choose to enter. Conclave is where that ideal becomes real.",
-    color: "#ea7600"
+    color: "#ea7600",
+    bgImage: null
   },
   {
     image: "/images/avatars/1714137500084.jpeg",
     name: "Michael Doran",
     title: "National Council member, former chapter president Mu Alpha",
     quote: "We spend most of our lives inside our bubbles, in our own built communities. Conclaves are the chance to pop those bubbles and share ideas, successes, failures and support across the national fraternity.",
-    color: "#f1d44b"
+    color: "#f1d44b",
+    bgImage: "/images/fraternity-house-bg.jpg"
   },
   {
     image: "/images/avatars/1693961796462_orig.jpeg",
@@ -38,7 +40,9 @@ const testimonials = [
             <div class={`testimonial-slide ${i === 0 ? 'active' : ''}`} data-index={i} data-color={t.color}>
               <div class="slide-layout">
                 <div class="photo-section">
-                  <div class="diagonal-bg"></div>
+                  <div class={`diagonal-bg ${t.bgImage ? 'has-bg-image' : ''}`} style={t.bgImage ? `--bg-image: url(${t.bgImage});` : ''}>
+                    {t.bgImage && <div class="bg-gradient-overlay"></div>}
+                  </div>
                   <div class="photo-circle-wrapper">
                     <div class="photo-circle" style={`background: ${t.color};`}>
                       <img src={t.image} alt={t.name} class="photo" loading="lazy" />
@@ -167,6 +171,21 @@ const testimonials = [
     clip-path: polygon(0 0, 100% 0, 85% 100%, 0% 100%);
   }
 
+  .diagonal-bg.has-bg-image {
+    background: var(--bg-image) center/cover no-repeat;
+    filter: blur(4px);
+  }
+
+  .bg-gradient-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(180deg, rgba(234, 118, 0, 0.35) 0%, rgba(241, 212, 75, 0.35) 100%);
+    clip-path: polygon(0 0, 100% 0, 85% 100%, 0% 100%);
+  }
+
   .photo-circle-wrapper {
     position: relative;
     z-index: 2;
@@ -282,6 +301,10 @@ const testimonials = [
     }
 
     .diagonal-bg {
+      clip-path: polygon(0 0, 100% 0, 100% 85%, 0% 100%);
+    }
+
+    .bg-gradient-overlay {
       clip-path: polygon(0 0, 100% 0, 100% 85%, 0% 100%);
     }
 
