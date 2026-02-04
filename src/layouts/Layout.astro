@@ -8,10 +8,21 @@ import '../styles/fonts.css';
 import '../styles/inter.css';
 
 interface Props {
+  title?: string;
+  description?: string;
   includeMaterialSymbols?: boolean;
 }
 
-const { includeMaterialSymbols = false } = Astro.props;
+const { 
+  title = "All Roads Lead To Ada", 
+  description = "Join Phi Mu Delta for the 62nd National Conclave, June 25-28, 2026 at Ohio Northern University in Ada, Ohio. Celebrating 100 years of Mu Beta chapter.",
+  includeMaterialSymbols = false 
+} = Astro.props;
+
+const siteName = "Phi Mu Delta 62nd National Conclave";
+const siteUrl = "https://roadtoonu.com";
+const canonicalUrl = new URL(Astro.url.pathname, siteUrl).href;
+const ogImage = `${siteUrl}/phi-mu-delta-conclave-2026.webp`;
 ---
 
 <!DOCTYPE html>
@@ -19,9 +30,104 @@ const { includeMaterialSymbols = false } = Astro.props;
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width" />
+        
+        <!-- Primary Meta Tags -->
+        <title>{title} | {siteName}</title>
+        <meta name="title" content={`${title} | ${siteName}`} />
+        <meta name="description" content={description} />
+        <link rel="canonical" href={canonicalUrl} />
+        
+        <!-- Favicons -->
         <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />
         <link rel="icon" type="image/png" sizes="192x192" href="/favicon-192.png" />
         <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+        
+        <!-- Open Graph / Facebook -->
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content={canonicalUrl} />
+        <meta property="og:title" content={`${title} | ${siteName}`} />
+        <meta property="og:description" content={description} />
+        <meta property="og:image" content={ogImage} />
+        <meta property="og:site_name" content={siteName} />
+        <meta property="og:locale" content="en_US" />
+        
+        <!-- Twitter -->
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:url" content={canonicalUrl} />
+        <meta name="twitter:title" content={`${title} | ${siteName}`} />
+        <meta name="twitter:description" content={description} />
+        <meta name="twitter:image" content={ogImage} />
+        
+        <!-- Additional SEO Meta Tags -->
+        <meta name="robots" content="index, follow" />
+        <meta name="author" content="Phi Mu Delta National Fraternity" />
+        <meta name="keywords" content="Phi Mu Delta, National Conclave, fraternity, Ohio Northern University, Ada Ohio, brotherhood, Greek life, 2026" />
+        
+        <!-- Structured Data - Organization -->
+        <script type="application/ld+json">
+        {
+          "@context": "https://schema.org",
+          "@type": "Organization",
+          "name": "Phi Mu Delta National Fraternity",
+          "url": "https://phimudelta.org",
+          "logo": "https://roadtoonu.com/phi-mu-delta-conclave-2026.webp",
+          "sameAs": [
+            "https://www.facebook.com/PhiMuDelta",
+            "https://www.instagram.com/phimudelta"
+          ],
+          "address": {
+            "@type": "PostalAddress",
+            "streetAddress": "4885-A McKnight Rd. #263",
+            "addressLocality": "Pittsburgh",
+            "addressRegion": "PA",
+            "postalCode": "15237",
+            "addressCountry": "US"
+          },
+          "contactPoint": {
+            "@type": "ContactPoint",
+            "telephone": "+1-412-203-5169",
+            "contactType": "customer service"
+          }
+        }
+        </script>
+        
+        <!-- Structured Data - Event -->
+        <script type="application/ld+json">
+        {
+          "@context": "https://schema.org",
+          "@type": "Event",
+          "name": "Phi Mu Delta 62nd National Conclave",
+          "description": "The 62nd National Conclave of Phi Mu Delta National Fraternity, celebrating 100 years of Mu Beta chapter at Ohio Northern University.",
+          "startDate": "2026-06-25",
+          "endDate": "2026-06-28",
+          "eventStatus": "https://schema.org/EventScheduled",
+          "eventAttendanceMode": "https://schema.org/OfflineEventAttendanceMode",
+          "location": {
+            "@type": "Place",
+            "name": "Ohio Northern University",
+            "address": {
+              "@type": "PostalAddress",
+              "streetAddress": "525 S Main St",
+              "addressLocality": "Ada",
+              "addressRegion": "OH",
+              "postalCode": "45810",
+              "addressCountry": "US"
+            }
+          },
+          "image": "https://roadtoonu.com/phi-mu-delta-conclave-2026.webp",
+          "organizer": {
+            "@type": "Organization",
+            "name": "Phi Mu Delta National Fraternity",
+            "url": "https://phimudelta.org"
+          },
+          "offers": {
+            "@type": "Offer",
+            "url": "https://roadtoonu.com",
+            "availability": "https://schema.org/InStock"
+          }
+        }
+        </script>
+        
         <!-- Preconnect hints for external origins -->
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />

@@ -1,0 +1,11 @@
+# robots.txt for roadtoonu.com
+# Phi Mu Delta 62nd National Conclave
+
+User-agent: *
+Allow: /
+
+# Sitemap location
+Sitemap: https://roadtoonu.com/sitemap.xml
+
+# Disallow admin/private paths (none currently)
+# Disallow: /admin/

@@ -2,6 +2,9 @@
 import Layout from "../../layouts/Layout.astro"
 import Container from "../../components/Container.astro"
 
+const pageTitle = "Hotel Accommodations";
+const pageDescription = "Find nearby hotels for the Phi Mu Delta 62nd National Conclave. Recommended hotels near Ohio Northern University in Ada, Ohio with special rates for attendees.";
+
 const hotels = [
   {
     name: "Hampton Inn Lima",
@@ -46,7 +49,7 @@ const hotels = [
 ]
 ---
 
-<Layout includeMaterialSymbols={true}>
+<Layout title={pageTitle} description={pageDescription} includeMaterialSymbols={true}>
   <main class="pt-24 pb-20">
     <!-- Hero Section -->
     <section class="bg-gradient-to-br from-[#212322] to-[#2a2b2a] py-16 sm:py-20">

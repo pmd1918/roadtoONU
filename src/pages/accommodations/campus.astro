@@ -2,6 +2,9 @@
 import Layout from "../../layouts/Layout.astro"
 import Container from "../../components/Container.astro"
 
+const pageTitle = "On-Campus Housing";
+const pageDescription = "Stay on campus at Ohio Northern University during the 62nd National Conclave. Suite-style and traditional dorm options available. Walk to all events!";
+
 const campusOptions = [
   {
     name: "University Inn",
@@ -44,7 +47,7 @@ const campusOptions = [
 ]
 ---
 
-<Layout includeMaterialSymbols={true}>
+<Layout title={pageTitle} description={pageDescription} includeMaterialSymbols={true}>
   <main class="pt-24 pb-20">
     <!-- Hero Section -->
     <section class="bg-gradient-to-br from-[#212322] to-[#2a2b2a] py-16 sm:py-20">
