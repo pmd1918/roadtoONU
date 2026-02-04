@@ -4,13 +4,24 @@ import Container from '../components/Container.astro';
 ---
 
 <Layout title="Sponsor the 62nd National Conclave - Phi Mu Delta">
-  <!-- Sticky Header -->
-  <header class="sponsor-sticky-header">
-    <a href="/" class="header-btn home-btn">Home</a>
-    <a href="/" class="header-logo">
-      <img src="/PhiMuDeltaLogo-MultiColor.png" alt="Phi Mu Delta" />
-    </a>
-    <a href="/#registration" class="header-btn register-btn">Register</a>
+  <!-- Sticky Header - matching landing page style -->
+  <header class="sponsor-navbar">
+    <div class="sponsor-nav-container">
+      <!-- Hanging Conclave Logo -->
+      <a href="/" class="sponsor-conclave-logo">
+        <img src="/phi%20mu%20delta%20conclave%202026.png" alt="62nd National Conclave" />
+      </a>
+      
+      <!-- Home Button (left of logo) -->
+      <a class="sponsor-nav-btn home-btn" href="/">
+        <span class="btn-inner">Home</span>
+      </a>
+      
+      <!-- Register Button (right of logo) -->
+      <a class="sponsor-nav-btn register-btn" href="/#registration">
+        <span class="btn-inner">Preregister</span>
+      </a>
+    </div>
   </header>
 
   <main class="sponsorship-page">
@@ -317,65 +328,172 @@ import Container from '../components/Container.astro';
 </Layout>
 
 <style>
-  /* Sticky Header */
-  .sponsor-sticky-header {
+  /* Animation properties for glowing buttons */
+  @property --angle {
+    syntax: "<angle>";
+    initial-value: 0deg;
+    inherits: false;
+  }
+
+  @property --glowColor {
+    syntax: "<color>";
+    initial-value: #ea7600;
+  }
+
+  @keyframes rotate {
+    0% { --angle: 0deg; }
+    100% { --angle: 360deg; }
+  }
+
+  /* Navbar matching landing page */
+  .sponsor-navbar {
     position: fixed;
     top: 0;
     left: 0;
     right: 0;
+    height: 70px;
+    background: transparent;
     z-index: 1000;
+  }
+
+  .sponsor-nav-container {
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    padding: 0.75rem 1.5rem;
-    background: rgba(33, 35, 34, 0.95);
-    backdrop-filter: blur(12px);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    justify-content: center;
+    position: relative;
+    height: 100%;
+    width: 100%;
+    padding: 0 1rem;
   }
 
-  .header-logo {
+  /* Hanging Conclave Logo */
+  .sponsor-conclave-logo {
     position: absolute;
     left: 50%;
-    transform: translateX(-50%);
+    top: 100%;
+    transform: translateX(-50%) translateY(-30%);
+    z-index: 100;
   }
 
-  .header-logo img {
-    height: 40px;
-    width: auto;
+  .sponsor-conclave-logo img {
+    height: auto;
+    width: clamp(85px, 21.25vw, 187px);
   }
 
-  .header-btn {
-    font-family: 'Inter', sans-serif;
-    font-size: 0.875rem;
-    font-weight: 600;
+  /* Action Buttons */
+  .sponsor-nav-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 100px;
+    border: none;
+    background: none;
+    position: absolute;
+    top: 100%;
+    transform: translateY(-30%);
+    padding: 1px;
     text-decoration: none;
-    padding: 0.5rem 1.25rem;
-    border-radius: 50px;
-    transition: all 0.2s ease;
+    transition: all 0.18s ease-in-out;
+    z-index: 100;
   }
 
-  .home-btn {
-    color: #f4f7ff;
-    border: 1px solid rgba(255, 255, 255, 0.3);
+  .sponsor-nav-btn.register-btn {
+    left: calc(50% + clamp(42.5px, 10.625vw, 93.5px) + 1.5rem);
+    --glowColor: #ea7600;
   }
 
-  .home-btn:hover {
-    border-color: #ea7600;
-    color: #ea7600;
+  .sponsor-nav-btn.home-btn {
+    right: calc(50% + clamp(42.5px, 10.625vw, 93.5px) + 1.5rem);
+    --glowColor: #f1d44b;
   }
 
-  .register-btn {
-    background: linear-gradient(135deg, #ea7600, #f1d44b);
+  .sponsor-nav-btn:after, 
+  .sponsor-nav-btn:before {
+    content: "";
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border-radius: calc(100px + 1.5px);
+    background-size: 100% 100%;
+    background-position: 0px 0px;
+    background-image: conic-gradient(
+      from var(--angle) at 50% 50%, 
+      rgba(0,0,0,0) 0%,
+      rgba(0,0,0,0) 33%,
+      var(--glowColor) 50%,
+      rgba(0,0,0,0) 66%,
+      rgba(0,0,0,0) 100%
+    );
+    animation: rotate 2s infinite linear;
+  }
+
+  .sponsor-nav-btn:before {
+    filter: blur(20px);
+  }
+
+  .sponsor-nav-btn .btn-inner {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    padding: 0.6rem 2rem;
+    border-radius: 100px;
+    font-family: 'Inter', sans-serif;
+    font-weight: 800;
+    font-size: 0.9375rem;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    z-index: 1;
+    transition: all 0.18s ease;
+    background: rgba(255, 255, 255, 0.25);
+    backdrop-filter: blur(40px);
+    backface-visibility: hidden;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15), 0 4px 16px rgba(0, 0, 0, 0.1);
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
     color: #212322;
   }
 
-  .register-btn:hover {
-    box-shadow: 0 4px 12px rgba(234, 118, 0, 0.4);
+  .sponsor-nav-btn:hover .btn-inner {
+    background: rgba(0, 0, 0, 0.5);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25), 0 8px 24px rgba(0, 0, 0, 0.15);
+    transform: translateY(-1px);
+  }
+
+  .sponsor-nav-btn.register-btn:hover .btn-inner {
+    color: #ff8c1a;
+  }
+
+  .sponsor-nav-btn.home-btn:hover .btn-inner {
+    color: #f5de6f;
+  }
+
+  .sponsor-nav-btn:active {
+    transform: translateY(-30%) scale(0.95);
+  }
+
+  /* Mobile button positioning */
+  @media (max-width: 768px) {
+    .sponsor-nav-btn.home-btn {
+      right: calc(50% + clamp(42.5px, 10.625vw, 93.5px) + 1rem);
+    }
+
+    .sponsor-nav-btn.register-btn {
+      left: calc(50% + clamp(42.5px, 10.625vw, 93.5px) + 1rem);
+    }
+
+    .sponsor-nav-btn .btn-inner {
+      padding: 0.5rem 1.25rem;
+      font-size: 0.8125rem;
+      letter-spacing: 0.5px;
+    }
   }
 
   .sponsorship-page {
     background: #f4f7ff;
-    padding-top: 60px; /* Account for sticky header */
+    padding-top: 70px; /* Account for navbar height */
   }
 
   /* Featured Sponsors - matching main page */
