@@ -156,9 +156,9 @@ function Badge({ modelPath, positionIndex, index, total, maxSpeed = 50, minSpeed
   // Fan angle: side badges angle outward
   const fanAngle = positionIndex * 0.2;
 
-  useRopeJoint(fixed, j1, [[0, 0, 0], [0, 0, 0], 1]);
-  useRopeJoint(j1, j2, [[0, 0, 0], [0, 0, 0], 1]);
-  useRopeJoint(j2, j3, [[0, 0, 0], [0, 0, 0], 1]);
+  useRopeJoint(fixed, j1, [[0, 0, 0], [0, 0, 0], 2.5]);
+  useRopeJoint(j1, j2, [[0, 0, 0], [0, 0, 0], 2.5]);
+  useRopeJoint(j2, j3, [[0, 0, 0], [0, 0, 0], 2.5]);
   useSphericalJoint(j3, card, [
     [0, 0, 0],
     [0, 2.75, 0]
@@ -268,7 +268,7 @@ function Badge({ modelPath, positionIndex, index, total, maxSpeed = 50, minSpeed
           resolution={isMobile ? [1000, 2000] : [width, height]}
           useMap
           map={texture}
-          repeat={[-4, 1]}
+          repeat={[-10, 1]}
           lineWidth={1}
         />
       </mesh>
