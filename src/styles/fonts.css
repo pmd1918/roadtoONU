@@ -2,7 +2,8 @@
 
 @font-face {
   font-family: 'Have Heart';
-  src: url('/fonts/HaveHeart.woff2') format('woff2'),
+  src: url('/fonts/HaveHeart-subset.woff2') format('woff2'),
+       url('/fonts/HaveHeart.woff2') format('woff2'),
        url('/fonts/HaveHeart.otf') format('opentype');
   font-weight: normal;
   font-style: normal;
