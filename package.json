@@ -31,6 +31,7 @@
     "topojson-client": "^3.1.0"
   },
   "devDependencies": {
+    "critical": "^7.2.1",
     "sass": "^1.97.2"
   }
 }
