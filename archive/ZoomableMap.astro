@@ -1,0 +1,480 @@
+---
+// ZoomableMap.astro
+---
+
+<div id="container">
+    <svg id="map">
+        <defs>
+            <linearGradient id="hoverGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                <stop offset="0%" style="stop-color:#ea7600;stop-opacity:1" />
+                <stop offset="100%" style="stop-color:#f1d44b;stop-opacity:1" />
+            </linearGradient>
+            <linearGradient id="activeGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                <stop offset="0%" style="stop-color:#ea7600;stop-opacity:1" />
+                <stop offset="100%" style="stop-color:#f1d44b;stop-opacity:1" />
+            </linearGradient>
+        </defs>
+    </svg>
+</div>
+
+<style>
+    #container {
+        width: 95%;
+        max-width: 900px;
+        max-height: 50vh;
+        margin: 0 auto;
+        background: #f4f7ff;
+        padding: 10px;
+        border-radius: 8px;
+        box-shadow: none;
+        overflow: hidden;
+    }
+
+    @media (min-width: 480px) {
+        #container {
+            width: 90%;
+            padding: 15px;
+            max-height: 55vh;
+        }
+    }
+
+    @media (min-width: 768px) {
+        #container {
+            width: 80%;
+            padding: 20px;
+            max-height: 60vh;
+        }
+    }
+
+    h1 {
+        margin: 0 0 20px 0;
+        font-size: 24px;
+        color: #333;
+    }
+
+    #map {
+        display: block;
+        margin: 0 auto;
+        border: 1px solid #f4f7ff;
+        border-radius: 4px;
+        background: #f4f7ff;
+        width: 100%;
+        height: 100%;
+        max-height: calc(50vh - 40px);
+        overflow: hidden;
+    }
+
+    @media (min-width: 480px) {
+        #map {
+            max-height: calc(55vh - 50px);
+        }
+    }
+
+    @media (min-width: 768px) {
+        #map {
+            max-height: calc(60vh - 60px);
+        }
+    }
+    
+    :global(.state) {
+        stroke: transparent;
+        stroke-width: 1.5;
+        cursor: pointer;
+        transition: opacity 0.2s;
+        opacity: 0.5;
+    }
+    
+    :global(.state:hover) {
+        opacity: 0.8;
+    }
+    
+    .button-wrap {
+        display: flex;
+        justify-content: center;
+    }
+    
+    .info {
+        margin-top: 20px;
+        padding: 15px;
+        background: #f4f7ff;
+        border-radius: 4px;
+        color: #666;
+        font-size: 14px;
+    }
+
+    :global(.chapter-marker) {
+        cursor: pointer;
+        transition: font-size 0.2s ease;
+    }
+
+    :global(.chapter-marker:hover) {
+        font-size: 3px !important;
+    }
+
+</style>
+
+<script is:inline src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
+<script is:inline src="https://cdnjs.cloudflare.com/ajax/libs/topojson/3.0.2/topojson.min.js"></script>
+
+<script is:inline>
+    console.log('Script loading...');
+    
+    function initMap() {
+        console.log('Initializing map...');
+        
+        // Chapter data with Greek names for modal display
+        const chapters = [
+            { state: 'Connecticut', university: 'University of Connecticut', date: 'March 1, 1918', status: 'Dormant', alumniActive: false, greekName: 'Ν Α', fullName: 'Nu Alpha', lat: 41.8077, lon: -72.2540 },
+            { state: 'New Hampshire', university: 'University of New Hampshire', date: 'March 1, 1918', status: 'Dormant', alumniActive: true, greekName: 'Ν Β', fullName: 'Nu Beta', lat: 43.1339, lon: -70.9264 },
+            { state: 'Vermont', university: 'University of Vermont', date: 'March 1, 1918', status: 'Active', alumniActive: true, greekName: 'Ν Γ', fullName: 'Nu Gamma', lat: 44.4779, lon: -73.1965 },
+            { state: 'Illinois', university: 'Northwestern University', date: 'April 28, 1921', status: 'Dormant', greekName: 'Γ Α', fullName: 'Gamma Alpha', lat: 42.0565, lon: -87.6753 },
+            { state: 'Massachusetts', university: 'MIT', date: 'January 22, 1922', status: 'Dormant', greekName: 'Ν Δ', fullName: 'Nu Delta', lat: 42.3601, lon: -71.0942 },
+            { state: 'Michigan', university: 'University of Michigan', date: 'May 1, 1922', status: 'Dormant', greekName: 'Γ Β', fullName: 'Gamma Beta', lat: 42.2780, lon: -83.7382 },
+            { state: 'Illinois', university: 'University of Illinois', date: 'February 24, 1923', status: 'Dormant', greekName: 'Γ Γ', fullName: 'Gamma Gamma', lat: 40.1020, lon: -88.2272 },
+            { state: 'Maine', university: 'University of Maine', date: 'March 3, 1923', status: 'Dormant', greekName: 'Ν Ε', fullName: 'Nu Epsilon', lat: 44.9012, lon: -68.6719 },
+            { state: 'Wisconsin', university: 'University of Wisconsin', date: 'March 16, 1923', status: 'Dormant', greekName: 'Γ Δ', fullName: 'Gamma Delta', lat: 43.0766, lon: -89.4125 },
+            { state: 'Pennsylvania', university: 'Susquehanna University', date: 'December 20, 1924', status: 'Active', alumniActive: true, greekName: 'Μ Α', fullName: 'Mu Alpha', lat: 40.8020, lon: -76.8639 },
+            { state: 'California', university: 'UC Berkeley', date: 'April 18, 1925', status: 'Dormant', greekName: 'Π Α', fullName: 'Pi Alpha', lat: 37.8719, lon: -122.2585 },
+            { state: 'Ohio', university: 'Ohio Northern University', date: 'April 10, 1926', status: 'Active', alumniActive: true, greekName: 'Μ Β', fullName: 'Mu Beta', lat: 40.7695, lon: -83.8227 },
+            { state: 'Ohio', university: 'Ohio State University', date: 'May 22, 1926', status: 'Dormant', greekName: 'Μ Γ', fullName: 'Mu Gamma', lat: 40.0067, lon: -83.0305 },
+            { state: 'Massachusetts', university: 'Boston University', date: 'April 30, 1927', status: 'Dormant', greekName: 'Ν Ζ', fullName: 'Nu Zeta (Original)', lat: 42.3505, lon: -71.1054 },
+            { state: 'Rhode Island', university: 'University of Rhode Island', date: 'February 23, 1929', status: 'Dormant', greekName: 'Ν Η', fullName: 'Nu Eta', lat: 41.4861, lon: -71.5263 },
+            { state: 'New York', university: 'RPI', date: 'May 4, 1929', status: 'Active', greekName: 'Ν Θ', fullName: 'Nu Theta', lat: 42.7298, lon: -73.6789 },
+            { state: 'Ohio', university: 'Wittenberg University', date: 'March 1, 1930', status: 'Dormant', greekName: 'Μ Δ', fullName: 'Mu Delta', lat: 39.9242, lon: -83.8088 },
+            { state: 'Oregon', university: 'Oregon State University', date: 'November 28, 1931', status: 'Dormant', greekName: 'Π Β', fullName: 'Pi Beta', lat: 44.5646, lon: -123.2620 },
+            { state: 'Massachusetts', university: 'Tufts University', date: 'October 21, 1934', status: 'Dormant', greekName: 'Ν Ι', fullName: 'Nu Iota', lat: 42.4085, lon: -71.1183 },
+            { state: 'New York', university: 'New York University', date: 'December 7, 1935', status: 'Dormant', greekName: 'Ν Κ', fullName: 'Nu Kappa', lat: 40.7295, lon: -73.9965 },
+            { state: 'Massachusetts', university: 'UMass Amherst', date: 'October 17, 1953', status: 'Dormant', greekName: 'Ν Ζ', fullName: 'Nu Zeta', lat: 42.3868, lon: -72.5301 },
+            { state: 'Minnesota', university: 'University of Minnesota–Morris', date: 'December 18, 1964', status: 'Dormant', greekName: 'Γ Ε', fullName: 'Gamma Epsilon', lat: 45.5920, lon: -95.8975 },
+            { state: 'Connecticut', university: 'Trinity College', date: 'April 30, 1966', status: 'Dormant', greekName: 'Ν Λ', fullName: 'Nu Lambda', lat: 41.7472, lon: -72.6906 },
+            { state: 'Maine', university: 'University of Southern Maine', date: 'December 8, 1967', status: 'Dormant', alumniActive: true, greekName: 'Ν Ξ', fullName: 'Nu Xi', lat: 43.6591, lon: -70.2568 },
+            { state: 'Pennsylvania', university: 'Lock Haven University', date: 'April 12, 1969', status: 'Active', alumniActive: true, greekName: 'Μ Ζ', fullName: 'Mu Zeta', lat: 41.1370, lon: -77.4469 },
+            { state: 'Pennsylvania', university: 'Kutztown University', date: 'April 25, 1970', status: 'Dormant', greekName: 'Μ Η', fullName: 'Mu Eta', lat: 40.5176, lon: -75.7863 },
+            { state: 'New Hampshire', university: 'Keene State College', date: 'September 26, 1970', status: 'Dormant', alumniActive: true, greekName: 'Ν Ο', fullName: 'Nu Omicron', lat: 42.9340, lon: -72.2773 },
+            { state: 'Missouri', university: 'Tarkio College', date: 'April 17, 1971', status: 'Dormant', greekName: 'Γ Ψ', fullName: 'Gamma Psi', lat: 40.4406, lon: -95.3778 },
+            { state: 'Pennsylvania', university: 'Slippery Rock University', date: 'May 27, 1972', status: 'Dormant', greekName: 'Μ Κ', fullName: 'Mu Kappa', lat: 41.0648, lon: -80.0562 },
+            { state: 'Ohio', university: 'University of Toledo', date: 'May 19, 1973', status: 'Dormant', greekName: 'Μ Ω', fullName: 'Mu Omega (Original)', lat: 41.6578, lon: -83.6152 },
+            { state: 'Pennsylvania', university: 'California University of Pennsylvania', date: 'May 5, 1985', status: 'Dormant', greekName: 'Μ Π', fullName: 'Mu Pi', lat: 40.0637, lon: -79.8979 },
+            { state: 'Pennsylvania', university: 'Mansfield University', date: 'August 8, 1998', status: 'Dormant', greekName: 'Μ Λ', fullName: 'Mu Lambda', lat: 41.8073, lon: -77.0774 },
+            { state: 'Pennsylvania', university: 'Indiana University of Pennsylvania', date: 'August 8, 1998', status: 'Dormant', greekName: 'Μ Θ', fullName: 'Mu Theta', lat: 40.6187, lon: -79.1528 },
+            { state: 'Pennsylvania', university: 'Lycoming College', date: 'April 15, 1999', status: 'Dormant', greekName: 'Μ Ι', fullName: 'Mu Iota', lat: 41.2412, lon: -77.0011 },
+            { state: 'Pennsylvania', university: 'Pennsylvania College of Technology', date: 'April 25, 2003', status: 'Active', alumniActive: true, greekName: 'Μ Ξ', fullName: 'Mu Xi', lat: 41.2431, lon: -76.9919 },
+            { state: 'New York', university: 'Plattsburgh University', date: 'April 28, 2007', status: 'Active', greekName: 'Ν Π', fullName: 'Nu Pi', lat: 44.6995, lon: -73.4529 },
+            { state: 'Maryland', university: 'Frostburg State University', date: 'April 15, 2009', status: 'Active', greekName: 'Μ Ο', fullName: 'Mu Omicron', lat: 39.6584, lon: -78.9286 },
+            { state: 'New Hampshire', university: 'New England College', date: 'October 29, 2011', status: 'Dormant', greekName: 'Ν Θ Η', fullName: 'Nu Theta Eta', lat: 43.1798, lon: -71.8223 },
+            { state: 'Virginia', university: 'Longwood University', date: 'April 25, 2013', status: 'Active', alumniActive: true, greekName: 'Σ Α', fullName: 'Sigma Alpha', lat: 37.2963, lon: -78.3958 },
+            { state: 'Ohio', university: 'Shawnee State University', date: 'March 13, 2016', status: 'Dormant', greekName: 'Μ Ρ', fullName: 'Mu Rho', lat: 38.7318, lon: -83.0007 },
+            { state: 'New Jersey', university: 'Rutgers University–New Brunswick', date: 'October 22, 2016', status: 'Active', greekName: 'Μ Σ', fullName: 'Mu Sigma', lat: 40.5008, lon: -74.4474 },
+            { state: 'New Jersey', university: 'Rutgers University–Camden', date: 'October 22, 2016', status: 'Dormant', greekName: 'Μ Τ', fullName: 'Mu Tau', lat: 39.9480, lon: -75.1220 },
+            { state: 'Pennsylvania', university: 'Robert Morris University', date: 'March 1, 2018', status: 'Active', greekName: 'Μ Υ', fullName: 'Mu Upsilon', lat: 40.5195, lon: -80.1867 },
+            { state: 'Pennsylvania', university: 'Penn State University', date: 'October 11, 2023', status: 'Dormant', greekName: 'Μ Ε', fullName: 'Mu Epsilon', lat: 40.7982, lon: -77.8599 },
+            { state: 'Rhode Island', university: 'Rhode Island College', date: 'Did Not Charter', status: 'Dormant', greekName: 'Ν Ρ', fullName: 'Nu Rho', lat: 41.8401, lon: -71.4638 },
+            { state: 'Pennsylvania', university: 'Marywood University', date: 'Did Not Charter', status: 'Dormant', greekName: 'Μ Φ', fullName: 'Mu Phi', lat: 41.4337, lon: -75.6831 },
+            { state: 'Pennsylvania', university: 'Temple University', date: 'Did Not Charter', status: 'Dormant', greekName: 'Μ Ω', fullName: 'Mu Omega', lat: 39.9812, lon: -75.1554 },
+            { state: 'Maryland', university: 'Stevenson University', date: 'Provisional Charter', status: 'Active', greekName: 'Μ Χ', fullName: 'Mu Chi', lat: 39.4101, lon: -76.7846 },
+            { state: 'New Jersey', university: 'Stockton College', date: 'Provisional Charter', status: 'Active', greekName: 'Μ Ψ', fullName: 'Mu Psi', lat: 39.4785, lon: -74.4318 }
+        ];
+
+        // Store states data for external lookups (swatch clicks)
+        let statesData = null;
+        let projection = null;
+        let markersGroup = null;
+
+        // Function to get state color based on whether it has any active chapters
+        function getStateColor(stateName) {
+            const stateChapters = chapters.filter(ch => ch.state === stateName);
+            
+            if (stateChapters.length === 0) {
+                return '#f4f7ff';
+            }
+
+
+            
+            const hasActiveChapter = stateChapters.some(ch => ch.status === 'Active');
+            const hasActiveAlumni = stateChapters.some(ch => ch.alumniActive === true);
+            
+            if (hasActiveChapter || hasActiveAlumni) {
+                return 'url(#activeGradient)';
+            } else {
+                return '#212322';
+            }
+        }
+
+        const width = 960;
+        const height = 600;
+
+        const svg = d3.select("#map")
+            .attr("viewBox", [0, 0, width, height]);
+
+        const g = svg.append("g");
+
+        const zoom = d3.zoom()
+            .scaleExtent([1, 8])
+            .on("zoom", (event) => {
+                g.attr("transform", event.transform);
+            });
+
+        svg.call(zoom);
+
+        // Disable scroll/wheel zoom - only allow click zoom
+        svg.on("wheel.zoom", null);
+
+        // Load US map data
+        fetch("/json/states-albers-10m.json")
+            .then(response => response.json())
+            .then(us => {
+                console.log('Map data loaded', us);
+                const states = topojson.feature(us, us.objects.states);
+                statesData = states; // Store for external lookups
+
+                const path = d3.geoPath();
+                // Projection configured to match the pre-projected TopoJSON (US Atlas 10m)
+                projection = d3.geoAlbersUsa()
+                    .scale(1300)
+                    .translate([487.5, 305]);
+
+                // Create markers group (will be populated when zooming to a state)
+                markersGroup = g.append("g").attr("class", "chapter-markers");
+
+                // Draw states
+g.selectAll("path")
+  .data(states.features)
+  .join("path")
+  .attr("class", d => {
+    const stateName = d.properties.name;
+    const hasChapters = chapters.some(ch => ch.state === stateName);
+    return hasChapters ? "state" : "state none";
+  })
+  .attr("d", path)
+  .attr("fill", d => getStateColor(d.properties.name))
+  .style("pointer-events", d => {
+    const stateName = d.properties.name;
+    const hasChapters = chapters.some(ch => ch.state === stateName);
+    return hasChapters ? "all" : "none";
+  })
+
+  .on("click", (event, d) => {
+  event.stopPropagation();   // ✅ THIS IS THE FIX
+
+  const stateName = d.properties.name;
+  const hasChapters = chapters.some(ch => ch.state === stateName);
+  if (!hasChapters) return;
+
+  clicked(event, d);
+});
+
+
+                // Add background click to reset
+                svg.on("click", function(event) {
+                    if (event.target === this) {
+                        reset();
+                    }
+                });
+            })
+            .catch(err => console.error('Error loading map:', err));
+
+        // Collision detection - push overlapping labels apart
+        function resolveCollisions(positions) {
+            const labelWidth = 12;
+            const labelHeight = 4;
+            const iterations = 15;
+
+            for (let i = 0; i < iterations; i++) {
+                for (let a = 0; a < positions.length; a++) {
+                    for (let b = a + 1; b < positions.length; b++) {
+                        const dx = positions[b].x - positions[a].x;
+                        const dy = positions[b].y - positions[a].y;
+
+                        if (Math.abs(dx) < labelWidth && Math.abs(dy) < labelHeight) {
+                            // Calculate push amount
+                            const pushX = (labelWidth - Math.abs(dx)) / 2 * (dx >= 0 ? 1 : -1);
+                            const pushY = (labelHeight - Math.abs(dy)) / 2 * (dy >= 0 ? 1 : -1);
+
+                            positions[a].x -= pushX * 0.5;
+                            positions[a].y -= pushY * 0.5;
+                            positions[b].x += pushX * 0.5;
+                            positions[b].y += pushY * 0.5;
+                        }
+                    }
+                }
+            }
+        }
+
+        // Show chapter markers when zooming to a state
+        function showChapterMarkers(stateName) {
+            if (!markersGroup || !projection) return;
+
+            // Clear existing markers
+            markersGroup.selectAll("*").remove();
+
+            const stateChapters = chapters.filter(ch => ch.state === stateName);
+            const positions = [];
+
+            // First pass: calculate initial positions
+            stateChapters.forEach(chapter => {
+                const coords = projection([chapter.lon, chapter.lat]);
+                if (coords) {
+                    positions.push({
+                        chapter,
+                        x: coords[0],
+                        y: coords[1],
+                        originalX: coords[0],
+                        originalY: coords[1]
+                    });
+                }
+            });
+
+            // Second pass: resolve collisions
+            resolveCollisions(positions);
+
+            // Third pass: render markers with leader lines
+            positions.forEach(pos => {
+                const isOffset = Math.abs(pos.x - pos.originalX) > 0.5 || Math.abs(pos.y - pos.originalY) > 0.5;
+
+                // Draw leader line if label was offset
+                if (isOffset) {
+                    markersGroup.append("line")
+                        .attr("class", "leader-line")
+                        .attr("x1", pos.originalX)
+                        .attr("y1", pos.originalY)
+                        .attr("x2", pos.x)
+                        .attr("y2", pos.y)
+                        .attr("stroke", "#666")
+                        .attr("stroke-width", 0.15)
+                        .attr("stroke-dasharray", "0.5,0.3");
+
+                    // Small dot at original position
+                    markersGroup.append("circle")
+                        .attr("cx", pos.originalX)
+                        .attr("cy", pos.originalY)
+                        .attr("r", 0.5)
+                        .attr("fill", "#666");
+                }
+
+                // Draw text label at adjusted position
+                markersGroup.append("text")
+                    .attr("class", "chapter-marker")
+                    .attr("x", pos.x)
+                    .attr("y", pos.y)
+                    .attr("text-anchor", "middle")
+                    .attr("dominant-baseline", "middle")
+                    .attr("fill", pos.chapter.status === 'Active' ? "#212322" : "#f4f7ff")
+                    .attr("stroke", "#212322")
+                    .attr("font-family", "Inter, sans-serif")
+                    .attr("stroke-width", 0.3)
+                    .attr("font-size", "2.5px")
+                    .attr("font-weight", "medium")
+                    .attr("cursor", "pointer")
+                    .text(pos.chapter.greekName)
+                    .on("click", (event) => {
+                        event.stopPropagation();
+                        // Dispatch event to highlight this specific chapter's swatch
+                        window.dispatchEvent(new CustomEvent('chapter-marker-clicked', {
+                            detail: { greekName: pos.chapter.greekName, fullName: pos.chapter.fullName }
+                        }));
+                    });
+            });
+        }
+
+        // Clear chapter markers
+        function clearChapterMarkers() {
+            if (markersGroup) {
+                markersGroup.selectAll("*").remove();
+            }
+        }
+
+            function clicked(event, d, fromSwatch = false) {
+  event.stopPropagation();
+
+  d3.selectAll(".state").classed("active", false);
+
+  // Handle both direct clicks and programmatic triggers
+  if (event.currentTarget) {
+    d3.select(event.currentTarget).classed("active", true);
+  } else {
+    // Find and highlight the state by data match
+    g.selectAll(".state").filter(data => data === d).classed("active", true);
+  }
+
+  const [[x0, y0], [x1, y1]] = d3.geoPath().bounds(d);
+
+  // Calculate zoom center - use state center for swatch clicks, mouse position for direct clicks
+  const zoomCenter = fromSwatch
+    ? [(x0 + x1) / 2, (y0 + y1) / 2]
+    : d3.pointer(event, svg.node());
+
+  svg.transition()
+    .duration(750)
+    .call(
+      zoom.transform,
+      d3.zoomIdentity
+        .translate(width / 2, height / 2)
+        .scale(Math.min(8, 0.9 / Math.max((x1 - x0) / width, (y1 - y0) / height)))
+        .translate(-(x0 + x1) / 2, -(y0 + y1) / 2),
+      zoomCenter
+    );
+
+  // Dispatch event to highlight swatches
+  const stateName = d.properties.name;
+  const stateChapters = chapters.filter(ch => ch.state === stateName);
+  window.dispatchEvent(new CustomEvent('map-state-clicked', {
+    detail: { state: stateName, chapters: stateChapters, fromSwatch }
+  }));
+
+  // Show chapter markers for this state
+  showChapterMarkers(stateName);
+}
+
+
+        function reset() {
+            d3.selectAll(".state").classed("active", false);
+
+            svg.transition()
+                .duration(750)
+                .call(
+                    zoom.transform,
+                    d3.zoomIdentity,
+                    d3.zoomTransform(svg.node()).invert([width / 2, height / 2])
+                );
+
+            // Clear chapter markers
+            clearChapterMarkers();
+
+            // Dispatch reset event to close modal
+            window.dispatchEvent(new CustomEvent('chapter-map-reset'));
+        }
+
+        document.getElementById('resetBtn')?.addEventListener('click', reset);
+
+        // Listen for card clicks to zoom to state
+        window.addEventListener('chapter-cards-clicked', (event) => {
+            const { state, fromSwatch } = event.detail;
+            if (!statesData) return;
+
+            const stateFeature = statesData.features.find(f => f.properties.name === state);
+            if (stateFeature) {
+                // Create a mock event for clicked() function
+                clicked({ stopPropagation: () => {}, currentTarget: null }, stateFeature, fromSwatch);
+            }
+        });
+
+        // Click anywhere to dismiss/reset
+        document.addEventListener('click', function(event) {
+            // Don't reset if clicking on interactive elements
+            if (event.target.classList.contains('state') ||
+                event.target.classList.contains('chapter-cards') ||
+                event.target.id === 'resetBtn' ||
+                event.target.closest('.state') ||
+                event.target.closest('.chapter-cards')) {
+                return;
+            }
+            reset();
+        });
+    }
+
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initMap);
+    } else {
+        initMap();
+    }
+</script>
