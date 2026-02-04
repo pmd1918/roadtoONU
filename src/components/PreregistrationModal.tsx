@@ -15,6 +15,7 @@ export default function PreregistrationModal({ isOpen, onClose }: Preregistratio
     phone: '',
     chapter: '',
     bringingGuest: '',
+    guestCount: '',
     arrivalDate: '',
     departureDate: ''
   });
@@ -40,6 +41,7 @@ export default function PreregistrationModal({ isOpen, onClose }: Preregistratio
         phone: '',
         chapter: '',
         bringingGuest: '',
+        guestCount: '',
         arrivalDate: '',
         departureDate: ''
       });
@@ -142,7 +144,7 @@ export default function PreregistrationModal({ isOpen, onClose }: Preregistratio
                       value="Y"
                       required
                       checked={formData.bringingGuest === 'Y'}
-                      onChange={(e) => setFormData({ ...formData, bringingGuest: e.target.value })}
+                      onChange={(e) => setFormData({ ...formData, bringingGuest: e.target.value, guestCount: '1' })}
                       style={styles.radio}
                     />
                     Yes
@@ -153,11 +155,24 @@ export default function PreregistrationModal({ isOpen, onClose }: Preregistratio
                       name="bringingGuest"
                       value="N"
                       checked={formData.bringingGuest === 'N'}
-                      onChange={(e) => setFormData({ ...formData, bringingGuest: e.target.value })}
+                      onChange={(e) => setFormData({ ...formData, bringingGuest: e.target.value, guestCount: '' })}
                       style={styles.radio}
                     />
                     No
                   </label>
+                  {formData.bringingGuest === 'Y' && (
+                    <div style={styles.guestCountWrapper}>
+                      <label style={styles.guestCountLabel}>How many?</label>
+                      <input
+                        type="number"
+                        min="1"
+                        max="10"
+                        value={formData.guestCount}
+                        onChange={(e) => setFormData({ ...formData, guestCount: e.target.value })}
+                        style={styles.guestCountInput}
+                      />
+                    </div>
+                  )}
                 </div>
               </div>
 
@@ -218,7 +233,7 @@ const styles: { [key: string]: React.CSSProperties } = {
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    zIndex: 1000,
+    zIndex: 99999,
     padding: '1rem',
     overflowY: 'auto',
   },
@@ -298,6 +313,31 @@ const styles: { [key: string]: React.CSSProperties } = {
     height: '18px',
     accentColor: '#ea7600',
     cursor: 'pointer',
+  },
+  guestCountWrapper: {
+    display: 'flex',
+    alignItems: 'center',
+    gap: '0.5rem',
+    marginLeft: '0.5rem',
+    paddingLeft: '1rem',
+    borderLeft: '1px solid rgba(241, 212, 75, 0.3)',
+  },
+  guestCountLabel: {
+    fontFamily: "'Inter', sans-serif",
+    fontSize: '0.85rem',
+    color: '#f4f7ff',
+  },
+  guestCountInput: {
+    fontFamily: "'Inter', sans-serif",
+    fontSize: '0.95rem',
+    padding: '0.4rem 0.6rem',
+    backgroundColor: '#212322',
+    border: '1px solid rgba(241, 212, 75, 0.3)',
+    borderRadius: '6px',
+    color: '#f4f7ff',
+    width: '60px',
+    textAlign: 'center' as const,
+    outline: 'none',
   },
   label: {
     fontFamily: "'Inter', sans-serif",
