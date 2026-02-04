@@ -304,6 +304,7 @@ window.addEventListener('chapter-marker-clicked', (event) => {
   .chapters-section {
     overflow: visible;
     position: relative;
+    z-index: 20;
   }
 
   .map-header{
@@ -580,12 +581,14 @@ window.addEventListener('chapter-marker-clicked', (event) => {
 @media (hover: hover) {
   .chapter-cards:hover {
     transform: translateY(-40%);
+    z-index: 100;
   }
 }
 
 @media (hover: hover) and (min-width: 768px) {
   .chapter-cards:hover {
     transform: translateY(-50%);
+    z-index: 100;
   }
 }
 
