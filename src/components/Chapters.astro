@@ -338,14 +338,14 @@ window.addEventListener('chapter-marker-clicked', (event) => {
   }
 
 .chapters-wrapper {
-  block-size: clamp(60px, 10vw, 100px);
+  block-size: clamp(80px, 12vw, 120px);
   position: relative;
   display: flex;
   justify-content: center;
   overflow-x: auto;
   overflow-y: visible;
-  clip-path: inset(-500px 0 0 0);
-  padding: 0 clamp(0.5rem, 2vw, 2rem);
+  clip-path: inset(-600px 0 0 0);
+  padding: 0 clamp(1rem, 4vw, 3rem);
   z-index: 50;
 }
 
@@ -354,34 +354,39 @@ window.addEventListener('chapter-marker-clicked', (event) => {
 }
 
 .chapters {
-  block-size: clamp(120px, 15vw, 200px);
+  block-size: clamp(160px, 22vw, 220px);
   display: flex;
   overflow: visible;
-  min-inline-size: min(calc(clamp(24px, 3.5vw, 42px) * 35), 100vw);
+  min-inline-size: min(calc(clamp(28px, 4vw, 42px) * 35), calc(100vw - 2rem));
   padding: clamp(4px, 0.8vw, 8px);
   align-content: center;
   justify-content: center;
-  max-width: 100vw;
+  max-width: calc(100vw - 2rem);
 }
 
 @media (max-width: 768px) {
+  .chapters-wrapper {
+    padding: 0 clamp(0.5rem, 3vw, 1.5rem);
+  }
+  
   .chapters {
-    min-inline-size: calc(clamp(20px, 6vw, 32px) * 35);
-    block-size: clamp(100px, 25vw, 150px);
+    min-inline-size: calc(100vw - 1rem);
+    max-width: calc(100vw - 1rem);
+    block-size: clamp(130px, 30vw, 180px);
   }
 }
 
 .chapter-cards {
-  border-top-left-radius: clamp(6px, 1.2vw, 12px);
-  border-top-right-radius: clamp(6px, 1.2vw, 12px);
-  block-size: clamp(100px, 15vw, 200px);
+  border-top-left-radius: clamp(8px, 1.2vw, 12px);
+  border-top-right-radius: clamp(8px, 1.2vw, 12px);
+  block-size: clamp(160px, 22vw, 220px);
   color: #ffffff;
   display: flex;
   flex-basis: 100%;
-  min-width: clamp(20px, 3.5vw, 42px);
+  min-width: clamp(28px, 4vw, 42px);
   font-weight: 500;
   justify-content: left;
-  padding: clamp(8px, 1.5vw, 16px) 0 clamp(4px, 0.8vw, 8px) clamp(4px, 0.8vw, 8px);
+  padding: clamp(12px, 1.5vw, 16px) 0 clamp(6px, 0.8vw, 8px) clamp(6px, 0.8vw, 8px);
   position: relative;
   transition: transform 0.3s ease;
   max-height: 100%;
@@ -392,8 +397,8 @@ window.addEventListener('chapter-marker-clicked', (event) => {
 
 @media (max-width: 768px) {
   .chapter-cards {
-    block-size: clamp(100px, 25vw, 150px);
-    min-width: clamp(18px, 5vw, 28px);
+    block-size: clamp(130px, 30vw, 180px);
+    min-width: clamp(22px, 5vw, 32px);
   }
 }
 
