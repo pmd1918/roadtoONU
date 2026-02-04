@@ -197,7 +197,9 @@ function Badge({ modelPath, positionIndex, index, total, maxSpeed = 50, minSpeed
       });
 
       // Update curve points for the lanyard band
-      curve.points[0].copy(j3.current.translation());
+      // Offset the band endpoint to stop at the clamp (not through the card)
+      const j3Pos = j3.current.translation();
+      curve.points[0].set(j3Pos.x, j3Pos.y + 1.5, j3Pos.z); // Stop at clamp top
       curve.points[1].copy(j2.current.lerped);
       curve.points[2].copy(j1.current.lerped);
       curve.points[3].copy(fixed.current.translation());
