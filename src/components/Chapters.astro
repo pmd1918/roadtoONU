@@ -355,12 +355,11 @@ window.addEventListener('chapter-marker-clicked', (event) => {
 }
 
 .chapters {
-  block-size: clamp(160px, 22vw, 220px);
   display: flex;
   overflow: visible;
   min-inline-size: min(calc(clamp(28px, 4vw, 42px) * 35), calc(100vw - 2rem));
   padding: clamp(4px, 0.8vw, 8px);
-  align-content: center;
+  align-items: flex-end;
   justify-content: center;
   max-width: calc(100vw - 2rem);
 }
@@ -374,7 +373,6 @@ window.addEventListener('chapter-marker-clicked', (event) => {
   .chapters {
     min-inline-size: calc(100vw - 1rem);
     max-width: calc(100vw - 1rem);
-    block-size: clamp(130px, 30vw, 180px);
   }
 }
 
@@ -391,7 +389,6 @@ window.addEventListener('chapter-marker-clicked', (event) => {
   padding: clamp(12px, 1.5vw, 16px) 0 clamp(6px, 0.8vw, 8px) clamp(6px, 0.8vw, 8px);
   position: relative;
   transition: transform 0.3s ease;
-  max-height: 100%;
   box-shadow: -4px 0 8px rgba(0, 0, 0, 0.15);
   /* Default: Dormant chapters */
   background-color: #212322;
