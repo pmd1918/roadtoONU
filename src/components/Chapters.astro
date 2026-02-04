@@ -321,7 +321,7 @@ window.addEventListener('chapter-marker-clicked', (event) => {
     z-index: 100;
   }
   .text-center{
-    margin-bottom: 8px;
+    margin-bottom: 0;
     font-size: clamp(0.75rem, 2.5vw, 1.25rem);
     color: #212322;
     font-weight: 600;
@@ -339,7 +339,6 @@ window.addEventListener('chapter-marker-clicked', (event) => {
   }
 
 .chapters-wrapper {
-  block-size: clamp(200px, 28vw, 260px);
   position: relative;
   display: flex;
   justify-content: center;
@@ -348,6 +347,7 @@ window.addEventListener('chapter-marker-clicked', (event) => {
   overflow-y: visible;
   padding: 0 clamp(1rem, 4vw, 3rem);
   z-index: 50;
+  background: #f4f7ff;
 }
 
 .chapters-wrapper::-webkit-scrollbar {
@@ -367,7 +367,6 @@ window.addEventListener('chapter-marker-clicked', (event) => {
 @media (max-width: 768px) {
   .chapters-wrapper {
     padding: 0 clamp(0.5rem, 3vw, 1.5rem);
-    block-size: clamp(160px, 40vw, 200px);
   }
   
   .chapters {
