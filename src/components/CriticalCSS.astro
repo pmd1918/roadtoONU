@@ -1,0 +1,22 @@
+---
+/**
+ * CriticalCSS Component
+ * Inlines critical CSS for faster FCP/LCP
+ * Non-critical CSS is loaded with media="print" trick for async loading
+ */
+
+// Import the critical CSS as a raw string
+import criticalCSS from '../styles/critical.css?raw';
+---
+
+{/* Inline critical CSS directly in head */}
+<style set:html={criticalCSS} is:inline></style>
+
+{/* 
+  Preload hint for the full stylesheets
+  Note: The actual stylesheets will be loaded by Astro's normal process,
+  but we provide preload hints to start fetching them early
+*/}
+<link rel="preload" href="/fonts/inter/inter-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/fonts/inter/inter-latin-600-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/fonts/HaveHeart-subset.woff2" as="font" type="font/woff2" crossorigin>
