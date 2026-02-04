@@ -92,7 +92,7 @@ import PreregisterButton from "./PreregisterButton";
   @media (max-width: 1024px) {
     .registration-container {
       grid-template-columns: 1fr;
-      gap: 2rem;
+      gap: 0;
     }
     
     .lanyard-wrapper {
@@ -239,21 +239,9 @@ import PreregisterButton from "./PreregisterButton";
     position: relative;
     z-index: 0;
     width: 100%;
-    height: 600px;
+    height: clamp(280px, 50vw, 600px);
     display: flex;
     justify-content: center;
     align-items: center;
-  }
-  
-  @media (max-width: 1024px) {
-    .lanyard-wrapper {
-      height: 500px;
-    }
-  }
-  
-  @media (max-width: 768px) {
-    .lanyard-wrapper {
-      height: 400px;
-    }
   }
 </style>
