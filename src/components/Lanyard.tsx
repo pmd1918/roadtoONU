@@ -39,20 +39,6 @@ export default function Lanyard({
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
-  // Static image on mobile - saves ~1MB of JS
-  if (isMobile) {
-    return (
-      <div className="relative z-0 w-full h-full flex items-center justify-center">
-        <img 
-          src="/images/lanyard-mobile.webp" 
-          alt="Conference lanyard badges" 
-          className="w-full h-full object-contain"
-          loading="eager"
-        />
-      </div>
-    );
-  }
-
   return (
     <div className="relative z-0 w-full h-full">
       <Canvas
