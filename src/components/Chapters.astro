@@ -388,7 +388,7 @@ window.addEventListener('chapter-marker-clicked', (event) => {
   justify-content: left;
   padding: clamp(12px, 1.5vw, 16px) 0 clamp(6px, 0.8vw, 8px) clamp(6px, 0.8vw, 8px);
   position: relative;
-  transition: transform 0.3s ease;
+  transition: block-size 0.3s ease;
   box-shadow: -4px 0 8px rgba(0, 0, 0, 0.15);
   /* Default: Dormant chapters */
   background-color: #212322;
@@ -578,13 +578,13 @@ window.addEventListener('chapter-marker-clicked', (event) => {
 
 @media (hover: hover) {
   .chapter-cards:hover {
-    transform: translateY(-40%);
+    block-size: clamp(240px, 34vw, 330px);
   }
 }
 
 @media (hover: hover) and (min-width: 768px) {
   .chapter-cards:hover {
-    transform: translateY(-50%);
+    block-size: clamp(280px, 38vw, 380px);
   }
 }
 
@@ -595,7 +595,7 @@ window.addEventListener('chapter-marker-clicked', (event) => {
 
 /* Active chapter-cards (when clicked directly) */
 .chapter-cards.chapter-cards-active {
-  transform: translateY(-40%) rotateZ(-1deg);
+  block-size: clamp(280px, 38vw, 380px);
 }
 
 .chapter-cards.chapter-cards-active .chapter-cards-hover-content {
