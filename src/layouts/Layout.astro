@@ -1,11 +1,17 @@
 ---
-import { AstroFont } from 'astro-font';
 import AppFooter from "../components/AppFooter.astro";
 import AppHeader from "../components/AppHeader.astro";
 import PreregisterButton from "../components/PreregisterButton";
 import "../styles/creed.css";
 import "./../tailus.css"
 import '../styles/fonts.css';
+import '../styles/inter.css';
+
+interface Props {
+  includeMaterialSymbols?: boolean;
+}
+
+const { includeMaterialSymbols = false } = Astro.props;
 ---
 
 <!DOCTYPE html>
@@ -16,21 +22,9 @@ import '../styles/fonts.css';
         <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />
         <link rel="icon" type="image/png" sizes="192x192" href="/favicon-192.png" />
         <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
-        <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
-
-        <AstroFont
-            config={[
-                {
-                    src: [],
-                    name: "Inter",
-                    preload: true,
-                    display: "swap",
-                    selector: "html",
-                    fallback: "sans-serif",
-                    googleFontsURL: 'https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap',
-                },
-            ]}
-        />
+        {includeMaterialSymbols && (
+            <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
+        )}
     </head>
     <body class="bg-[#f4f7ff]">
         <AppHeader />
