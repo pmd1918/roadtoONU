@@ -476,4 +476,12 @@ const links = [];
     // Initial check and scroll listener
     handleScroll();
     window.addEventListener('scroll', handleScroll);
+
+    // Preregister button opens modal
+    if (registerBtn) {
+        registerBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            window.dispatchEvent(new CustomEvent('open-preregister-modal'));
+        });
+    }
 </script>

@@ -2,6 +2,7 @@
 import { AstroFont } from 'astro-font';
 import AppFooter from "../components/AppFooter.astro";
 import AppHeader from "../components/AppHeader.astro";
+import PreregisterButton from "../components/PreregisterButton";
 import "../styles/creed.css";
 import "./../tailus.css"
 import '../styles/fonts.css';
@@ -33,6 +34,10 @@ import '../styles/fonts.css';
         <AppHeader />
         <slot />
         <AppFooter />
+        <!-- Global modal trigger (hidden, just listens for events) -->
+        <div style="display: none;">
+            <PreregisterButton client:load />
+        </div>
         <script src="/js/glass-reveal.js" defer></script>
         <script src="/js/magic-reveal.js" defer></script>
     </body>

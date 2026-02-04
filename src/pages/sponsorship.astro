@@ -18,7 +18,7 @@ import Container from '../components/Container.astro';
       </a>
       
       <!-- Register Button (right of logo) -->
-      <a class="sponsor-nav-btn register-btn" href="/#registration">
+      <a class="sponsor-nav-btn register-btn" href="#" id="sponsor-register-btn">
         <span class="btn-inner">Preregister</span>
       </a>
     </div>
@@ -1097,3 +1097,14 @@ import Container from '../components/Container.astro';
     opacity: 1;
   }
 </style>
+
+<script>
+  // Preregister button opens modal
+  const registerBtn = document.getElementById('sponsor-register-btn');
+  if (registerBtn) {
+    registerBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      window.dispatchEvent(new CustomEvent('open-preregister-modal'));
+    });
+  }
+</script>

@@ -1,9 +1,16 @@
 'use client';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import PreregistrationModal from './PreregistrationModal';
 
 export default function PreregisterButton() {
   const [isOpen, setIsOpen] = useState(false);
+
+  // Listen for external trigger (from header buttons)
+  useEffect(() => {
+    const handleOpenModal = () => setIsOpen(true);
+    window.addEventListener('open-preregister-modal', handleOpenModal);
+    return () => window.removeEventListener('open-preregister-modal', handleOpenModal);
+  }, []);
 
   return (
     <>
