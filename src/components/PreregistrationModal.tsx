@@ -9,7 +9,15 @@ interface PreregistrationModalProps {
 const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzUusJMOrmfhDIs737C_UVZX8hOFC2eM9MIW4N9u08Ibbg7GYpj71ueSZ_zGhs7xnpQGg/exec';
 
 export default function PreregistrationModal({ isOpen, onClose }: PreregistrationModalProps) {
-  const [formData, setFormData] = useState({ name: '', email: '', phone: '' });
+  const [formData, setFormData] = useState({ 
+    name: '', 
+    email: '', 
+    phone: '',
+    chapter: '',
+    bringingGuest: '',
+    arrivalDate: '',
+    departureDate: ''
+  });
   const [status, setStatus] = useState<'idle' | 'submitting' | 'success' | 'error'>('idle');
 
   if (!isOpen) return null;
@@ -26,7 +34,15 @@ export default function PreregistrationModal({ isOpen, onClose }: Preregistratio
         body: JSON.stringify(formData),
       });
       setStatus('success');
-      setFormData({ name: '', email: '', phone: '' });
+      setFormData({ 
+        name: '', 
+        email: '', 
+        phone: '',
+        chapter: '',
+        bringingGuest: '',
+        arrivalDate: '',
+        departureDate: ''
+      });
     } catch (err) {
       setStatus('error');
     }
@@ -65,39 +81,108 @@ export default function PreregistrationModal({ isOpen, onClose }: Preregistratio
             </p>
 
             <form onSubmit={handleSubmit} style={styles.form}>
-              <div style={styles.inputGroup}>
-                <label style={styles.label}>Name *</label>
-                <input
-                  type="text"
-                  required
-                  value={formData.name}
-                  onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                  style={styles.input}
-                  placeholder="Your full name"
-                />
+              <div style={styles.row}>
+                <div style={styles.inputGroup}>
+                  <label style={styles.label}>Name *</label>
+                  <input
+                    type="text"
+                    required
+                    value={formData.name}
+                    onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                    style={styles.input}
+                    placeholder="Your full name"
+                  />
+                </div>
+
+                <div style={styles.inputGroup}>
+                  <label style={styles.label}>Email *</label>
+                  <input
+                    type="email"
+                    required
+                    value={formData.email}
+                    onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                    style={styles.input}
+                    placeholder="your@email.com"
+                  />
+                </div>
+              </div>
+
+              <div style={styles.row}>
+                <div style={styles.inputGroup}>
+                  <label style={styles.label}>Phone</label>
+                  <input
+                    type="tel"
+                    value={formData.phone}
+                    onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                    style={styles.input}
+                    placeholder="(555) 123-4567"
+                  />
+                </div>
+
+                <div style={styles.inputGroup}>
+                  <label style={styles.label}>Chapter *</label>
+                  <input
+                    type="text"
+                    required
+                    value={formData.chapter}
+                    onChange={(e) => setFormData({ ...formData, chapter: e.target.value })}
+                    style={styles.input}
+                    placeholder="e.g., Mu Beta"
+                  />
+                </div>
               </div>
 
               <div style={styles.inputGroup}>
-                <label style={styles.label}>Email *</label>
-                <input
-                  type="email"
-                  required
-                  value={formData.email}
-                  onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                  style={styles.input}
-                  placeholder="your@email.com"
-                />
+                <label style={styles.label}>Are you bringing a guest? *</label>
+                <div style={styles.radioGroup}>
+                  <label style={styles.radioLabel}>
+                    <input
+                      type="radio"
+                      name="bringingGuest"
+                      value="Y"
+                      required
+                      checked={formData.bringingGuest === 'Y'}
+                      onChange={(e) => setFormData({ ...formData, bringingGuest: e.target.value })}
+                      style={styles.radio}
+                    />
+                    Yes
+                  </label>
+                  <label style={styles.radioLabel}>
+                    <input
+                      type="radio"
+                      name="bringingGuest"
+                      value="N"
+                      checked={formData.bringingGuest === 'N'}
+                      onChange={(e) => setFormData({ ...formData, bringingGuest: e.target.value })}
+                      style={styles.radio}
+                    />
+                    No
+                  </label>
+                </div>
               </div>
 
-              <div style={styles.inputGroup}>
-                <label style={styles.label}>Phone (optional)</label>
-                <input
-                  type="tel"
-                  value={formData.phone}
-                  onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                  style={styles.input}
-                  placeholder="(555) 123-4567"
-                />
+              <div style={styles.row}>
+                <div style={styles.inputGroup}>
+                  <label style={styles.label}>Arrival Date *</label>
+                  <input
+                    type="date"
+                    required
+                    value={formData.arrivalDate}
+                    onChange={(e) => setFormData({ ...formData, arrivalDate: e.target.value })}
+                    style={styles.input}
+                  />
+                </div>
+
+                <div style={styles.inputGroup}>
+                  <label style={styles.label}>Departure Date *</label>
+                  <input
+                    type="date"
+                    required
+                    value={formData.departureDate}
+                    onChange={(e) => setFormData({ ...formData, departureDate: e.target.value })}
+                    style={styles.input}
+                  />
+                </div>
               </div>
 
               {status === 'error' && (
@@ -135,16 +220,20 @@ const styles: { [key: string]: React.CSSProperties } = {
     justifyContent: 'center',
     zIndex: 1000,
     padding: '1rem',
+    overflowY: 'auto',
   },
   modal: {
     position: 'relative',
     backgroundColor: '#2a2b2a',
     borderRadius: '16px',
-    padding: '2.5rem',
-    maxWidth: '420px',
+    padding: '2rem',
+    maxWidth: '520px',
     width: '100%',
     border: '1px solid rgba(241, 212, 75, 0.2)',
     boxShadow: '0 24px 48px rgba(0, 0, 0, 0.4)',
+    margin: 'auto',
+    maxHeight: '90vh',
+    overflowY: 'auto',
   },
   closeButton: {
     position: 'absolute',
@@ -178,12 +267,37 @@ const styles: { [key: string]: React.CSSProperties } = {
   form: {
     display: 'flex',
     flexDirection: 'column',
-    gap: '1.25rem',
+    gap: '1rem',
+  },
+  row: {
+    display: 'grid',
+    gridTemplateColumns: '1fr 1fr',
+    gap: '1rem',
   },
   inputGroup: {
     display: 'flex',
     flexDirection: 'column',
     gap: '0.4rem',
+  },
+  radioGroup: {
+    display: 'flex',
+    gap: '1.5rem',
+    marginTop: '0.25rem',
+  },
+  radioLabel: {
+    fontFamily: "'Inter', sans-serif",
+    fontSize: '0.95rem',
+    color: '#f4f7ff',
+    display: 'flex',
+    alignItems: 'center',
+    gap: '0.5rem',
+    cursor: 'pointer',
+  },
+  radio: {
+    width: '18px',
+    height: '18px',
+    accentColor: '#ea7600',
+    cursor: 'pointer',
   },
   label: {
     fontFamily: "'Inter', sans-serif",
