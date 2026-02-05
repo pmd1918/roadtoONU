@@ -1,5 +1,4 @@
 ---
-import Lanyard from "./Lanyard";
 import PreregisterButton from "./PreregisterButton";
 ---
 
@@ -59,7 +58,17 @@ import PreregisterButton from "./PreregisterButton";
     </div>
     
     <div class="lanyard-wrapper">
-      <Lanyard client:visible />
+      <picture>
+        <source media="(max-width: 768px)" srcset="/images/lanyard-badges-mobile.webp" />
+        <img 
+          src="/images/lanyard-badges-desktop.webp" 
+          alt="Conclave lanyard with badges" 
+          class="lanyard-image"
+          loading="lazy"
+          width="600"
+          height="800"
+        />
+      </picture>
     </div>
   </div>
 </section>
@@ -243,5 +252,13 @@ import PreregisterButton from "./PreregisterButton";
     display: flex;
     justify-content: center;
     align-items: center;
+  }
+  
+  .lanyard-image {
+    max-width: 100%;
+    max-height: 100%;
+    width: auto;
+    height: auto;
+    object-fit: contain;
   }
 </style>
