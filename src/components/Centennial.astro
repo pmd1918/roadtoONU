@@ -18,7 +18,16 @@ const { class: className = '' } = Astro.props;
     
     <div class="centennial-photos">
       <div class="photo-frame generations">
-        <img src="/images/mu-beta-generations.webp" alt="Mu Beta brothers past and present - 1926 founders and current members united at the ONU rock" loading="lazy" width="800" height="528" />
+        <img 
+          src="/images/mu-beta-generations.webp" 
+          srcset="/images/mu-beta-generations-mobile.webp 308w,
+                  /images/mu-beta-generations.webp 800w"
+          sizes="(max-width: 768px) 308px, 800px"
+          alt="Mu Beta brothers past and present - 1926 founders and current members united at the ONU rock" 
+          loading="lazy" 
+          width="800" 
+          height="528" 
+        />
         <div class="photo-caption">1926 — 2026: A Century of Brotherhood</div>
       </div>
     </div>
