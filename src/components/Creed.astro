@@ -117,11 +117,18 @@
     let isTyping = false;
     let animationTimeout: number | undefined;
 
+    // Batch layout reads with rAF to avoid forced reflows
+    let rafPending = false;
     function updateHighlightWidth() {
-      if (highlightBox && wordEl) {
-        const width = wordEl.offsetWidth;
-        highlightBox.style.width = width > 0 ? width + 'px' : '0';
-      }
+      if (rafPending) return;
+      rafPending = true;
+      requestAnimationFrame(() => {
+        if (highlightBox && wordEl) {
+          const width = wordEl.offsetWidth;
+          highlightBox.style.width = width > 0 ? width + 'px' : '0';
+        }
+        rafPending = false;
+      });
     }
 
     async function typeWord(word: string) {

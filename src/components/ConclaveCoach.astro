@@ -280,8 +280,15 @@
       }
     }
     
+    // Debounce resize to avoid forced reflows
+    let resizeTimeout: number;
+    function debouncedScale() {
+        clearTimeout(resizeTimeout);
+        resizeTimeout = window.setTimeout(updateStageScale, 100);
+    }
+    
     updateStageScale();
-    window.addEventListener('resize', updateStageScale);
+    window.addEventListener('resize', debouncedScale, { passive: true });
     document.fonts.ready.then(updateStageScale);
     
     // Animated WebP with alpha works in all modern browsers

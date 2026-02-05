@@ -433,55 +433,74 @@ const links = [];
         });
     });
 
-    // Scroll event handler
+    // Cache layout values to avoid forced reflows
+    let cachedNavHeight = navbar.offsetHeight;
+    let sectionPositions: Array<{id: string, top: number, bottom: number}> = [];
+    const sections = document.querySelectorAll('section[id]');
+    
+    function cacheSectionPositions() {
+        cachedNavHeight = navbar.offsetHeight;
+        sectionPositions = Array.from(sections).map(section => {
+            const el = section as HTMLElement;
+            return {
+                id: section.getAttribute('id') || '',
+                top: el.offsetTop - cachedNavHeight - 100,
+                bottom: el.offsetTop + el.offsetHeight - cachedNavHeight - 100
+            };
+        });
+    }
+    
+    // Cache on load and resize (debounced)
+    cacheSectionPositions();
+    let resizeTimeout: number;
+    window.addEventListener('resize', () => {
+        clearTimeout(resizeTimeout);
+        resizeTimeout = window.setTimeout(cacheSectionPositions, 150);
+    });
+
+    // Throttle scroll handler with rAF
+    let ticking = false;
+    
     function handleScroll() {
         const scrollPos = window.scrollY;
 
-        // Show/hide scroll-top button
-        if (scrollPos > 50) {
-            scrollTopBtn.classList.add('show-button');
-        } else {
-            scrollTopBtn.classList.remove('show-button');
+        // Show/hide scroll-top button (cheap class toggle)
+        scrollTopBtn.classList.toggle('show-button', scrollPos > 50);
+
+        // Update active nav item using cached positions
+        for (const section of sectionPositions) {
+            if (scrollPos >= section.top && scrollPos < section.bottom) {
+                navbarNav.querySelectorAll('.glass-item').forEach(item => item.classList.remove('active'));
+                const activeLink = navbarNav.querySelector(`a[href="/#${section.id}"]`);
+                activeLink?.closest('.glass-item')?.classList.add('active');
+                break; // Only one section can be active
+            }
         }
 
-        // Update active nav item based on scroll position
-        const sections = document.querySelectorAll('section[id]');
-        const navHeight = navbar.offsetHeight;
-
-        sections.forEach((section) => {
-            const sectionTop = (section as HTMLElement).offsetTop - navHeight - 100;
-            const sectionBottom = sectionTop + (section as HTMLElement).offsetHeight;
-            const sectionId = section.getAttribute('id');
-
-            if (scrollPos >= sectionTop && scrollPos < sectionBottom) {
-                navbarNav.querySelectorAll('.glass-item').forEach(item => item.classList.remove('active'));
-                const activeLink = navbarNav.querySelector(`a[href="/#${sectionId}"]`);
-                activeLink?.closest('.glass-item')?.classList.add('active');
-            }
-        });
-
-        // Show/hide hanging logo and buttons
+        // Show/hide hanging logo and buttons (use cached navHeight)
         if (heroConclaveLogo && navbarConclaveLogo && registerBtn && sponsorBtn) {
             const heroLogoRect = heroConclaveLogo.getBoundingClientRect();
-            const navHeight = navbar.offsetHeight;
-
-            if (heroLogoRect.top < navHeight) {
-                navbarConclaveLogo.classList.add('show');
-                registerBtn.classList.add('show');
-                sponsorBtn.classList.add('show');
-                heroConclaveLogo.classList.add('faded');
-            } else {
-                navbarConclaveLogo.classList.remove('show');
-                registerBtn.classList.remove('show');
-                sponsorBtn.classList.remove('show');
-                heroConclaveLogo.classList.remove('faded');
-            }
+            const showNavItems = heroLogoRect.top < cachedNavHeight;
+            
+            navbarConclaveLogo.classList.toggle('show', showNavItems);
+            registerBtn.classList.toggle('show', showNavItems);
+            sponsorBtn.classList.toggle('show', showNavItems);
+            heroConclaveLogo.classList.toggle('faded', showNavItems);
+        }
+        
+        ticking = false;
+    }
+    
+    function onScroll() {
+        if (!ticking) {
+            requestAnimationFrame(handleScroll);
+            ticking = true;
         }
     }
 
     // Initial check and scroll listener
     handleScroll();
-    window.addEventListener('scroll', handleScroll);
+    window.addEventListener('scroll', onScroll, { passive: true });
 
     // Preregister button opens modal
     if (registerBtn) {
