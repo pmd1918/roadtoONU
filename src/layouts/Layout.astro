@@ -128,6 +128,14 @@ const ogImage = `${siteUrl}/phi-mu-delta-conclave-2026.webp`;
         }
         </script>
         
+        <!-- Preload critical fonts -->
+        <link rel="preload" href="/fonts/HaveHeart-subset.woff2" as="font" type="font/woff2" crossorigin />
+        <link rel="preload" href="/fonts/inter/inter-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin />
+        <link rel="preload" href="/fonts/inter/inter-latin-600-normal.woff2" as="font" type="font/woff2" crossorigin />
+        
+        <!-- Preload LCP image -->
+        <link rel="preload" href="/phi-mu-delta-conclave-2026-256.webp" as="image" type="image/webp" />
+        
         <!-- Preconnect hints for external origins -->
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />

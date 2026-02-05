@@ -24,8 +24,8 @@ export default function Lanyard() {
           alt="Conference badges showing different delegate types - Guest, Alternate Delegate, Voting Delegate, Voting Member, and Brother"
           className="w-full h-auto max-h-full object-contain"
           loading="eager"
-          width="1000"
-          height="1100"
+          width="400"
+          height="440"
         />
       </picture>
     </div>
