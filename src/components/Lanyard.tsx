@@ -9,7 +9,7 @@
 
 export default function Lanyard() {
   return (
-    <div className="relative z-0 w-full h-full flex items-center justify-center">
+    <div className="relative z-0 w-full h-full flex items-end justify-center">
       <picture>
         <source 
           media="(max-width: 768px)" 
