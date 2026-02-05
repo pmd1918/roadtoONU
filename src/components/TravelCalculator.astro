@@ -611,10 +611,10 @@ const { class: className = '' } = Astro.props;
   let selectedOrigin: { type: 'airport' | 'address', value: string, name: string, coords?: [number, number] } | null = null;
   let originMarker: any = null;
 
-  // Initialize Mapbox
+  // Initialize Mapbox (exposed globally for lazy loader)
   function initMap() {
     if (!(window as any).mapboxgl || !window.MAPBOX_TOKEN) {
-      console.error('Mapbox not loaded');
+      console.error('Mapbox not loaded or token missing');
       return;
     }
 
@@ -849,10 +849,15 @@ const { class: className = '' } = Astro.props;
     });
   }
 
-  // Initialize on load
+  // Expose initMap globally for the lazy loader
+  (window as any).initMap = initMap;
+
+  // Initialize on load (fallback if Mapbox already loaded)
   if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initMap);
-  } else {
+    document.addEventListener('DOMContentLoaded', () => {
+      if ((window as any).mapboxgl) initMap();
+    });
+  } else if ((window as any).mapboxgl) {
     initMap();
   }
 </script>
