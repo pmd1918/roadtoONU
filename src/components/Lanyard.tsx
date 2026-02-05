@@ -25,7 +25,7 @@ export default function Lanyard() {
           className="w-full h-auto max-h-full object-contain"
           loading="eager"
           width="1000"
-          height="1500"
+          height="1100"
         />
       </picture>
     </div>
