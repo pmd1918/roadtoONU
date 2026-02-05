@@ -42,10 +42,23 @@
         
         <!-- Coach Bus (Animated WebP with transparency) -->
         <div class="coach-container">
+          <!-- Static poster shown immediately -->
+          <img 
+            src="/images/conclave-coach-poster.webp" 
+            class="coach-poster" 
+            alt="Conclave Coach Bus"
+            width="900"
+            height="375"
+          />
+          <!-- Animation lazy-loaded, replaces poster when ready -->
           <img 
             src="/images/conclave-coach.webp" 
             class="coach-gif" 
-            alt="Conclave Coach Bus" 
+            alt="Conclave Coach Bus"
+            loading="lazy"
+            width="900"
+            height="375"
+            onload="this.classList.add('loaded')"
           />
         </div>
       </div>
@@ -241,12 +254,29 @@
       overflow: visible;
     }
 
+    .coach-poster,
     .coach-gif {
+      position: absolute;
+      bottom: 0;
       width: 100%;
       max-width: 900px;
       height: auto;
       object-fit: contain;
       object-position: bottom center;
+    }
+
+    .coach-poster {
+      z-index: 1;
+    }
+
+    .coach-gif {
+      z-index: 2;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .coach-gif.loaded {
+      opacity: 1;
     }
 
     /* ========== ANIMATIONS ========== */

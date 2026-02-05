@@ -9,13 +9,11 @@ import '../styles/inter.css';
 interface Props {
   title?: string;
   description?: string;
-  includeMaterialSymbols?: boolean;
 }
 
 const { 
   title = "All Roads Lead To Ada", 
-  description = "Join Phi Mu Delta for the 62nd National Conclave, June 25-28, 2026 at Ohio Northern University in Ada, Ohio. Celebrating 100 years of Mu Beta chapter.",
-  includeMaterialSymbols = false 
+  description = "Join Phi Mu Delta for the 62nd National Conclave, June 25-28, 2026 at Ohio Northern University in Ada, Ohio. Celebrating 100 years of Mu Beta chapter."
 } = Astro.props;
 
 const siteName = "Phi Mu Delta 62nd National Conclave";
@@ -151,12 +149,7 @@ const ogImage = `${siteUrl}/phi-mu-delta-conclave-2026.webp`;
         />
         
         <!-- Preconnect hints for external origins -->
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
         <link rel="preconnect" href="https://www.onu.edu" />
-        {includeMaterialSymbols && (
-            <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
-        )}
     </head>
     <body class="bg-[#f4f7ff]">
         <AppHeader />
