@@ -1,0 +1,20 @@
+---
+/**
+ * Async CSS loader - prevents render blocking
+ * Uses print media trick: loads as print (non-blocking), then swaps to all on load
+ */
+interface Props {
+  href: string;
+}
+const { href } = Astro.props;
+---
+
+<link 
+  rel="preload" 
+  href={href} 
+  as="style" 
+  onload="this.onload=null;this.rel='stylesheet'"
+/>
+<noscript>
+  <link rel="stylesheet" href={href} />
+</noscript>
