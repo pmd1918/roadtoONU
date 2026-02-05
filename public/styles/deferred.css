@@ -1,0 +1,484 @@
+/* deferred.css - Non-critical styles loaded asynchronously */
+/* Contains: animations, hover effects, interactive states, creed section */
+
+/* === TAILWIND FULL (re-import for any missed utilities) === */
+@import 'tailwindcss';
+
+@theme {
+  --color-primary: #ea7600;
+  --color-secondary: #f1d44b;
+  --color-info: var(--color-blue-600);
+}
+
+/* === ADDITIONAL FONT WEIGHTS (non-critical) === */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url('/fonts/inter/inter-latin-500-normal.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 800;
+  font-display: swap;
+  src: url('/fonts/inter/inter-latin-700-normal.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Permanent Marker';
+  src: url('/fonts/PermanentMarker-Regular.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* === NAVBAR ANIMATIONS & INTERACTIONS === */
+@property --angle {
+  syntax: "<angle>";
+  initial-value: 0deg;
+  inherits: false;
+}
+
+@property --glowColor {
+  syntax: "<color>";
+  initial-value: #ea7600;
+}
+
+@keyframes rotate {
+  0% { --angle: 0deg; }
+  100% { --angle: 360deg; }
+}
+
+.navbar {
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.navbar-conclave-logo {
+  transition: opacity 0.3s ease, transform 0.3s ease, visibility 0.3s ease;
+}
+
+.navbar-conclave-logo.show {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+}
+
+.nav-action-btn {
+  transition: all 0.18s ease-in-out;
+}
+
+.nav-action-btn.show {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+}
+
+.nav-action-btn:after,
+.nav-action-btn:before {
+  content: "";
+  display: block;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: calc(100px + 1.5px);
+  background-size: 100% 100%;
+  background-position: 0px 0px;
+  background-image: conic-gradient(
+    from var(--angle) at 50% 50%,
+    rgba(0,0,0,0) 0%,
+    rgba(0,0,0,0) 33%,
+    var(--glowColor) 50%,
+    rgba(0,0,0,0) 66%,
+    rgba(0,0,0,0) 100%
+  );
+  animation: rotate 2s infinite linear;
+}
+
+.nav-action-btn:before {
+  filter: blur(20px);
+}
+
+.register-btn {
+  --glowColor: #ea7600;
+}
+
+.sponsor-btn {
+  --glowColor: #f1d44b;
+}
+
+.btn-inner {
+  transition: all 0.18s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15), 0 4px 16px rgba(0, 0, 0, 0.1);
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.nav-action-btn:hover .btn-inner {
+  background: rgba(0, 0, 0, 0.5);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25), 0 8px 24px rgba(0, 0, 0, 0.15);
+  transform: translateY(-1px);
+}
+
+.register-btn:hover .btn-inner {
+  color: #ff8c1a;
+}
+
+.sponsor-btn:hover .btn-inner {
+  color: #f5de6f;
+}
+
+.nav-action-btn:active {
+  transform: translateY(-30%) scale(0.95);
+}
+
+/* === SCROLL TOP BUTTON === */
+.scroll-top {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: fixed;
+  right: 20px;
+  bottom: 20px;
+  width: 44px;
+  height: 44px;
+  color: white;
+  background: #ea7600;
+  border-radius: 50%;
+  box-shadow: 2px 2px 12px rgba(0, 0, 0, 0.2);
+  transform: translateY(80px);
+  transition: transform 0.2s ease-in, opacity 0.2s ease;
+  opacity: 0.7;
+  z-index: 999;
+}
+
+.scroll-top:hover {
+  opacity: 1;
+}
+
+.scroll-top.show-button {
+  transform: translateY(0);
+}
+
+.scroll-top svg {
+  width: 24px;
+  height: 24px;
+  fill: currentColor;
+}
+
+/* === HERO SECTION ANIMATIONS === */
+.hero-section.paused .hero-divider-track {
+  animation-play-state: paused;
+}
+
+#hero-conclave-logo.faded {
+  opacity: 0;
+}
+
+/* Marquee animation */
+@keyframes hero-divider-marquee {
+  from { transform: translateX(-50%); }
+  to { transform: translateX(0); }
+}
+
+@keyframes hero-divider-marquee-reverse {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
+.hero-divider-track {
+  animation: hero-divider-marquee 25s linear infinite;
+  will-change: transform;
+}
+
+.hero-divider-bottom .hero-divider-track {
+  animation: hero-divider-marquee-reverse 25s linear infinite;
+}
+
+/* === COMMIT SPONSOR BUTTON === */
+@property --commit-angle {
+  syntax: "<angle>";
+  initial-value: 0deg;
+  inherits: false;
+}
+
+@keyframes commit-rotate {
+  0% { --commit-angle: 0deg; }
+  100% { --commit-angle: 360deg; }
+}
+
+.commit-sponsor-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 100px;
+  border: none;
+  background: none;
+  position: relative;
+  padding: 1px;
+  text-decoration: none;
+}
+
+.commit-btn-inner {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  padding: clamp(0.3rem, 0.6vw, 0.6rem) clamp(0.75rem, 1.5vw, 2rem);
+  border-radius: 100px;
+  font-family: 'Inter', sans-serif;
+  font-weight: 800;
+  font-size: clamp(0.5rem, 0.9vw, 0.9375rem);
+  text-transform: uppercase;
+  letter-spacing: clamp(0.5px, 0.1vw, 2px);
+  z-index: 1;
+  background: rgba(0, 0, 0, 0.75);
+  backdrop-filter: blur(40px);
+  -webkit-backdrop-filter: blur(40px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15), 0 4px 16px rgba(0, 0, 0, 0.1);
+  color: #ffffff;
+}
+
+.commit-sponsor-btn:hover .commit-btn-inner {
+  background: rgba(0, 0, 0, 0.9);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25), 0 8px 24px rgba(0, 0, 0, 0.15);
+}
+
+.commit-sponsor-btn:active {
+  transform: scale(0.98);
+}
+
+/* === COUNTDOWN ANIMATIONS === */
+.figure {
+  transform-style: preserve-3d;
+  perspective: 1000px;
+}
+
+.card-face {
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+.figure .top,
+.figure .top-back span {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  height: 100%;
+  transform: translateY(50%);
+}
+
+.figure .bottom,
+.figure .bottom-back span {
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  height: 100%;
+  transform: translateY(-50%);
+}
+
+.figure .top,
+.figure .bottom,
+.figure .top-back span,
+.figure .bottom-back span {
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  transform: translateZ(0);
+}
+
+.top:after,
+.bottom-back:after {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: 100%;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.top {
+  transform-origin: 50% 100%;
+  transform: perspective(200px) rotateX(0deg);
+  will-change: transform;
+}
+
+.top.flipping {
+  animation: flipTop 0.6s cubic-bezier(0.4, 0.0, 0.2, 1);
+}
+
+@keyframes flipTop {
+  0% { transform: perspective(200px) rotateX(0deg); }
+  100% { transform: perspective(200px) rotateX(-180deg); }
+}
+
+.bottom:before {
+  content: "";
+  position: absolute;
+  display: block;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 50%;
+  background-color: rgba(0, 0, 0, 0.3);
+}
+
+.bottom-back span {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  margin: auto;
+}
+
+.top-back {
+  transform-origin: 50% 0;
+  transform: perspective(200px) rotateX(180deg);
+  will-change: transform;
+}
+
+.top-back.flipping {
+  animation: flipTopBack 0.6s cubic-bezier(0.4, 0.0, 0.2, 1);
+}
+
+@keyframes flipTopBack {
+  0% { transform: perspective(200px) rotateX(180deg); }
+  100% { transform: perspective(200px) rotateX(0deg); }
+}
+
+.top-back span {
+  position: absolute;
+  top: -100%;
+  left: 0;
+  right: 0;
+  margin: auto;
+}
+
+/* === CREED SECTION === */
+:root {
+  --color-background: #f4f7ff;
+  --color-text: #212322;
+  --color-highlight: #ea7600;
+  --pill-pad-y: 0.12em;
+  --pill-pad-x: 0.25em;
+}
+
+.creed-wrap.paused .creed-ellipsis::after {
+  animation-play-state: paused;
+}
+
+.creed-wrap {
+  display: grid;
+  place-items: center;
+  background: var(--color-background);
+  padding: 4rem 0;
+  overflow: visible;
+}
+
+.creed-line {
+  color: var(--color-text);
+  font-size: clamp(1.5rem, 4.5vw + 0.5rem, 3.5rem);
+  font-weight: 350;
+  display: inline-block;
+  white-space: nowrap;
+}
+
+.creed-prefix {
+  display: inline;
+}
+
+.creed-word {
+  display: inline-block;
+  line-height: 1;
+  padding: var(--pill-pad-y) var(--pill-pad-x);
+  border-radius: 0.2em;
+  background: transparent;
+  color: var(--color-text);
+}
+
+.creed-word.is-highlight {
+  background: var(--color-highlight);
+  color: #f4f7ff;
+}
+
+.creed-ellipsis {
+  display: inline-block;
+  margin-left: 0.15em;
+  color: var(--color-text);
+  line-height: 1;
+}
+
+.creed-ellipsis::after {
+  content: "";
+  display: inline-block;
+  width: 2px;
+  height: calc(1em + (2 * var(--pill-pad-y)));
+  margin-left: 4px;
+  vertical-align: middle;
+  animation: blink-cursor 0.75s step-end infinite;
+  background-color: black;
+}
+
+@keyframes blink-cursor {
+  0% { background-color: transparent; }
+  50% { background-color: black; }
+}
+
+/* === GRAYSCALE HOVER TRANSITION === */
+.grayscale {
+  transition: filter 200ms;
+}
+
+.grayscale:hover,
+.grayscale:focus-within,
+.grayscale:active {
+  filter: grayscale(0);
+}
+
+/* === FOCUS SECTION ANIMATION === */
+section.focus .section-header {
+  color: #ea7600;
+}
+
+/* === REDUCED MOTION === */
+@media (prefers-reduced-motion: reduce) {
+  .hero-divider-track,
+  .top.flipping,
+  .top-back.flipping,
+  .creed-ellipsis::after {
+    animation: none;
+  }
+  
+  * {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+  }
+}
+
+/* === RESPONSIVE CREED === */
+@media only screen and (max-width: 600px) {
+  .creed-wrap {
+    padding: 2rem 0;
+  }
+
+  .creed-ellipsis {
+    margin-left: 0.1em;
+  }
+
+  .creed-ellipsis::after {
+    margin-left: 2px;
+  }
+}
+
+/* === RESPONSIVE BUTTONS === */
+@media (max-width: 768px) {
+  .commit-btn-inner {
+    padding: 0.5rem 1.25rem;
+    font-size: 0.8125rem;
+    letter-spacing: 0.5px;
+  }
+}
