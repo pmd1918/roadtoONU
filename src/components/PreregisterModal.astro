@@ -1,0 +1,409 @@
+---
+const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzUusJMOrmfhDIs737C_UVZX8hOFC2eM9MIW4N9u08Ibbg7GYpj71ueSZ_zGhs7xnpQGg/exec';
+---
+
+<!-- Modal Backdrop -->
+<div id="preregister-modal" class="modal-backdrop" style="display: none;">
+  <div class="modal-content">
+    <button class="modal-close" id="modal-close">×</button>
+    
+    <!-- Form State -->
+    <div id="modal-form-state">
+      <h2 class="modal-title">Preregister Now</h2>
+      <p class="modal-subtitle">
+        Be the first to know when registration opens for the 62nd National Conclave.
+      </p>
+
+      <form id="preregister-form" class="modal-form">
+        <div class="form-row">
+          <div class="input-group">
+            <label class="input-label">Name *</label>
+            <input type="text" name="name" required class="input-field" placeholder="Your full name" />
+          </div>
+          <div class="input-group">
+            <label class="input-label">Email *</label>
+            <input type="email" name="email" required class="input-field" placeholder="your@email.com" />
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="input-group">
+            <label class="input-label">Phone</label>
+            <input type="tel" name="phone" class="input-field" placeholder="(555) 123-4567" />
+          </div>
+          <div class="input-group">
+            <label class="input-label">Chapter *</label>
+            <input type="text" name="chapter" required class="input-field" placeholder="e.g., Mu Beta" />
+          </div>
+        </div>
+
+        <div class="input-group">
+          <label class="input-label">Are you bringing a guest? *</label>
+          <div class="radio-group">
+            <label class="radio-label">
+              <input type="radio" name="bringingGuest" value="Y" required class="radio-input" />
+              Yes
+            </label>
+            <label class="radio-label">
+              <input type="radio" name="bringingGuest" value="N" class="radio-input" />
+              No
+            </label>
+            <div id="guest-count-wrapper" class="guest-count-wrapper" style="display: none;">
+              <label class="guest-count-label">How many?</label>
+              <input type="number" name="guestCount" min="1" max="10" value="1" class="guest-count-input" />
+            </div>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="input-group">
+            <label class="input-label">Arrival Date *</label>
+            <input type="date" name="arrivalDate" required class="input-field" />
+          </div>
+          <div class="input-group">
+            <label class="input-label">Departure Date *</label>
+            <input type="date" name="departureDate" required class="input-field" />
+          </div>
+        </div>
+
+        <p id="error-message" class="error-text" style="display: none;">Something went wrong. Please try again.</p>
+
+        <button type="submit" class="submit-button" id="submit-btn">Submit</button>
+      </form>
+    </div>
+
+    <!-- Success State -->
+    <div id="modal-success-state" class="success-container" style="display: none;">
+      <div class="success-icon">✓</div>
+      <h2 class="modal-title">You're In!</h2>
+      <p class="success-text">We'll be in touch with registration details soon.</p>
+      <button class="submit-button" id="success-close">Close</button>
+    </div>
+  </div>
+</div>
+
+<!-- Preregister Button (used in Registration section) -->
+<button id="preregister-btn" class="preregister-button">
+  Preregister Now
+</button>
+
+<style>
+  .preregister-button {
+    display: inline-block;
+    padding: 0.75rem 1.75rem;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 700;
+    text-decoration: none;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    border-radius: 50px;
+    border: 2px solid transparent;
+    background: linear-gradient(135deg, #ea7600, #f1d44b);
+    color: #212322;
+    box-shadow: 0 4px 20px rgba(234, 118, 0, 0.4);
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+
+  .preregister-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 32px rgba(234, 118, 0, 0.6);
+  }
+
+  .modal-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.8);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 99999;
+    padding: 1rem;
+    overflow-y: auto;
+  }
+
+  .modal-content {
+    position: relative;
+    background-color: #2a2b2a;
+    border-radius: 16px;
+    padding: 2rem;
+    max-width: 520px;
+    width: 100%;
+    border: 1px solid rgba(241, 212, 75, 0.2);
+    box-shadow: 0 24px 48px rgba(0, 0, 0, 0.4);
+    margin: auto;
+    max-height: 90vh;
+    overflow-y: auto;
+  }
+
+  .modal-close {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    background: none;
+    border: none;
+    color: #8a8e96;
+    font-size: 1.75rem;
+    cursor: pointer;
+    line-height: 1;
+    padding: 0.25rem;
+  }
+
+  .modal-title {
+    font-family: 'Have Heart', cursive;
+    font-size: 2.5rem;
+    background: linear-gradient(135deg, #ea7600, #f1d44b);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 0.5rem;
+    margin-top: 0;
+  }
+
+  .modal-subtitle {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.95rem;
+    color: #e8ecf4;
+    margin-bottom: 1.5rem;
+    line-height: 1.5;
+  }
+
+  .modal-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+  }
+
+  @media (max-width: 500px) {
+    .form-row {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .input-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+  }
+
+  .input-label {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #f1d44b;
+  }
+
+  .input-field {
+    font-family: 'Inter', sans-serif;
+    font-size: 1rem;
+    padding: 0.75rem 1rem;
+    background-color: #212322;
+    border: 1px solid rgba(241, 212, 75, 0.3);
+    border-radius: 8px;
+    color: #f4f7ff;
+    outline: none;
+    transition: border-color 0.2s ease;
+  }
+
+  .input-field:focus {
+    border-color: #ea7600;
+  }
+
+  .radio-group {
+    display: flex;
+    gap: 1.5rem;
+    margin-top: 0.25rem;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+
+  .radio-label {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.95rem;
+    color: #f4f7ff;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    cursor: pointer;
+  }
+
+  .radio-input {
+    width: 18px;
+    height: 18px;
+    accent-color: #ea7600;
+    cursor: pointer;
+  }
+
+  .guest-count-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-left: 0.5rem;
+    padding-left: 1rem;
+    border-left: 1px solid rgba(241, 212, 75, 0.3);
+  }
+
+  .guest-count-label {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.85rem;
+    color: #f4f7ff;
+  }
+
+  .guest-count-input {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.95rem;
+    padding: 0.4rem 0.6rem;
+    background-color: #212322;
+    border: 1px solid rgba(241, 212, 75, 0.3);
+    border-radius: 6px;
+    color: #f4f7ff;
+    width: 60px;
+    text-align: center;
+    outline: none;
+  }
+
+  .submit-button {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.95rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    padding: 0.85rem 1.75rem;
+    background: linear-gradient(135deg, #ea7600, #f1d44b);
+    color: #212322;
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+    margin-top: 0.5rem;
+    box-shadow: 0 4px 20px rgba(234, 118, 0, 0.4);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  .submit-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 32px rgba(234, 118, 0, 0.6);
+  }
+
+  .submit-button:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+  }
+
+  .error-text {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.85rem;
+    color: #ff6b6b;
+    margin: 0;
+  }
+
+  .success-container {
+    text-align: center;
+    padding: 1rem 0;
+  }
+
+  .success-icon {
+    width: 64px;
+    height: 64px;
+    background: linear-gradient(135deg, #ea7600, #f1d44b);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+    color: #212322;
+    margin: 0 auto 1.5rem;
+  }
+
+  .success-text {
+    font-family: 'Inter', sans-serif;
+    font-size: 1rem;
+    color: #e8ecf4;
+    margin-bottom: 1.5rem;
+    line-height: 1.5;
+  }
+</style>
+
+<script define:vars={{ GOOGLE_SCRIPT_URL }}>
+  const modal = document.getElementById('preregister-modal');
+  const formState = document.getElementById('modal-form-state');
+  const successState = document.getElementById('modal-success-state');
+  const form = document.getElementById('preregister-form');
+  const closeBtn = document.getElementById('modal-close');
+  const successClose = document.getElementById('success-close');
+  const submitBtn = document.getElementById('submit-btn');
+  const errorMsg = document.getElementById('error-message');
+  const guestWrapper = document.getElementById('guest-count-wrapper');
+  const preregisterBtn = document.getElementById('preregister-btn');
+
+  function openModal() {
+    modal.style.display = 'flex';
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeModal() {
+    modal.style.display = 'none';
+    document.body.style.overflow = '';
+    // Reset to form state
+    formState.style.display = 'block';
+    successState.style.display = 'none';
+    errorMsg.style.display = 'none';
+    form.reset();
+    guestWrapper.style.display = 'none';
+  }
+
+  // Open modal triggers
+  preregisterBtn?.addEventListener('click', openModal);
+  window.addEventListener('open-preregister-modal', openModal);
+
+  // Close modal triggers
+  closeBtn?.addEventListener('click', closeModal);
+  successClose?.addEventListener('click', closeModal);
+  modal?.addEventListener('click', (e) => {
+    if (e.target === modal) closeModal();
+  });
+
+  // Guest count toggle
+  document.querySelectorAll('input[name="bringingGuest"]').forEach(radio => {
+    radio.addEventListener('change', (e) => {
+      guestWrapper.style.display = e.target.value === 'Y' ? 'flex' : 'none';
+    });
+  });
+
+  // Form submission
+  form?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Submitting...';
+    errorMsg.style.display = 'none';
+
+    const formData = new FormData(form);
+    const data = Object.fromEntries(formData.entries());
+
+    try {
+      await fetch(GOOGLE_SCRIPT_URL, {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data),
+      });
+
+      formState.style.display = 'none';
+      successState.style.display = 'block';
+    } catch (err) {
+      errorMsg.style.display = 'block';
+    } finally {
+      submitBtn.disabled = false;
+      submitBtn.textContent = 'Submit';
+    }
+  });
+</script>
