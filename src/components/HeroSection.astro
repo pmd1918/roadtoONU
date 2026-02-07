@@ -21,32 +21,32 @@ import Countdown from "./Countdown.astro"
                         <div class="flex items-center justify-center gap-2 sm:gap-3 md:gap-4 w-full">
                             <div class="text-right flex-1">
                                 <p class="text-sm sm:text-base md:text-lg lg:text-xl font-bold text-[#ea7600] uppercase leading-tight">June 25 - 28, 2026</p>
-                                <p class="text-sm sm:text-base md:text-lg lg:text-xl font-medium text-[#212322] uppercase leading-tight">62<sup class="text-[0.6em]">nd</sup> National</p>
-                                <p class="text-sm sm:text-base md:text-lg lg:text-xl font-medium text-[#212322] uppercase leading-tight ">Conclave</p>
+                                <p class="text-sm sm:text-base md:text-lg lg:text-xl font-medium text-[#212322] uppercase leading-tight" style="text-shadow: 0 1px 3px rgba(255, 255, 255, 0.8);">62<sup class="text-[0.6em]">nd</sup> National</p>
+                                <p class="text-sm sm:text-base md:text-lg lg:text-xl font-medium text-[#212322] uppercase leading-tight" style="text-shadow: 0 1px 3px rgba(255, 255, 255, 0.8);">Conclave</p>
                             </div>
                             <img 
                                 id="hero-conclave-logo" 
-                                src="/phi-mu-delta-conclave-2026-256.webp" 
+                                src="/phi-mu-delta-conclave-2026-128.webp" 
                                 srcset="/phi-mu-delta-conclave-2026-128.webp 128w,
                                         /phi-mu-delta-conclave-2026-192.webp 192w,
                                         /phi-mu-delta-conclave-2026-256.webp 256w,
                                         /phi-mu-delta-conclave-2026-384.webp 384w,
-                                        /phi-mu-delta-conclave-2026.webp 400w,
                                         /phi-mu-delta-conclave-2026-512.webp 512w"
                                 sizes="(max-width: 480px) 128px,
                                        (max-width: 768px) 192px,
-                                       (max-width: 1024px) 384px,
-                                       512px"
+                                       (max-width: 1024px) 256px,
+                                       384px"
                                 alt="Phi Mu Delta Conclave 2026" 
                                 class="w-32 sm:w-48 md:w-64 lg:w-80 xl:w-96 flex-shrink-0" 
-                                width="256" 
-                                height="263" 
-                                fetchpriority="high" 
+                                width="128" 
+                                height="131" 
+                                fetchpriority="high"
+                                decoding="async"
                             />
                             <div class="text-left flex-1">
                                 <p class="text-sm sm:text-base md:text-lg lg:text-xl font-bold text-[#ea7600] uppercase leading-tight">Ada, Ohio</p>
-                                <p class="text-sm sm:text-base md:text-lg lg:text-xl font-medium text-[#212322] uppercase leading-tight">Ohio Northern</p>
-                                <p class="text-sm sm:text-base md:text-lg lg:text-xl font-medium text-[#212322] uppercase leading-tight">University</p>
+                                <p class="text-sm sm:text-base md:text-lg lg:text-xl font-medium text-[#212322] uppercase leading-tight" style="text-shadow: 0 1px 3px rgba(255, 255, 255, 0.8);">Ohio Northern</p>
+                                <p class="text-sm sm:text-base md:text-lg lg:text-xl font-medium text-[#212322] uppercase leading-tight" style="text-shadow: 0 1px 3px rgba(255, 255, 255, 0.8);">University</p>
                             </div>
                         </div>
                     </div>
@@ -109,9 +109,9 @@ import Countdown from "./Countdown.astro"
                               loading="lazy"
                               alt="Nu Beta Alumni Association logo"
                           />
-                          <div class="block text-left">
-                              <p class="text-xs sm:text-sm font-semibold text-[#212322] leading-tight whitespace-nowrap">The Nu Beta</p>
-                              <p class="text-xs sm:text-sm font-normal text-[#212322] leading-tight whitespace-nowrap">Alumni Association</p>
+                          <div class="block text-left min-w-0">
+                              <p class="text-[10px] xs:text-xs sm:text-sm font-semibold text-[#212322] leading-tight">The Nu Beta</p>
+                              <p class="text-[10px] xs:text-xs sm:text-sm font-normal text-[#212322] leading-tight">Alumni Association</p>
                           </div>
                       </div>
                   </div>
@@ -168,7 +168,7 @@ import Countdown from "./Countdown.astro"
     .hero-bg {
         position: absolute;
         inset: 0;
-        background-image: url('/Conclave%20Registration%20Header%20background.png');
+        background: linear-gradient(135deg, #ea7600 0%, #f1d44b 100%);
         background-size: cover;
         background-position: center;
         background-repeat: no-repeat;
@@ -204,6 +204,8 @@ import Countdown from "./Countdown.astro"
         width: 200%;
         animation: hero-divider-marquee 25s linear infinite;
         will-change: transform;
+        transform: translateZ(0); /* Force GPU layer */
+        backface-visibility: hidden;
         opacity: 0.85;
         filter: brightness(0);
     }
@@ -277,6 +279,8 @@ import Countdown from "./Countdown.astro"
         position: relative;
         padding: 1px;
         text-decoration: none;
+        transform: translateZ(0); /* Force GPU layer */
+        backface-visibility: hidden;
     }
 
     .commit-btn-inner {
@@ -284,19 +288,24 @@ import Countdown from "./Countdown.astro"
         display: flex;
         flex-direction: column;
         width: 100%;
-        padding: clamp(0.3rem, 0.6vw, 0.6rem) clamp(0.75rem, 1.5vw, 2rem);
+        padding: 0.4rem 0.875rem;
         border-radius: 100px;
         font-family: 'Inter', sans-serif;
         font-weight: 800;
-        font-size: clamp(0.5rem, 0.9vw, 0.9375rem);
+        font-size: 0.6875rem;
         text-transform: uppercase;
-        letter-spacing: clamp(0.5px, 0.1vw, 2px);
+        letter-spacing: 0.75px;
+        line-height: 1.2;
         z-index: 1;
         background: rgba(0, 0, 0, 0.75);
         backdrop-filter: blur(40px);
         -webkit-backdrop-filter: blur(40px);
         box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15), 0 4px 16px rgba(0, 0, 0, 0.1);
         color: #ffffff;
+    }
+
+    .commit-sponsor-btn:hover {
+        transform: translateZ(0) translateY(-1px);
     }
 
     .commit-sponsor-btn:hover .commit-btn-inner {
@@ -308,11 +317,19 @@ import Countdown from "./Countdown.astro"
         transform: scale(0.98);
     }
 
-    @media (max-width: 768px) {
+    @media (min-width: 480px) {
         .commit-btn-inner {
             padding: 0.5rem 1.25rem;
             font-size: 0.8125rem;
-            letter-spacing: 0.5px;
+            letter-spacing: 1px;
+        }
+    }
+
+    @media (min-width: 768px) {
+        .commit-btn-inner {
+            padding: 0.6rem 2rem;
+            font-size: 0.9375rem;
+            letter-spacing: 2px;
         }
     }
 
@@ -340,5 +357,15 @@ import Countdown from "./Countdown.astro"
     .sponsor-content-section {
         background: transparent;
         position: relative;
+    }
+
+    @media (max-width: 380px) {
+        .sponsor-content-section .flex.items-center {
+            gap: 0.25rem;
+        }
+        
+        .sponsor-content-section img {
+            height: 2.5rem !important; /* 40px */
+        }
     }
 </style>
