@@ -34,9 +34,6 @@ const ogImage = `${siteUrl}/phi-mu-delta-conclave-2026.webp`;
         <meta name="description" content={description} />
         <link rel="canonical" href={canonicalUrl} />
         
-        <!-- Preload LCP hero image -->
-        <link rel="preload" as="image" href="/hero-bg.avif" type="image/avif" fetchpriority="high" />
-        
         <!-- Favicons -->
         <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />
         <link rel="icon" type="image/png" sizes="192x192" href="/favicon-192.png" />
@@ -136,11 +133,6 @@ const ogImage = `${siteUrl}/phi-mu-delta-conclave-2026.webp`;
         }
         </script>
         
-        <!-- Preload critical fonts -->
-        <link rel="preload" href="/fonts/HaveHeart-subset.woff2" as="font" type="font/woff2" crossorigin />
-        <link rel="preload" href="/fonts/inter/inter-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin />
-        <link rel="preload" href="/fonts/inter/inter-latin-600-normal.woff2" as="font" type="font/woff2" crossorigin />
-        
         <!-- Critical resource hints -->
         <link rel="dns-prefetch" href="//roadtoonu.com" />
         <link rel="preconnect" href="https://roadtoonu.com" crossorigin />
@@ -166,10 +158,6 @@ const ogImage = `${siteUrl}/phi-mu-delta-conclave-2026.webp`;
             imagesizes="(max-width: 768px) 128px, 192px"
         />
         
-        <!-- Preconnect hints for external origins -->
-        <link rel="preconnect" href="https://www.onu.edu" />
-        <link rel="preconnect" href="https://api.mapbox.com" />
-        <link rel="preconnect" href="https://events.mapbox.com" />
     </head>
     <body class="bg-[#f4f7ff]">
         <AppHeader />
