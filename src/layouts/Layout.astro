@@ -60,6 +60,14 @@ const ogImage = `${siteUrl}/phi-mu-delta-conclave-2026.webp`;
         <meta name="author" content="Phi Mu Delta National Fraternity" />
         <meta name="keywords" content="Phi Mu Delta, National Conclave, fraternity, Ohio Northern University, Ada Ohio, brotherhood, Greek life, 2026" />
         
+        <!-- Disable Cloudflare Rocket Loader for performance -->
+        <meta name="cf-skip-worker-load" content="true" />
+        <script data-cfasync="false">
+            // Disable Rocket Loader entirely
+            window.CloudflareApps = window.CloudflareApps || {};
+            window.CloudflareApps.installs = window.CloudflareApps.installs || {};
+        </script>
+        
         <!-- Structured Data - Organization -->
         <script type="application/ld+json">
         {
@@ -130,7 +138,20 @@ const ogImage = `${siteUrl}/phi-mu-delta-conclave-2026.webp`;
         <link rel="preload" href="/fonts/inter/inter-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin />
         <link rel="preload" href="/fonts/inter/inter-latin-600-normal.woff2" as="font" type="font/woff2" crossorigin />
         
-        <!-- Preload LCP image with mobile-first strategy -->
+        <!-- Critical resource hints -->
+        <link rel="dns-prefetch" href="//roadtoonu.com" />
+        <link rel="preconnect" href="https://roadtoonu.com" crossorigin />
+        
+        <!-- Preload hero background (LCP element) -->
+        <link 
+            rel="preload" 
+            as="image" 
+            type="image/avif"
+            fetchpriority="high"
+            href="/hero-bg.avif"
+        />
+        
+        <!-- Preload LCP logo with mobile-first strategy -->
         <link 
             rel="preload" 
             as="image" 
@@ -151,7 +172,7 @@ const ogImage = `${siteUrl}/phi-mu-delta-conclave-2026.webp`;
         <AppHeader />
         <slot />
         <AppFooter />
-        <script src="/js/glass-reveal.js" defer></script>
-        <script src="/js/magic-reveal.js" defer></script>
+        <script src="/js/glass-reveal.js" defer data-cfasync="false"></script>
+        <script src="/js/magic-reveal.js" defer data-cfasync="false"></script>
     </body>
 </html>

@@ -103,7 +103,7 @@ const { class: className = '' } = Astro.props;
 </section>
 
 <!-- Mapbox Token (script loads lazily) -->
-<script is:inline define:vars={{ mapboxToken: import.meta.env.PUBLIC_MAPBOX_TOKEN }}>
+<script is:inline define:vars={{ mapboxToken: import.meta.env.PUBLIC_MAPBOX_TOKEN }} data-cfasync="false">
   window.MAPBOX_TOKEN = mapboxToken;
   window.MAPBOX_LOADED = false;
   
@@ -585,7 +585,7 @@ const { class: className = '' } = Astro.props;
   }
 </style>
 
-<script>
+<script data-cfasync="false">
   // Constants
   const DESTINATION = {
     address: '401 W College Ave, Ada, OH 45810',
