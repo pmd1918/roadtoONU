@@ -1,7 +1,7 @@
 <section class="conclave-coach-section">
     <span class="all-roads-heading">All Roads Lead to Ada</span>
     <h2 class="roadtrip-subheading">Did Someone Say Roadtrip? Scroll Down To Plan Your Trip to Ada, Ohio.</h2>
-    
+
     <div class="stage-wrapper">
       <div class="stage">
         <!-- Welcome Sign -->
@@ -21,12 +21,12 @@
               </svg>
             </div>
           </div>
-          
+
           <div class="sign-right">
             <div class="welcome-line">WELCOME TO</div>
             <div class="big-lines">ADA, OHIO</div>
           </div>
-          
+
           <div class="mount-rail">
             <i class="mount"></i>
             <i class="mount"></i>
@@ -39,21 +39,21 @@
         <!-- Sign Posts -->
         <div class="sign-post-left"></div>
         <div class="sign-post-right"></div>
-        
+
         <!-- Coach Bus (Animated WebP with transparency) -->
         <div class="coach-container">
           <!-- Static poster shown immediately -->
-          <img 
-            src="/images/conclave-coach-poster-600.webp" 
-            class="coach-poster" 
+          <img
+            src="/images/conclave-coach-poster-600.webp"
+            class="coach-poster"
             alt="Conclave Coach Bus"
             width="600"
             height="250"
           />
           <!-- Animation lazy-loaded, replaces poster when ready -->
-          <img 
-            src="/images/conclave-coach-600.webp" 
-            class="coach-gif" 
+          <img
+            src="/images/conclave-coach-600.webp"
+            class="coach-gif"
             alt="Conclave Coach Bus"
             loading="lazy"
             width="600"
@@ -64,7 +64,7 @@
       </div>
     </div>
   </section>
-  
+
   <style>
     .conclave-coach-section {
       text-align: center;
@@ -110,7 +110,7 @@
       width: 100vw;
       top: 0;
       bottom: 0;
-      background-image: url('/images/scenery-bg.jpg');
+      /* background loaded via IntersectionObserver */
       background-size: auto 100%;
       background-repeat: repeat-x;
       background-position: center bottom;
@@ -289,8 +289,27 @@
       0%, 100% { background-position: 200% center; }
       50% { background-position: -200% center; }
     }
+    .stage-wrapper.bg-loaded::before {
+      background-image: url('/images/scenery-bg.jpg');
+    }
   </style>
-  
+
+  <script>
+    // Lazy load scenery background
+    const stageWrapper = document.querySelector('.stage-wrapper');
+    if (stageWrapper) {
+      const scObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            stageWrapper.classList.add('bg-loaded');
+            scObserver.disconnect();
+          }
+        });
+      }, { rootMargin: '200px' });
+      scObserver.observe(stageWrapper);
+    }
+  </script>
+
   <script>
     // Dynamic scaling for mobile
     function updateStageScale() {
@@ -298,7 +317,7 @@
       const stage = document.querySelector('.stage') as HTMLElement;
       if (wrapper && stage) {
         const viewportWidth = window.innerWidth;
-        
+
         if (viewportWidth < 1200) {
           const availableWidth = wrapper.offsetWidth;
           const scale = availableWidth / 1200;
@@ -310,18 +329,18 @@
         }
       }
     }
-    
+
     // Debounce resize to avoid forced reflows
     let resizeTimeout: number;
     function debouncedScale() {
         clearTimeout(resizeTimeout);
         resizeTimeout = window.setTimeout(updateStageScale, 100);
     }
-    
+
     updateStageScale();
     window.addEventListener('resize', debouncedScale, { passive: true });
     document.fonts.ready.then(updateStageScale);
-    
+
     // Animated WebP with alpha works in all modern browsers
   </script>
 </section>
