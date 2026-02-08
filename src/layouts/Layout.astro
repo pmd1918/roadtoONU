@@ -34,6 +34,9 @@ const ogImage = `${siteUrl}/phi-mu-delta-conclave-2026.webp`;
         <meta name="description" content={description} />
         <link rel="canonical" href={canonicalUrl} />
         
+        <!-- Preload LCP hero image -->
+        <link rel="preload" as="image" href="/hero-bg.avif" type="image/avif" fetchpriority="high" />
+        
         <!-- Favicons -->
         <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />
         <link rel="icon" type="image/png" sizes="192x192" href="/favicon-192.png" />
