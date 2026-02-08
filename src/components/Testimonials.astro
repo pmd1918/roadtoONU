@@ -41,7 +41,7 @@ const testimonials = [
             <div class={`testimonial-slide ${i === 0 ? 'active' : ''}`} data-index={i} data-color={t.color}>
               <div class="slide-layout">
                 <div class="photo-section">
-                  <div class={`diagonal-bg ${t.bgImage ? 'has-bg-image' : ''}`} style={t.bgImage ? `--bg-image: url(${t.bgImage});` : ''}>
+                  <div class={`diagonal-bg ${t.bgImage ? 'has-bg-image' : ''}`} data-bg={t.bgImage || ''}>
                     {t.bgImage && <div class="bg-gradient-overlay"></div>}
                   </div>
                   <div class="photo-circle-wrapper">
@@ -350,6 +350,23 @@ const testimonials = [
 </style>
 
 <script>
+  // Lazy load background images when testimonials section is in view
+  const testimonialsSection = document.querySelector('.testimonials-section');
+  if (testimonialsSection) {
+    const bgObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          document.querySelectorAll('.diagonal-bg[data-bg]').forEach(el => {
+            const bg = el.getAttribute('data-bg');
+            if (bg) el.style.setProperty('--bg-image', `url(${bg})`);
+          });
+          bgObserver.disconnect();
+        }
+      });
+    }, { rootMargin: '200px' });
+    bgObserver.observe(testimonialsSection);
+  }
+
   const slides = document.querySelectorAll('.testimonial-slide');
   const prevBtn = document.querySelector('.nav-prev');
   const nextBtn = document.querySelector('.nav-next');
