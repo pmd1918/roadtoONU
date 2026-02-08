@@ -7,13 +7,7 @@
   src: url('/fonts/inter/inter-latin-400-normal.woff2') format('woff2');
 }
 
-@font-face {
-  font-family: 'Inter';
-  font-style: normal;
-  font-weight: 500;
-  font-display: swap;
-  src: url('/fonts/inter/inter-latin-500-normal.woff2') format('woff2');
-}
+/* Removed font-weight 500 to reduce bundle size - replaced with 600 */
 
 @font-face {
   font-family: 'Inter';
