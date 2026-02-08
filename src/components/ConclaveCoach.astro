@@ -290,9 +290,6 @@
       0%, 100% { background-position: 200% center; }
       50% { background-position: -200% center; }
     }
-    .stage-wrapper.bg-loaded::before {
-      background-image: url('/images/scenery-bg.jpg');
-    }
   </style>
 
   <script>
@@ -302,7 +299,9 @@
       const scObserver = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
           if (entry.isIntersecting) {
-            stageWrapper.classList.add('bg-loaded');
+            const style = document.createElement('style');
+            style.textContent = `.stage-wrapper::before { background-image: url('/images/scenery-bg.jpg') !important; }`;
+            document.head.appendChild(style);
             scObserver.disconnect();
           }
         });
