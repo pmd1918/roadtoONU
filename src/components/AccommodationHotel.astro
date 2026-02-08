@@ -55,6 +55,7 @@ const undergradImages = [
           <div class="image-carousel absolute inset-0">
             {alumniImages.map((src, index) => (
               <img
+                loading="lazy"
                 src={src}
                 alt={`Inn at ONU room ${index + 1}`}
                 class="carousel-image carousel-alumni absolute inset-0 w-full h-full object-cover"
@@ -123,6 +124,7 @@ const undergradImages = [
           <div class="image-carousel absolute inset-0">
             {undergradImages.map((src, index) => (
               <img
+                loading="lazy"
                 src={src}
                 alt={`ONU residence hall ${index + 1}`}
                 class="carousel-image carousel-undergrad absolute inset-0 w-full h-full object-cover"
