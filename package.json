@@ -18,6 +18,5 @@
   },
   "devDependencies": {
     "critters": "^0.0.25"
-  },
-  "packageManager": "npm@10.9.2"
+  }
 }
