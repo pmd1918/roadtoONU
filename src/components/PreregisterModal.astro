@@ -3,13 +3,13 @@ const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzUusJMOrmfhD
 ---
 
 <!-- Modal Backdrop -->
-<div id="preregister-modal" class="modal-backdrop" style="display: none;">
+<div id="preregister-modal" class="modal-backdrop" style="display: none;" role="dialog" aria-modal="true" aria-labelledby="modal-title">
   <div class="modal-content">
-    <button class="modal-close" id="modal-close">×</button>
+    <button class="modal-close" id="modal-close" aria-label="Close modal">×</button>
     
     <!-- Form State -->
     <div id="modal-form-state">
-      <h2 class="modal-title">Preregister Now</h2>
+      <h2 class="modal-title" id="modal-title">Preregister Now</h2>
       <p class="modal-subtitle">
         Be the first to know when registration opens for the 62nd National Conclave.
       </p>
@@ -345,14 +345,21 @@ const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzUusJMOrmfhD
   const guestWrapper = document.getElementById('guest-count-wrapper');
   const preregisterBtn = document.getElementById('preregister-btn');
 
+  let previouslyFocused = null;
+
   function openModal() {
+    previouslyFocused = document.activeElement;
     modal.style.display = 'flex';
     document.body.style.overflow = 'hidden';
+    // Focus first input
+    const firstInput = modal.querySelector('input, button');
+    firstInput?.focus();
   }
 
   function closeModal() {
     modal.style.display = 'none';
     document.body.style.overflow = '';
+    previouslyFocused?.focus();
     // Reset to form state
     formState.style.display = 'block';
     successState.style.display = 'none';
@@ -370,6 +377,21 @@ const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzUusJMOrmfhD
   successClose?.addEventListener('click', closeModal);
   modal?.addEventListener('click', (e) => {
     if (e.target === modal) closeModal();
+  });
+
+  // Escape key closes modal
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && modal.style.display === 'flex') closeModal();
+  });
+
+  // Focus trap
+  modal?.addEventListener('keydown', (e) => {
+    if (e.key !== 'Tab') return;
+    const focusable = modal.querySelectorAll('input, button, [tabindex]:not([tabindex="-1"])');
+    const first = focusable[0];
+    const last = focusable[focusable.length - 1];
+    if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+    else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
   });
 
   // Guest count toggle

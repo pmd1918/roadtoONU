@@ -11,10 +11,10 @@ const { class: className = '' } = Astro.props;
   </div>
   
   <div class="centennial-content">
-    <h1 class="centennial-headline">
+    <h2 class="centennial-headline">
       <span class="headline-main">100 Years of Brotherhood</span>
       <span class="headline-sub">Mu Beta Chapter at Ohio Northern University</span>
-    </h1>
+    </h2>
     
     <div class="centennial-photos">
       <div class="photo-frame generations">
@@ -383,9 +383,11 @@ const { class: className = '' } = Astro.props;
   }
   
   const particles: Particle[] = [];
+  const MAX_PARTICLES = 200;
   const fireworks: Firework[] = [];
   
   function createFirework() {
+    if (particles.length >= MAX_PARTICLES) return;
     fireworks.push({
       x: Math.random() * canvas.width,
       y: canvas.height,
@@ -460,15 +462,21 @@ const { class: className = '' } = Astro.props;
       ctx.globalAlpha = 1;
     }
     
-    requestAnimationFrame(animate);
+    if (!document.hidden) requestAnimationFrame(animate);
   }
   
   // Launch fireworks periodically
+  let launchTimer;
   function launchLoop() {
     createFirework();
-    if (Math.random() > 0.5) createFirework(); // sometimes launch 2
-    setTimeout(launchLoop, 800 + Math.random() * 1500);
+    if (Math.random() > 0.5) createFirework();
+    launchTimer = setTimeout(launchLoop, 800 + Math.random() * 1500);
   }
+  
+  document.addEventListener('visibilitychange', () => {
+    if (document.hidden) { clearTimeout(launchTimer); }
+    else { requestAnimationFrame(animate); launchLoop(); }
+  });
   
   // Start
   animate();

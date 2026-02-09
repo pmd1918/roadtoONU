@@ -391,8 +391,12 @@ const testimonials = [
   prevBtn?.addEventListener('click', prevSlide);
   nextBtn?.addEventListener('click', nextSlide);
 
-  // Auto-advance every 8 seconds
-  setInterval(nextSlide, 8000);
+  // Auto-advance every 8 seconds (pause when tab hidden)
+  let slideInterval = setInterval(nextSlide, 8000);
+  document.addEventListener('visibilitychange', () => {
+    if (document.hidden) clearInterval(slideInterval);
+    else slideInterval = setInterval(nextSlide, 8000);
+  });
 
   // Touch/swipe support
   let touchStartX = 0;
