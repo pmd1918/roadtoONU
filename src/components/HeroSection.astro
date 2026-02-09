@@ -78,7 +78,7 @@ import Countdown from "./Countdown.astro"
                   <!-- Left Logo -->
                   <div class="p-1 sm:p-2 grayscale transition duration-200 hover:grayscale-0 focus-within:grayscale-0 active:grayscale-0 flex-shrink-0" tabindex="0">
                       <div class="flex items-center gap-2 2xl:gap-4">
-                          <div class="block text-right">
+                          <div class="hidden sm:block text-right">
                               <p class="text-xs sm:text-sm font-bold text-[#212322] leading-tight whitespace-nowrap">The Mu Beta</p>
                               <p class="text-xs sm:text-sm font-normal text-[#212322] leading-tight whitespace-nowrap">Alumni Association</p>
                           </div>
@@ -94,9 +94,9 @@ import Countdown from "./Countdown.astro"
                   </div>
                   <!-- Center Text -->
                   <div class="text-center px-2 flex-shrink min-w-0">
-                      <p class="font-bold uppercase leading-tight text-white" style="font-size: clamp(0.875rem, 2.5vw, 2.25rem);">Featured Sponsors</p>
+                      <p class="font-bold uppercase leading-tight text-white whitespace-nowrap" style="font-size: clamp(0.7rem, 2.5vw, 2.25rem);">Featured Sponsors</p>
                       <a href="/sponsorship" class="commit-sponsor-btn mt-2">
-                          <span class="commit-btn-inner">Commit to Sponsor</span>
+                          <span class="commit-btn-inner whitespace-nowrap">Commit to Sponsor</span>
                       </a>
                   </div>
                   <!-- Right Logo -->
@@ -110,7 +110,7 @@ import Countdown from "./Countdown.astro"
                               loading="lazy"
                               alt="Nu Beta Alumni Association logo"
                           />
-                          <div class="block text-left min-w-0">
+                          <div class="hidden sm:block text-left min-w-0">
                               <p class="text-[10px] xs:text-xs sm:text-sm font-semibold text-[#212322] leading-tight">The Nu Beta</p>
                               <p class="text-[10px] xs:text-xs sm:text-sm font-normal text-[#212322] leading-tight">Alumni Association</p>
                           </div>
@@ -361,13 +361,13 @@ import Countdown from "./Countdown.astro"
         position: relative;
     }
 
-    @media (max-width: 380px) {
+    @media (max-width: 480px) {
         .sponsor-content-section .flex.items-center {
             gap: 0.25rem;
         }
         
         .sponsor-content-section img {
-            height: 2.5rem !important; /* 40px */
+            height: 2.5rem !important;
         }
     }
 </style>
