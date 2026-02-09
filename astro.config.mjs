@@ -10,11 +10,10 @@ export default defineConfig({
     cssCodeSplit: "per-page"
   },
   prefetch: {
-    prefetchAll: true,
     defaultStrategy: 'viewport'
   },
   build: {
-    inlineStylesheets: 'always'
+    inlineStylesheets: 'auto'
   },
   vite: {
     plugins: [tailwindcss()],
