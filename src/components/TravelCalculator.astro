@@ -613,6 +613,7 @@ const { class: className = '' } = Astro.props;
 
   // Initialize Mapbox (exposed globally for lazy loader)
   function initMap() {
+    if (map) return; // Already initialized
     if (!(window as any).mapboxgl || !window.MAPBOX_TOKEN) {
       console.error('Mapbox not loaded or token missing');
       return;

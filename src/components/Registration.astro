@@ -58,17 +58,14 @@ import PreregisterModal from "./PreregisterModal.astro";
     </div>
     
     <div class="lanyard-wrapper">
-      <picture>
-        <source media="(max-width: 768px)" srcset="/images/lanyard-badges-mobile.webp" />
-        <img 
-          src="/images/lanyard-badges-desktop.webp" 
-          alt="Conclave lanyard with badges" 
-          class="lanyard-image"
-          loading="lazy"
-          width="600"
-          height="800"
-        />
-      </picture>
+      <img 
+        src="/images/lanyard-badges-desktop.webp" 
+        alt="Conclave lanyard with badges" 
+        class="lanyard-image"
+        loading="lazy"
+        width="1000"
+        height="1100"
+      />
     </div>
   </div>
 </section>
@@ -248,7 +245,7 @@ import PreregisterModal from "./PreregisterModal.astro";
     position: relative;
     z-index: 0;
     width: 100%;
-    height: clamp(280px, 50vw, 600px);
+    height: clamp(350px, 60vw, 600px);
     display: flex;
     justify-content: center;
     align-items: center;
