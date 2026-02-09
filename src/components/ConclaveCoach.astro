@@ -111,7 +111,7 @@
       width: 100vw;
       top: 0;
       bottom: 0;
-      /* background loaded via IntersectionObserver */
+      background-image: url('/images/scenery-bg.jpg');
       background-size: auto 100%;
       background-repeat: repeat-x;
       background-position: center bottom;
@@ -292,23 +292,7 @@
     }
   </style>
 
-  <script>
-    // Lazy load scenery background
-    const stageWrapper = document.querySelector('.stage-wrapper');
-    if (stageWrapper) {
-      const scObserver = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-          if (entry.isIntersecting) {
-            const style = document.createElement('style');
-            style.textContent = `.stage-wrapper::before { background-image: url('/images/scenery-bg.jpg') !important; }`;
-            document.head.appendChild(style);
-            scObserver.disconnect();
-          }
-        });
-      }, { rootMargin: '200px' });
-      scObserver.observe(stageWrapper);
-    }
-  </script>
+  <!-- Scenery background now loaded directly via CSS for reliability -->
 
   <script>
     // Dynamic scaling for mobile
