@@ -481,11 +481,34 @@ import Container from "./Container.astro";
       updateFigure(minutes, $minutes, 2);
     }
 
+    let countdownTimer: number | undefined;
+
+    function clearCountdownTimer() {
+      if (countdownTimer !== undefined) {
+        clearTimeout(countdownTimer);
+        countdownTimer = undefined;
+      }
+    }
+
+    function scheduleNextUpdate() {
+      clearCountdownTimer();
+      const now = Date.now();
+      const delayToNextMinute = 60000 - (now % 60000);
+      countdownTimer = window.setTimeout(() => {
+        updateCountdown();
+        scheduleNextUpdate();
+      }, delayToNextMinute);
+    }
+
     updateCountdown();
-    let countdownInterval = setInterval(updateCountdown, 1000);
+    scheduleNextUpdate();
     document.addEventListener('visibilitychange', () => {
-      if (document.hidden) { clearInterval(countdownInterval); }
-      else { updateCountdown(); countdownInterval = setInterval(updateCountdown, 1000); }
+      if (document.hidden) {
+        clearCountdownTimer();
+      } else {
+        updateCountdown();
+        scheduleNextUpdate();
+      }
     });
   }
 

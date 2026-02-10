@@ -392,12 +392,46 @@ const testimonials = [
   prevBtn?.addEventListener('click', prevSlide);
   nextBtn?.addEventListener('click', nextSlide);
 
-  // Auto-advance every 8 seconds (pause when tab hidden)
-  let slideInterval = setInterval(nextSlide, 8000);
-  document.addEventListener('visibilitychange', () => {
-    if (document.hidden) clearInterval(slideInterval);
-    else slideInterval = setInterval(nextSlide, 8000);
-  });
+  // Auto-advance every 8 seconds while section is visible and tab is active
+  let slideInterval: number | undefined;
+  let isSectionVisible = false;
+
+  function stopAutoAdvance() {
+    if (slideInterval !== undefined) {
+      clearInterval(slideInterval);
+      slideInterval = undefined;
+    }
+  }
+
+  function startAutoAdvance() {
+    if (slideInterval !== undefined || document.hidden || !isSectionVisible) return;
+    slideInterval = window.setInterval(nextSlide, 8000);
+  }
+
+  function updateAutoAdvance() {
+    if (document.hidden || !isSectionVisible) stopAutoAdvance();
+    else startAutoAdvance();
+  }
+
+  if (testimonialsSection && 'IntersectionObserver' in window) {
+    const sectionObserver = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.target === testimonialsSection) {
+            isSectionVisible = entry.isIntersecting;
+            updateAutoAdvance();
+          }
+        });
+      },
+      { rootMargin: '100px', threshold: 0.1 }
+    );
+    sectionObserver.observe(testimonialsSection);
+  } else {
+    isSectionVisible = true;
+  }
+
+  document.addEventListener('visibilitychange', updateAutoAdvance);
+  updateAutoAdvance();
 
   // Touch/swipe support
   let touchStartX = 0;
