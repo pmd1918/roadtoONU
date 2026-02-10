@@ -8,15 +8,16 @@ const links = [];
            
             <!-- Hanging Conclave Logo (appears on scroll) -->
             <img
-                src="/phi-mu-delta-conclave-2026-192.webp"
-                srcset="/phi-mu-delta-conclave-2026-128.webp 128w,
-                        /phi-mu-delta-conclave-2026-192.webp 192w"
+                data-src="/phi-mu-delta-conclave-2026-192.webp"
+                data-srcset="/phi-mu-delta-conclave-2026-128.webp 128w,
+                             /phi-mu-delta-conclave-2026-192.webp 192w"
                 sizes="(max-width: 768px) 85px, 187px"
                 alt="Phi Mu Delta Conclave 2026"
                 class="navbar-conclave-logo"
                 id="navbar-conclave-logo"
                 width="192"
                 height="197"
+                src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw=="
                 loading="lazy"
             />
 
@@ -377,7 +378,7 @@ const links = [];
     const scrollTopBtn = document.getElementById('scroll-top') as HTMLElement;
     const navLinks = navbarNav.querySelectorAll('a');
     const heroConclaveLogo = document.getElementById('hero-conclave-logo') as HTMLElement;
-    const navbarConclaveLogo = document.getElementById('navbar-conclave-logo') as HTMLElement;
+    const navbarConclaveLogo = document.getElementById('navbar-conclave-logo') as HTMLImageElement;
     const registerBtn = document.getElementById('register-btn') as HTMLElement;
     const sponsorBtn = document.getElementById('sponsor-btn') as HTMLElement;
 
@@ -460,6 +461,21 @@ const links = [];
 
     // Throttle scroll handler with rAF
     let ticking = false;
+    let hasLoadedNavbarLogo = false;
+
+    function loadNavbarLogo() {
+        if (!navbarConclaveLogo || hasLoadedNavbarLogo) return;
+
+        const deferredSrc = navbarConclaveLogo.dataset.src;
+        const deferredSrcset = navbarConclaveLogo.dataset.srcset;
+        if (!deferredSrc) return;
+
+        navbarConclaveLogo.src = deferredSrc;
+        if (deferredSrcset) {
+            navbarConclaveLogo.srcset = deferredSrcset;
+        }
+        hasLoadedNavbarLogo = true;
+    }
     
     function handleScroll() {
         const scrollPos = window.scrollY;
@@ -481,6 +497,9 @@ const links = [];
         if (heroConclaveLogo && navbarConclaveLogo && registerBtn && sponsorBtn) {
             const heroLogoRect = heroConclaveLogo.getBoundingClientRect();
             const showNavItems = heroLogoRect.top < cachedNavHeight;
+            if (showNavItems) {
+                loadNavbarLogo();
+            }
             
             navbarConclaveLogo.classList.toggle('show', showNavItems);
             registerBtn.classList.toggle('show', showNavItems);
