@@ -11,7 +11,6 @@
   },
   "dependencies": {
     "@astrojs/sitemap": "^3.7.0",
-    "@fontsource/inter": "^5.2.8",
     "@tailwindcss/vite": "^4.1.18",
     "astro": "^5.17.1",
     "tailwindcss": "^4.1.18"
@@ -19,6 +18,9 @@
   "devDependencies": {
     "chrome-launcher": "^1.2.1",
     "critters": "^0.0.25",
-    "lighthouse": "^13.0.2"
+    "fontkit": "^2.0.4",
+    "lighthouse": "^13.0.2",
+    "sharp": "^0.34.5",
+    "svgo": "^4.0.0"
   }
 }

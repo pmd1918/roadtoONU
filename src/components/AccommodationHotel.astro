@@ -46,9 +46,15 @@ const undergradImage = "/images/campus/founders-hall.webp"
         <div class="aspect-[4/3] bg-gradient-to-br from-[#212322] to-[#3a3b39] relative overflow-hidden">
           <img
             src={alumniImage}
+            srcset="/images/hotel/inn-at-onu-exterior-480.webp 480w,
+                    /images/hotel/inn-at-onu-exterior-720.webp 720w,
+                    /images/hotel/inn-at-onu-exterior.webp 1200w"
+            sizes="(max-width: 1024px) 100vw, 50vw"
             alt="The Inn at Ohio Northern University"
             class="absolute inset-0 w-full h-full object-cover"
             loading="lazy"
+            width="1200"
+            height="790"
           />
           <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent"></div>
           <div class="absolute bottom-0 left-0 right-0 p-6 text-white">

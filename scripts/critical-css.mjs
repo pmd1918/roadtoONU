@@ -10,12 +10,24 @@ import { fileURLToPath } from 'url';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const distDir = join(__dirname, '..', 'dist');
+const MAX_INLINED_CSS_BYTES = 24 * 1024;
+const MAX_HTML_GROWTH_BYTES = 30 * 1024;
 
 // Pages to process
 const pages = [
   'index.html',
   'sponsorship/index.html'
 ];
+
+function getInlineCssBytes(html) {
+  const styleTagRegex = /<style\b[^>]*>([\s\S]*?)<\/style>/gi;
+  let total = 0;
+  let match;
+  while ((match = styleTagRegex.exec(html)) !== null) {
+    total += match[1].length;
+  }
+  return total;
+}
 
 async function processCriticalCSS() {
   console.log('🎨 Inlining critical CSS with Critters...\n');
@@ -49,9 +61,17 @@ async function processCriticalCSS() {
       
       const html = readFileSync(htmlPath, 'utf8');
       const result = await critters.process(html);
-      
+
+      const inlinedCssBytes = getInlineCssBytes(result);
+      const htmlGrowthBytes = result.length - html.length;
+      if (inlinedCssBytes > MAX_INLINED_CSS_BYTES || htmlGrowthBytes > MAX_HTML_GROWTH_BYTES) {
+        writeFileSync(htmlPath, html);
+        console.log(`  ⚠️  Skipped (inline CSS ${Math.round(inlinedCssBytes / 1024)}KB, HTML growth ${Math.round(htmlGrowthBytes / 1024)}KB)\n`);
+        continue;
+      }
+
       writeFileSync(htmlPath, result);
-      console.log(`  ✅ Done\n`);
+      console.log(`  ✅ Done (inline CSS ${Math.round(inlinedCssBytes / 1024)}KB)\n`);
       
     } catch (error) {
       console.error(`  ❌ Error processing ${page}:`, error.message);
