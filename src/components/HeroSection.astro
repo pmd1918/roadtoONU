@@ -1,6 +1,8 @@
 ---
 import Container from "./Container.astro"
 import Countdown from "./Countdown.astro"
+
+const dividerItems = Array.from({ length: 12 });
 ---
 
 <div class="hero-section relative" id="home">
@@ -10,9 +12,19 @@ import Countdown from "./Countdown.astro"
         <!-- Background Image -->
         <div class="hero-bg" aria-hidden="true">
             <picture>
-                <source srcset="/hero-bg.avif" type="image/avif" />
+                <source
+                    srcset="/hero-bg-768.avif 768w,
+                            /hero-bg-1280.avif 1280w,
+                            /hero-bg.avif 2732w"
+                    sizes="100vw"
+                    type="image/avif"
+                />
                 <img
-                    src="/hero-bg.webp"
+                    src="/hero-bg-1280.webp"
+                    srcset="/hero-bg-768.webp 768w,
+                            /hero-bg-1280.webp 1280w,
+                            /hero-bg.webp 2732w"
+                    sizes="100vw"
                     alt=""
                     width="2732"
                     height="1536"
@@ -40,12 +52,12 @@ import Countdown from "./Countdown.astro"
                             </div>
                             <img 
                                 id="hero-conclave-logo" 
-                                src="/phi-mu-delta-conclave-2026-128.webp" 
-                                srcset="/phi-mu-delta-conclave-2026-128.webp 128w,
-                                        /phi-mu-delta-conclave-2026-192.webp 192w,
-                                        /phi-mu-delta-conclave-2026-256.webp 256w,
-                                        /phi-mu-delta-conclave-2026-384.webp 384w,
-                                        /phi-mu-delta-conclave-2026-512.webp 512w"
+                                src="/phi-mu-delta-conclave-2026-128.optimized.webp" 
+                                srcset="/phi-mu-delta-conclave-2026-128.optimized.webp 128w,
+                                        /phi-mu-delta-conclave-2026-192.optimized.webp 192w,
+                                        /phi-mu-delta-conclave-2026-256.optimized.webp 256w,
+                                        /phi-mu-delta-conclave-2026-384.optimized.webp 384w,
+                                        /phi-mu-delta-conclave-2026-512.optimized.webp 512w"
                                 sizes="(max-width: 480px) 128px,
                                        (max-width: 768px) 192px,
                                        (max-width: 1024px) 256px,
@@ -72,14 +84,23 @@ import Countdown from "./Countdown.astro"
     </div>
     <!-- Unified gradient wrapper for marquees + sponsor section -->
     <div class="sponsor-unified-gradient">
-      <!-- Top Scrolling Track -->
+      <!-- Top Divider Track -->
       <div class="hero-divider">
         <div class="hero-divider-track">
           <div class="hero-divider-content">
-            <img src="/ScalesOf Justice.svg" alt="" aria-hidden="true" /><span class="hero-divider-text">All Roads Lead to Ada</span><img src="/ScalesOf Justice.svg" alt="" aria-hidden="true" /><span class="hero-divider-text">All Roads Lead to Ada</span><img src="/ScalesOf Justice.svg" alt="" aria-hidden="true" /><span class="hero-divider-text">All Roads Lead to Ada</span><img src="/ScalesOf Justice.svg" alt="" aria-hidden="true" /><span class="hero-divider-text">All Roads Lead to Ada</span><img src="/ScalesOf Justice.svg" alt="" aria-hidden="true" /><span class="hero-divider-text">All Roads Lead to Ada</span><img src="/ScalesOf Justice.svg" alt="" aria-hidden="true" /><span class="hero-divider-text">All Roads Lead to Ada</span><img src="/ScalesOf Justice.svg" alt="" aria-hidden="true" /><span class="hero-divider-text">All Roads Lead to Ada</span><img src="/ScalesOf Justice.svg" alt="" aria-hidden="true" /><span class="hero-divider-text">All Roads Lead to Ada</span>
-          </div>
-          <div class="hero-divider-content">
-            <img src="/ScalesOf Justice.svg" alt="" aria-hidden="true" /><span class="hero-divider-text">All Roads Lead to Ada</span><img src="/ScalesOf Justice.svg" alt="" aria-hidden="true" /><span class="hero-divider-text">All Roads Lead to Ada</span><img src="/ScalesOf Justice.svg" alt="" aria-hidden="true" /><span class="hero-divider-text">All Roads Lead to Ada</span><img src="/ScalesOf Justice.svg" alt="" aria-hidden="true" /><span class="hero-divider-text">All Roads Lead to Ada</span><img src="/ScalesOf Justice.svg" alt="" aria-hidden="true" /><span class="hero-divider-text">All Roads Lead to Ada</span><img src="/ScalesOf Justice.svg" alt="" aria-hidden="true" /><span class="hero-divider-text">All Roads Lead to Ada</span><img src="/ScalesOf Justice.svg" alt="" aria-hidden="true" /><span class="hero-divider-text">All Roads Lead to Ada</span><img src="/ScalesOf Justice.svg" alt="" aria-hidden="true" /><span class="hero-divider-text">All Roads Lead to Ada</span>
+            {dividerItems.map(() => (
+              <>
+                <img src="/ScalesOf Justice.svg" alt="" aria-hidden="true" />
+                <img
+                  src="/images/wordmarks/all-roads-lead-to-ada.svg"
+                  alt=""
+                  aria-hidden="true"
+                  class="hero-divider-wordmark"
+                  loading="eager"
+                  decoding="async"
+                />
+              </>
+            ))}
           </div>
         </div>
       </div>
@@ -131,14 +152,23 @@ import Countdown from "./Countdown.astro"
               </div>
           </Container>
       </div>
-      <!-- Bottom Scrolling Track -->
+      <!-- Bottom Divider Track -->
       <div class="hero-divider hero-divider-bottom">
         <div class="hero-divider-track">
           <div class="hero-divider-content">
-            <img src="/ScalesOf Justice.svg" alt="" aria-hidden="true" /><span class="hero-divider-text">All Roads Lead to Ada</span><img src="/ScalesOf Justice.svg" alt="" aria-hidden="true" /><span class="hero-divider-text">All Roads Lead to Ada</span><img src="/ScalesOf Justice.svg" alt="" aria-hidden="true" /><span class="hero-divider-text">All Roads Lead to Ada</span><img src="/ScalesOf Justice.svg" alt="" aria-hidden="true" /><span class="hero-divider-text">All Roads Lead to Ada</span><img src="/ScalesOf Justice.svg" alt="" aria-hidden="true" /><span class="hero-divider-text">All Roads Lead to Ada</span><img src="/ScalesOf Justice.svg" alt="" aria-hidden="true" /><span class="hero-divider-text">All Roads Lead to Ada</span><img src="/ScalesOf Justice.svg" alt="" aria-hidden="true" /><span class="hero-divider-text">All Roads Lead to Ada</span><img src="/ScalesOf Justice.svg" alt="" aria-hidden="true" /><span class="hero-divider-text">All Roads Lead to Ada</span>
-          </div>
-          <div class="hero-divider-content">
-            <img src="/ScalesOf Justice.svg" alt="" aria-hidden="true" /><span class="hero-divider-text">All Roads Lead to Ada</span><img src="/ScalesOf Justice.svg" alt="" aria-hidden="true" /><span class="hero-divider-text">All Roads Lead to Ada</span><img src="/ScalesOf Justice.svg" alt="" aria-hidden="true" /><span class="hero-divider-text">All Roads Lead to Ada</span><img src="/ScalesOf Justice.svg" alt="" aria-hidden="true" /><span class="hero-divider-text">All Roads Lead to Ada</span><img src="/ScalesOf Justice.svg" alt="" aria-hidden="true" /><span class="hero-divider-text">All Roads Lead to Ada</span><img src="/ScalesOf Justice.svg" alt="" aria-hidden="true" /><span class="hero-divider-text">All Roads Lead to Ada</span><img src="/ScalesOf Justice.svg" alt="" aria-hidden="true" /><span class="hero-divider-text">All Roads Lead to Ada</span><img src="/ScalesOf Justice.svg" alt="" aria-hidden="true" /><span class="hero-divider-text">All Roads Lead to Ada</span>
+            {dividerItems.map(() => (
+              <>
+                <img src="/ScalesOf Justice.svg" alt="" aria-hidden="true" />
+                <img
+                  src="/images/wordmarks/all-roads-lead-to-ada.svg"
+                  alt=""
+                  aria-hidden="true"
+                  class="hero-divider-wordmark"
+                  loading="eager"
+                  decoding="async"
+                />
+              </>
+            ))}
           </div>
         </div>
       </div>
@@ -226,11 +256,13 @@ import Countdown from "./Countdown.astro"
         flex: 0 0 auto;
     }
 
-    .hero-divider-text {
-        font-family: 'Have Heart', cursive;
-        font-size: clamp(0.85rem, 1.5vw, 1.25rem);
+    .hero-divider-wordmark {
+        width: clamp(7.5rem, 20vw, 12.5rem);
+        max-width: 100%;
+        height: auto;
         color: #212322;
-        font-weight: 400;
+        flex: 0 0 auto;
+        display: block;
     }
 
     /* Commit to Sponsor Button */

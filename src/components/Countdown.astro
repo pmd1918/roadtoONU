@@ -48,23 +48,6 @@ import Container from "./Container.astro";
           </div>
         </div>
 
-        <div class="bloc-time min" data-init-value="0">
-          <span class="count-title">Minutes</span>
-          <div class="figures-wrap">
-            <div class="figure min min-1">
-              <span class="top">0</span>
-              <span class="top-back"><span>0</span></span>
-              <span class="bottom">0</span>
-              <span class="bottom-back"><span>0</span></span>
-            </div>
-            <div class="figure min min-2">
-              <span class="top">0</span>
-              <span class="top-back"><span>0</span></span>
-              <span class="bottom">0</span>
-              <span class="bottom-back"><span>0</span></span>
-            </div>
-          </div>
-        </div>
       </div>
     </div>
   </Container>
@@ -415,7 +398,6 @@ import Container from "./Container.astro";
 
     const $days = document.querySelectorAll('.figure.days');
     const $hours = document.querySelectorAll('.figure.hours');
-    const $minutes = document.querySelectorAll('.figure.min');
 
     function animateFigure($el: Element, value: string) {
       const $top = $el.querySelector('.top') as HTMLElement;
@@ -474,11 +456,8 @@ import Container from "./Container.astro";
 
       const days = Math.floor(distance / (1000 * 60 * 60 * 24));
       const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-      const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-
       updateFigure(days, $days, 3);
       updateFigure(hours, $hours, 2);
-      updateFigure(minutes, $minutes, 2);
     }
 
     let countdownTimer: number | undefined;

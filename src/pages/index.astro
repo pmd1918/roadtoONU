@@ -13,19 +13,25 @@ import WilsonSlider from '../components/WilsonSlider.astro';
 import RoadsDivider from '../components/RoadsDivider.astro';
 ---
 
-<Layout title="All Roads Lead To Ada">
-	<main id="main-content" class="mb-10">
-		<HeroSection/>
-		<div class="mt-6 md:mt-16"><Centennial/></div>
-		<div class="mt-6 md:mt-16"><Features/></div>
-		<div class="mt-6 md:mt-16"><WilsonSlider/></div>
-		<div class="mt-6 md:mt-16"><AccommodationHotel/></div>
-		<Creed/>
-		<Registration/>
-		<RoadsDivider/>
-		<div class="mt-6 md:mt-16"><ConclaveCoach /></div>
-		<div class="mt-6 md:mt-16"><TravelCalculator/></div>
-		<div class="mt-6 md:mt-16"><Testimonials/></div>
-	</main>
-</Layout>
+	<Layout title="All Roads Lead To Ada">
+		<main id="main-content" class="mb-10">
+			<HeroSection/>
+			<div class="mt-6 md:mt-16"><Centennial/></div>
+			<div class="mt-6 md:mt-16 deferred-section" data-have-heart><Features/></div>
+			<div class="mt-6 md:mt-16 deferred-section" data-have-heart><WilsonSlider/></div>
+			<div class="mt-6 md:mt-16 deferred-section" data-have-heart><AccommodationHotel/></div>
+			<div class="deferred-section"><Creed/></div>
+			<div class="deferred-section" data-have-heart><Registration/></div>
+			<div class="deferred-section" data-have-heart><RoadsDivider/></div>
+			<div class="mt-6 md:mt-16 deferred-section" data-have-heart><ConclaveCoach /></div>
+			<div class="mt-6 md:mt-16 deferred-section"><TravelCalculator/></div>
+			<div class="mt-6 md:mt-16 deferred-section" data-have-heart><Testimonials/></div>
+		</main>
+	</Layout>
 
+	<style>
+		.deferred-section {
+			content-visibility: auto;
+			contain-intrinsic-size: 800px;
+		}
+	</style>

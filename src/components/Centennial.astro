@@ -6,13 +6,17 @@ const { class: className = '' } = Astro.props;
 ---
 
 <section class:list={["centennial-section", className]} id="centennial">
-  <div class="fireworks-container">
-    <canvas id="fireworks-canvas"></canvas>
-  </div>
-  
   <div class="centennial-content">
     <h2 class="centennial-headline">
-      <span class="headline-main">100 Years of Brotherhood</span>
+      <span class="headline-main">
+        <img
+          src="/images/wordmarks/100-years-of-brotherhood.svg"
+          alt="100 Years of Brotherhood"
+          class="headline-main-wordmark"
+          loading="eager"
+          decoding="async"
+        />
+      </span>
       <span class="headline-sub">Mu Beta Chapter at Ohio Northern University</span>
     </h2>
     
@@ -21,8 +25,10 @@ const { class: className = '' } = Astro.props;
         <img 
           src="/images/mu-beta-generations.webp" 
           srcset="/images/mu-beta-generations-mobile.webp 308w,
+                  /images/mu-beta-generations-512.webp 512w,
+                  /images/mu-beta-generations-640.webp 640w,
                   /images/mu-beta-generations.webp 800w"
-          sizes="(max-width: 768px) 308px, 800px"
+          sizes="(max-width: 768px) 256px, (max-width: 1200px) 640px, 800px"
           alt="Mu Beta brothers past and present - 1926 founders and current members united at the ONU rock" 
           loading="lazy" 
           width="800" 
@@ -65,22 +71,6 @@ const { class: className = '' } = Astro.props;
     .centennial-section {
       margin-top: -5rem;
     }
-  }
-  
-  /* Fireworks background */
-  .fireworks-container {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    z-index: 0;
-  }
-  
-  #fireworks-canvas {
-    width: 100%;
-    height: 100%;
-    display: block;
   }
   
   /* Content overlay */
@@ -142,13 +132,17 @@ const { class: className = '' } = Astro.props;
   }
   
   .headline-main {
-    font-family: 'Have Heart', cursive;
-    font-size: clamp(2.5rem, 8vw, 7rem);
-    line-height: 1;
-    color: #ea7600;
-    white-space: nowrap;
+    display: block;
     position: relative;
     z-index: 2;
+  }
+
+  .headline-main-wordmark {
+    display: block;
+    width: min(92vw, 980px);
+    height: auto;
+    margin: 0 auto;
+    color: #ea7600;
   }
   
   .headline-sub {
@@ -346,201 +340,3 @@ const { class: className = '' } = Astro.props;
     }
   }
 </style>
-
-<script>
-  (() => {
-    const section = document.getElementById('centennial');
-    const canvas = document.getElementById('fireworks-canvas') as HTMLCanvasElement | null;
-    const ctx = canvas?.getContext('2d');
-    if (!section || !canvas || !ctx) return;
-
-    // Colors - orange/gold theme
-    const colors = ['#ea7600', '#f1d44b', '#ff9500', '#ffcc00', '#fff', '#ff6b00'];
-
-    interface Particle {
-      x: number;
-      y: number;
-      vx: number;
-      vy: number;
-      alpha: number;
-      color: string;
-      decay: number;
-      size: number;
-    }
-
-    interface Firework {
-      x: number;
-      y: number;
-      vy: number;
-      targetY: number;
-      color: string;
-    }
-
-    const particles: Particle[] = [];
-    const fireworks: Firework[] = [];
-    const MAX_PARTICLES = 200;
-    const reducedMotionQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
-
-    let isSectionVisible = false;
-    let isRunning = false;
-    let hasLaunchedInitialBurst = false;
-    let launchTimer: number | undefined;
-    let animationFrameId: number | undefined;
-
-    function resizeCanvas() {
-      const bounds = section.getBoundingClientRect();
-      canvas.width = Math.max(1, Math.floor(bounds.width));
-      canvas.height = Math.max(1, Math.floor(bounds.height));
-    }
-
-    function createFirework() {
-      if (particles.length >= MAX_PARTICLES) return;
-      fireworks.push({
-        x: Math.random() * canvas.width,
-        y: canvas.height,
-        vy: -(8 + Math.random() * 4),
-        targetY: 100 + Math.random() * (canvas.height * 0.4),
-        color: colors[Math.floor(Math.random() * colors.length)],
-      });
-    }
-
-    function explode(fw: Firework) {
-      const count = 80 + Math.floor(Math.random() * 40);
-      for (let i = 0; i < count; i++) {
-        if (particles.length >= MAX_PARTICLES) break;
-
-        const angle = (Math.PI * 2 * i) / count + Math.random() * 0.2;
-        const speed = 2 + Math.random() * 4;
-        particles.push({
-          x: fw.x,
-          y: fw.y,
-          vx: Math.cos(angle) * speed,
-          vy: Math.sin(angle) * speed,
-          alpha: 1,
-          color: Math.random() > 0.3 ? fw.color : colors[Math.floor(Math.random() * colors.length)],
-          decay: 0.015 + Math.random() * 0.01,
-          size: 2 + Math.random() * 2,
-        });
-      }
-    }
-
-    function drawFrame() {
-      if (!isRunning) return;
-
-      ctx.fillStyle = 'rgba(33, 35, 34, 0.15)';
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-      for (let i = fireworks.length - 1; i >= 0; i--) {
-        const fw = fireworks[i];
-        fw.y += fw.vy;
-        fw.vy += 0.1;
-
-        ctx.beginPath();
-        ctx.arc(fw.x, fw.y, 3, 0, Math.PI * 2);
-        ctx.fillStyle = fw.color;
-        ctx.fill();
-
-        if (fw.y <= fw.targetY || fw.vy >= -1) {
-          explode(fw);
-          fireworks.splice(i, 1);
-        }
-      }
-
-      for (let i = particles.length - 1; i >= 0; i--) {
-        const particle = particles[i];
-        particle.x += particle.vx;
-        particle.y += particle.vy;
-        particle.vy += 0.05;
-        particle.vx *= 0.99;
-        particle.alpha -= particle.decay;
-
-        if (particle.alpha <= 0) {
-          particles.splice(i, 1);
-          continue;
-        }
-
-        ctx.beginPath();
-        ctx.arc(particle.x, particle.y, particle.size * particle.alpha, 0, Math.PI * 2);
-        ctx.fillStyle = particle.color;
-        ctx.globalAlpha = particle.alpha;
-        ctx.fill();
-        ctx.globalAlpha = 1;
-      }
-
-      animationFrameId = requestAnimationFrame(drawFrame);
-    }
-
-    function runLaunchLoop() {
-      if (!isRunning) return;
-
-      createFirework();
-      if (Math.random() > 0.5) createFirework();
-
-      launchTimer = window.setTimeout(runLaunchLoop, 800 + Math.random() * 1500);
-    }
-
-    function stopAnimation() {
-      isRunning = false;
-
-      if (launchTimer !== undefined) {
-        clearTimeout(launchTimer);
-        launchTimer = undefined;
-      }
-
-      if (animationFrameId !== undefined) {
-        cancelAnimationFrame(animationFrameId);
-        animationFrameId = undefined;
-      }
-    }
-
-    function startAnimation() {
-      if (isRunning) return;
-      isRunning = true;
-
-      if (!hasLaunchedInitialBurst) {
-        for (let i = 0; i < 3; i++) {
-          window.setTimeout(() => {
-            if (isRunning) createFirework();
-          }, i * 300);
-        }
-        hasLaunchedInitialBurst = true;
-      }
-
-      drawFrame();
-      runLaunchLoop();
-    }
-
-    function updateAnimationState() {
-      const shouldRun = isSectionVisible && !document.hidden && !reducedMotionQuery.matches;
-      if (shouldRun) {
-        startAnimation();
-      } else {
-        stopAnimation();
-      }
-    }
-
-    resizeCanvas();
-    window.addEventListener('resize', resizeCanvas, { passive: true });
-
-    const visibilityObserver = new IntersectionObserver(
-      (entries) => {
-        for (const entry of entries) {
-          if (entry.target === section) {
-            isSectionVisible = entry.isIntersecting;
-            updateAnimationState();
-          }
-        }
-      },
-      { threshold: 0.1 }
-    );
-    visibilityObserver.observe(section);
-
-    document.addEventListener('visibilitychange', updateAnimationState);
-
-    if (typeof reducedMotionQuery.addEventListener === 'function') {
-      reducedMotionQuery.addEventListener('change', updateAnimationState);
-    } else if (typeof reducedMotionQuery.addListener === 'function') {
-      reducedMotionQuery.addListener(updateAnimationState);
-    }
-  })();
-</script>
