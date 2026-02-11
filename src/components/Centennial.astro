@@ -13,8 +13,9 @@ const { class: className = '' } = Astro.props;
           src="/images/wordmarks/100-years-of-brotherhood.svg"
           alt="100 Years of Brotherhood"
           class="headline-main-wordmark"
-          loading="eager"
+          loading="lazy"
           decoding="async"
+          fetchpriority="low"
         />
       </span>
       <span class="headline-sub">Mu Beta Chapter at Ohio Northern University</span>

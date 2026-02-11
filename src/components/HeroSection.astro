@@ -11,28 +11,19 @@ const dividerItems = Array.from({ length: 12 });
     <div class="hero-top relative">
         <!-- Background Image -->
         <div class="hero-bg" aria-hidden="true">
-            <picture>
-                <source
-                    srcset="/hero-bg-768.avif 768w,
-                            /hero-bg-1280.avif 1280w,
-                            /hero-bg.avif 2732w"
-                    sizes="100vw"
-                    type="image/avif"
-                />
-                <img
-                    src="/hero-bg-1280.webp"
-                    srcset="/hero-bg-768.webp 768w,
-                            /hero-bg-1280.webp 1280w,
-                            /hero-bg.webp 2732w"
-                    sizes="100vw"
-                    alt=""
-                    width="2732"
-                    height="1536"
-                    fetchpriority="high"
-                    loading="eager"
-                    decoding="async"
-                />
-            </picture>
+            <img
+                src="/hero-bg-1280.webp"
+                srcset="/hero-bg-768.webp 768w,
+                        /hero-bg-1280.webp 1280w,
+                        /hero-bg.webp 2732w"
+                sizes="100vw"
+                alt=""
+                width="2732"
+                height="1536"
+                fetchpriority="high"
+                loading="eager"
+                decoding="async"
+            />
         </div>
         <!-- Gradient Overlay -->
         <div aria-hidden="true" class="absolute inset-0 grid grid-cols-2 -space-x-52 opacity-40">
@@ -90,14 +81,22 @@ const dividerItems = Array.from({ length: 12 });
           <div class="hero-divider-content">
             {dividerItems.map(() => (
               <>
-                <img src="/ScalesOf Justice.svg" alt="" aria-hidden="true" />
+                <img
+                  src="/ScalesOf Justice.svg"
+                  alt=""
+                  aria-hidden="true"
+                  loading="lazy"
+                  decoding="async"
+                  fetchpriority="low"
+                />
                 <img
                   src="/images/wordmarks/all-roads-lead-to-ada.svg"
                   alt=""
                   aria-hidden="true"
                   class="hero-divider-wordmark"
-                  loading="eager"
+                  loading="lazy"
                   decoding="async"
+                  fetchpriority="low"
                 />
               </>
             ))}
@@ -158,14 +157,22 @@ const dividerItems = Array.from({ length: 12 });
           <div class="hero-divider-content">
             {dividerItems.map(() => (
               <>
-                <img src="/ScalesOf Justice.svg" alt="" aria-hidden="true" />
+                <img
+                  src="/ScalesOf Justice.svg"
+                  alt=""
+                  aria-hidden="true"
+                  loading="lazy"
+                  decoding="async"
+                  fetchpriority="low"
+                />
                 <img
                   src="/images/wordmarks/all-roads-lead-to-ada.svg"
                   alt=""
                   aria-hidden="true"
                   class="hero-divider-wordmark"
-                  loading="eager"
+                  loading="lazy"
                   decoding="async"
+                  fetchpriority="low"
                 />
               </>
             ))}

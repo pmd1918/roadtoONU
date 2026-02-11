@@ -126,11 +126,11 @@ const ogImage = `${siteUrl}/phi-mu-delta-conclave-2026.webp`;
         <link 
             rel="preload" 
             as="image" 
-            type="image/avif"
+            type="image/webp"
             fetchpriority="high"
-            imagesrcset="/hero-bg-768.avif 768w, /hero-bg-1280.avif 1280w, /hero-bg.avif 2732w"
+            imagesrcset="/hero-bg-768.webp 768w, /hero-bg-1280.webp 1280w, /hero-bg.webp 2732w"
             imagesizes="100vw"
-            href="/hero-bg-1280.avif"
+            href="/hero-bg-1280.webp"
         />
         
         <!-- Preload critical fonts -->
@@ -147,39 +147,31 @@ const ogImage = `${siteUrl}/phi-mu-delta-conclave-2026.webp`;
               document.head.appendChild(link);
             };
 
-            const setupObserver = () => {
+            const setupDeferredLoad = () => {
               const targets = document.querySelectorAll('[data-have-heart]');
               if (!targets.length) return;
 
-              if (!('IntersectionObserver' in window)) {
-                window.setTimeout(loadHaveHeart, 3000);
-                return;
-              }
+              const onUserIntent = () => {
+                loadHaveHeart();
+                window.removeEventListener('scroll', onUserIntent);
+                window.removeEventListener('touchstart', onUserIntent);
+                window.removeEventListener('pointerdown', onUserIntent);
+                window.removeEventListener('keydown', onUserIntent);
+              };
 
-              const observer = new IntersectionObserver(
-                (entries) => {
-                  if (entries.some((entry) => entry.isIntersecting)) {
-                    loadHaveHeart();
-                    observer.disconnect();
-                  }
-                },
-                { rootMargin: '0px' }
-              );
-
-              targets.forEach((target) => observer.observe(target));
+              window.addEventListener('scroll', onUserIntent, { passive: true, once: true });
+              window.addEventListener('touchstart', onUserIntent, { passive: true, once: true });
+              window.addEventListener('pointerdown', onUserIntent, { passive: true, once: true });
+              window.addEventListener('keydown', onUserIntent, { once: true });
             };
 
             if (document.readyState === 'loading') {
-              document.addEventListener('DOMContentLoaded', setupObserver, { once: true });
+              document.addEventListener('DOMContentLoaded', setupDeferredLoad, { once: true });
             } else {
-              setupObserver();
+              setupDeferredLoad();
             }
           })();
         </script>
-        <noscript>
-          <link rel="stylesheet" href="/fonts-haveheart.css" />
-        </noscript>
-        
     </head>
     <body class="bg-[#f4f7ff]">
         <a href="#main-content" class="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[9999] focus:px-4 focus:py-2 focus:bg-[#ea7600] focus:text-white focus:rounded-lg focus:font-semibold focus:text-sm">Skip to content</a>
